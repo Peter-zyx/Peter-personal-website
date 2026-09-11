@@ -1,0 +1,191 @@
+import pyb
+import micropython
+from oled_938 import OLED_938
+from mpu6050 import MPU6050
+from motor import DRIVE
+
+micropython.alloc_emergency_exception_buf(100)
+
+# =========================================================
+# OLED
+# =========================================================
+i2c = pyb.I2C(2, pyb.I2C.MASTER)
+oled = OLED_938(
+    pinout={"sda": "Y10", "scl": "Y9", "res": "Y8"},
+    height=64,
+    external_vcc=False,
+    i2c_devid=i2c.scan()[0],
+)
+oled.poweron()
+oled.init_display()
+
+def oled_clear():
+    try:
+        oled.clear()
+    except:
+        try:
+            oled.fill(0)
+        except:
+            pass
+
+def oled_show_idle():
+    oled_clear()
+    oled.draw_text(0, 0, 'Challenge 5')
+    oled.draw_text(0, 16, 'Self Balance')
+    oled.draw_text(0, 32, 'Press USER')
+    oled.display()
+
+def oled_show_running():
+    oled_clear()
+    oled.draw_text(0, 0, 'Running...')
+    oled.display()
+
+def oled_show_error(msg):
+    oled_clear()
+    oled.draw_text(0, 0, 'Runtime error')
+    oled.draw_text(0, 16, str(msg))
+    oled.display()
+
+# =========================================================
+# USER switch
+# =========================================================
+sw = pyb.Switch()
+
+# =========================================================
+# IMU + motor
+# =========================================================
+imu = MPU6050(1, False)
+drive = DRIVE()
+
+# =========================================================
+# Optional pitch offset from file
+# =========================================================
+def load_pitch_offset(filename='pitch_offset.txt'):
+    try:
+        f = open(filename, 'r')
+        value = float(f.read())
+        f.close()
+        return value
+    except:
+        return 0.0
+
+pitch_offset = load_pitch_offset()
+
+# =========================================================
+# Tuning constants
+# =========================================================
+SETPOINT = 0.0
+CONTROL_US = 5000          # 5 ms = 200 Hz
+OLED_PERIOD_MS = 200
+
+MOTOR_SIGN = 1             # flip to -1 if direction is wrong
+
+Kp = 22.0
+Ki = 1.0
+Kd = 1.2
+
+MAX_CMD = 80
+DEAD_CMD = 3
+FALL_ANGLE = 35.0
+INT_LIMIT = 25.0
+
+# =========================================================
+# Helper
+# =========================================================
+def clamp(x, lo, hi):
+    if x < lo:
+        return lo
+    if x > hi:
+        return hi
+    return x
+
+# =========================================================
+# Initial state
+# =========================================================
+drive.stop()
+oled_show_idle()
+print('Challenge 5 idle')
+print('pitch_offset =', pitch_offset)
+
+while not sw():
+    pyb.delay(10)
+
+while sw():
+    pyb.delay(10)
+
+oled_show_running()
+print('Challenge 5 started')
+
+# =========================================================
+# Main loop
+# =========================================================
+pitch = 0.0
+pitch_prev = 0.0
+pitch_dot = 0.0
+integral = 0.0
+cmd = 0
+
+tic1 = pyb.micros()
+last_oled = pyb.millis()
+
+try:
+    while True:
+        dt_us = pyb.elapsed_micros(tic1)
+
+        if dt_us >= CONTROL_US:
+            now_us = pyb.micros()
+            dt = dt_us / 1000000.0
+            tic1 = now_us
+
+            if dt <= 0:
+                dt = 0.005
+
+            # estimate pitch angle and pitch_dot
+            pitch = imu.pitch() - pitch_offset
+            pitch_dot = (pitch - pitch_prev) / dt
+            pitch_prev = pitch
+
+            # safety
+            if abs(pitch) > FALL_ANGLE:
+                drive.stop()
+                integral = 0.0
+                cmd = 0
+            else:
+                error = SETPOINT - pitch
+
+                integral += error * dt
+                integral = clamp(integral, -INT_LIMIT, INT_LIMIT)
+
+                # PID control using pitch and pitch_dot
+                u = Kp * error + Ki * integral - Kd * pitch_dot
+                cmd = int(clamp(MOTOR_SIGN * u, -MAX_CMD, MAX_CMD))
+
+                if abs(cmd) < DEAD_CMD:
+                    cmd = 0
+
+                drive.set_speed(cmd)
+                drive.set_turn(0)
+                drive.drive()
+
+        # OLED at lower rate
+        if pyb.elapsed_millis(last_oled) >= OLED_PERIOD_MS:
+            last_oled = pyb.millis()
+
+            spdA = drive.get_speedA()
+            spdB = drive.get_speedB()
+
+            oled_clear()
+            oled.draw_text(0, 0,  'P:{:6.2f}'.format(pitch))
+            oled.draw_text(0, 12, 'dP:{:6.1f}'.format(pitch_dot))
+            oled.draw_text(0, 24, 'Cmd:{:4d}'.format(cmd))
+            oled.draw_text(0, 36, 'A:{:4d}'.format(spdA))
+            oled.draw_text(0, 48, 'B:{:4d}'.format(spdB))
+            oled.display()
+
+except Exception as e:
+    print('Error:', e)
+    oled_show_error(e)
+
+finally:
+    drive.stop()
+    print('Motors stopped')

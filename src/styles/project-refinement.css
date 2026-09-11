@@ -1,0 +1,97 @@
+/* Case-specific refinements. Keep each project's visual language and evidence intact. */
+[data-project-slug] :where(h1,h2,h3){text-wrap:balance}
+[data-project-slug] :where(p){text-wrap:pretty}
+[data-project-slug] :where(table,output,[class*=metrics],[class*=results]){font-variant-numeric:tabular-nums}
+[data-project-slug] :where(h2[id],#project-evidence,#process-gallery,#project-analysis){scroll-margin-top:112px}
+article.project[data-project-slug] .case-decision{border-color:color-mix(in srgb,currentColor 23%,transparent)}
+/* Earlier technical pages now put the evidence inside the first viewport. */
+article.project[data-project-slug] .eco-hero,article.project[data-project-slug] .reveng-hero{padding-top:54px;min-height:auto;width:min(1200px,calc(100% - 64px));gap:40px 65px;padding-bottom:38px}
+article.project[data-project-slug] .eco-back,article.project[data-project-slug] .reveng-back{margin-bottom:40px;min-height:32px}
+article.project[data-project-slug] .eco-hero h1,article.project[data-project-slug] .reveng-hero h1{font-size:clamp(48px,5.2vw,76px);line-height:1.02}
+article.project[data-project-slug] .eco-hero__visual{padding:20px;background:#f1f0e9;margin-top:0}
+article.project[data-project-slug] .eco-hero__visual:before{display:none}
+article.project[data-project-slug] .eco-hero__visual img{aspect-ratio:auto;object-fit:contain;filter:none}
+article.project[data-project-slug] .eco-hero__visual figcaption{position:static;margin-top:18px;flex-direction:column;gap:6px;color:#455346;font-size:10px;line-height:1.6}
+article.project[data-project-slug] .eco-hero__visual .evidence-caption{color:#455346}
+article.project[data-project-slug] .eco-hero .eco-deck,article.project[data-project-slug] .reveng-hero .reveng-deck{font-size:15px;line-height:1.8;margin-top:28px}
+article.project[data-project-slug] .eco-tags,article.project[data-project-slug] .reveng-tags{gap:6px;margin-top:22px}
+article.project[data-project-slug] .eco-tags span,article.project[data-project-slug] .reveng-tags span{font-size:10px;padding:7px 9px}
+article.project[data-project-slug] .reveng-hero{grid-template-columns:1.2fr .8fr}
+article.project[data-project-slug] .reveng-hero:before{display:none}
+article.project[data-project-slug] .reveng-hero__object{background:#f5f5f1;width:100%;padding:26px 38px 22px;margin:0;border-radius:4px}
+article.project[data-project-slug] .reveng-hero__object:before{display:none}
+article.project[data-project-slug] .reveng-hero__object img{height:350px;width:100%;object-fit:contain;clip-path:none;filter:none;mix-blend-mode:multiply}
+article.project[data-project-slug] .reveng-hero__object .specimen-id{position:static;display:block;writing-mode:horizontal-tb;color:#596864;margin-bottom:20px;font-size:10px}
+article.project[data-project-slug] .reveng-hero__object figcaption{position:static;color:#596864;font-size:10px;line-height:1.6;margin-top:18px}
+/* Health and analysis: make the title and the technical artefact share the stage. */
+article.project[data-project-slug] .med-hero .hero-copy h1{font-size:clamp(56px,6.7vw,94px);line-height:1.01}
+article.project[data-project-slug] .fea-hero .hero-copy h1{font-size:clamp(53px,6.1vw,87px);line-height:1.04}
+article.project[data-project-slug] .fea-hero{gap:35px 50px;padding-top:32px}
+article.project[data-project-slug] .fea-hero .hero-deck{max-width:410px;font-size:25px;line-height:1.35}
+article.project[data-project-slug] .fea-hero .blade-plate{border-radius:4px;overflow:hidden}
+/* Human-centred projects: reduce title height and give the work more space. */
+article.project[data-project-slug] .path-hero .hero-title{margin-top:25px}
+article.project[data-project-slug] .path-hero .hero-title h1{font-size:clamp(70px,9vw,125px);line-height:1.03}
+article.project[data-project-slug] .path-hero .hero-intro{padding-block:25px;gap:55px}
+article.project[data-project-slug] .pet-hero .hero-heading{margin:28px 0 34px;gap:55px}
+article.project[data-project-slug] .pet-hero .hero-heading h1{font-size:clamp(70px,7.5vw,108px);line-height:1.02}
+article.project[data-project-slug] .pet-hero .hero-pair>a{height:390px}
+article.project[data-project-slug] .pet-hero .dooti-cover>img{object-fit:contain;background:#efeee7}
+article.project[data-project-slug] .pet-hero .dooti-cover .cover-bottom{background:#102b26e8;left:0;right:0;bottom:0;padding:16px 24px}
+article.project[data-project-slug] .pet-hero .dooti-cover:after{display:none}
+article.project[data-project-slug] .pet-hero .dooti-cover .cover-label{background:#102b26e8;padding:7px 10px;border-radius:3px}
+article.project[data-project-slug] .bloom-hero .hero-flower{border-radius:12px;min-height:620px}
+article.project[data-project-slug] .bloom-hero .hero-flower>img{object-position:48% 45%}
+article.project[data-project-slug] .bloom-hero .hero-copy h1{font-size:clamp(76px,8vw,115px);line-height:.98}
+article.project[data-project-slug] .bloom-hero .hero-image-label strong{font-size:30px;max-width:350px}
+/* Robotics: real footage has priority; strategy diagrams remain available alongside it. */
+article.project[data-project-slug] .fb-hero h1{font-size:clamp(65px,9.6vw,138px);line-height:1.02;margin-bottom:22px}
+article.project[data-project-slug] .fb-hero .hero-intro{padding-block:20px 28px;gap:55px}
+article.project[data-project-slug] .fb-hero .tactics-hero{grid-template-columns:1fr 1.1fr;gap:20px}
+article.project[data-project-slug] .fb-hero .red-robot{order:-1;padding:0;background:#dedfd4;justify-content:start}
+article.project[data-project-slug] .fb-hero .red-robot>img{width:100%;height:300px;object-fit:cover}
+article.project[data-project-slug] .fb-hero .red-robot figcaption{padding:20px 24px}
+article.project[data-project-slug] .fb-hero .tactics-board{padding:22px;align-self:stretch;display:flex;flex-direction:column;justify-content:center}
+article.project[data-project-slug] .segway-hero .hero-grid{grid-template-columns:1.15fr .85fr;gap:70px;padding-top:25px}
+article.project[data-project-slug] .segway-hero .hero-copy h1{font-size:clamp(52px,5.9vw,82px);line-height:1.04}
+article.project[data-project-slug] .segway-hero .film-frame{box-shadow:none;border:1px solid #667157;max-width:360px}
+article.project[data-project-slug] .segway-hero .film-frame video{max-height:480px;object-fit:contain;background:#11190f}
+/* Long 3D introductions now have an immediate route to the design evidence. */
+article.project[data-project-slug] .suv-cinematic{height:290vh;min-height:1950px}
+article.project[data-project-slug] .suv-stage{min-height:690px}
+article.project[data-project-slug] .suv-hero-copy h1{font-size:clamp(38px,4.2vw,64px);line-height:1.04;max-width:630px}
+article.project[data-project-slug] .suv-summary{max-width:510px;font-size:15px;line-height:1.7}
+article.project[data-project-slug] .suv-tags{max-width:510px}
+article.project[data-project-slug] .suv-tags span{font-size:10px}
+article.project[data-project-slug] .suv-feature-card{max-width:370px;padding:25px;background:#101714f2;backdrop-filter:none}
+article.project[data-project-slug] .suv-feature-card h2{font-size:28px;line-height:1.08}
+article.project[data-project-slug] .suv-feature-card p{font-size:13px;line-height:1.7}
+article.project[data-project-slug] .suv-skip{position:absolute;z-index:3;left:clamp(24px,5vw,80px);bottom:30px;display:inline-flex;align-items:center;min-height:42px;padding:10px 16px;background:#e0e8e0;color:#192620;font:600 11px/1.5 Arial,sans-serif;text-decoration:none;border:1px solid #819b8c;border-radius:3px}
+article.project[data-project-slug] .suv-skip:focus-visible{outline:3px solid white;outline-offset:5px}
+article.project[data-project-slug] .suv-fallback{position:absolute;width:54%;height:65%;right:3%;top:20%;object-fit:contain;opacity:1}
+article.project[data-project-slug] [data-suv-viewer][data-model-ready] .suv-fallback{display:none}
+@media(max-width:1000px){article.project[data-project-slug] .segway-hero .hero-grid{gap:36px}article.project[data-project-slug] .med-hero .hero-copy h1{font-size:60px}article.project[data-project-slug] .fea-hero .hero-copy h1{font-size:57px}article.project[data-project-slug] .eco-hero,article.project[data-project-slug] .reveng-hero{gap:36px}article.project[data-project-slug] .eco-hero h1,article.project[data-project-slug] .reveng-hero h1{font-size:55px}}
+@media(max-width:760px){
+ article.project[data-project-slug] .eco-hero,article.project[data-project-slug] .reveng-hero{width:calc(100% - 40px);grid-template-columns:1fr;padding-top:25px;gap:30px}
+ article.project[data-project-slug] .eco-back,article.project[data-project-slug] .reveng-back{margin-bottom:25px}
+ article.project[data-project-slug] .eco-hero h1,article.project[data-project-slug] .reveng-hero h1{font-size:clamp(43px,10.5vw,66px)}
+ article.project[data-project-slug] .eco-hero__visual{width:100%;padding:15px}article.project[data-project-slug] .reveng-hero__object{max-width:430px}
+ article.project[data-project-slug] .med-hero .hero-copy h1{font-size:clamp(47px,11.8vw,75px)}
+ article.project[data-project-slug] .fea-hero .hero-copy h1{font-size:clamp(47px,11vw,69px)}
+ article.project[data-project-slug] .fea-hero{gap:28px}article.project[data-project-slug] .fea-hero .hero-deck{font-size:23px}
+ article.project[data-project-slug] .pet-hero .hero-heading{gap:25px;margin:22px 0 28px}article.project[data-project-slug] .pet-hero .hero-heading h1{font-size:clamp(61px,15vw,100px)}
+ article.project[data-project-slug] .pet-hero .hero-pair{grid-template-columns:1fr}article.project[data-project-slug] .pet-hero .hero-pair>a{height:310px}article.project[data-project-slug] .pet-hero .petease-cover>img{height:235px;margin-top:23px}article.project[data-project-slug] .pet-hero .dooti-cover>img{object-position:center 34%;padding-bottom:44px}article.project[data-project-slug] .pet-hero .cover-label{font-size:10px}article.project[data-project-slug] .pet-hero .cover-bottom div>span{max-width:none}
+ article.project[data-project-slug] .path-hero .hero-title h1{font-size:clamp(58px,13.5vw,95px)}article.project[data-project-slug] .path-hero .hero-intro{gap:20px;padding-block:22px}
+ article.project[data-project-slug] .bloom-hero .hero-copy h1{font-size:clamp(67px,15.7vw,105px)}article.project[data-project-slug] .bloom-hero .hero-flower{min-height:560px;max-width:480px;width:100%;margin:auto}
+ article.project[data-project-slug] .fb-hero h1{font-size:clamp(55px,12vw,90px)}article.project[data-project-slug] .fb-hero .hero-intro{gap:20px}article.project[data-project-slug] .fb-hero .tactics-hero{grid-template-columns:1fr}article.project[data-project-slug] .fb-hero .red-robot{display:block}article.project[data-project-slug] .fb-hero .red-robot>img{height:auto;aspect-ratio:16/10}article.project[data-project-slug] .fb-hero .tactics-board{padding:18px}
+ article.project[data-project-slug] .segway-hero .hero-grid{grid-template-columns:1fr;gap:30px}article.project[data-project-slug] .segway-hero .hero-copy h1{font-size:clamp(43px,10.6vw,68px)}article.project[data-project-slug] .segway-hero .film-frame{width:100%;max-width:390px}
+ article.project[data-project-slug] .suv-cinematic{height:215vh;min-height:1500px}article.project[data-project-slug] .suv-stage{min-height:790px}article.project[data-project-slug] .suv-hero-copy h1{font-size:clamp(32px,8vw,47px);max-width:92%}article.project[data-project-slug] .suv-summary{font-size:13px;max-width:94%}article.project[data-project-slug] .suv-skip{left:22px;bottom:16px}article.project[data-project-slug] .suv-feature-card{max-width:calc(100% - 44px);padding:17px}article.project[data-project-slug] .suv-feature-card h2{font-size:23px}article.project[data-project-slug] .suv-feature-card p{font-size:12px}article.project[data-project-slug] .suv-fallback{width:94%;height:50%;right:3%;top:35%}
+ [data-project-slug] :where(h2[id],#project-evidence,#process-gallery,#project-analysis){scroll-margin-top:150px}
+}
+@media(prefers-reduced-motion:reduce){html:has([data-project-slug]){scroll-behavior:auto}article.project[data-project-slug] .suv-feature-card.is-changing{animation:none}}
+
+/* Written evidence remains readable even when enhancement scripts are unavailable. */
+article.project[data-project-slug] .eco-reveal,article.project[data-project-slug] .reveng-reveal{opacity:1;transform:none;transition:none}
+
+article.project[data-project-slug] .eco-case,article.project[data-project-slug] .reveng-case{margin-top:0}
+article.project[data-project-slug] .suv-hero-copy .suv-skip{position:static;left:auto;bottom:auto;margin-top:22px}

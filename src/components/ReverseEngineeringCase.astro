@@ -1,0 +1,1183 @@
+---
+import CaseDecision from "./CaseDecision.astro";
+import type { Project } from "../lib/projects";
+
+type Props = {
+  project: Project;
+};
+
+const { project } = Astro.props;
+
+const lifecycle = [
+  { label: "Materials", value: "52.5 MJ", share: "60.8%", width: 60.8 },
+  { label: "Transport", value: "32.0 MJ", share: "37.0%", width: 37 },
+  { label: "Manufacture", value: "1.74 MJ", share: "2.0%", width: 2 },
+  { label: "Use + disposal", value: "0.16 MJ", share: "0.2%", width: 0.2 }
+];
+
+const evidence = [
+  ["/images/projects/reverse-engineering-shaver/teardown-01.png", "01", "Opening the foil assembly"],
+  ["/images/projects/reverse-engineering-shaver/teardown-02.png", "02", "Battery and transmission access"],
+  ["/images/projects/reverse-engineering-shaver/teardown-03.png", "03", "Separating the head mechanism"],
+  ["/images/projects/reverse-engineering-shaver/teardown-04.png", "04", "Exposing the blade drive"],
+  ["/images/projects/reverse-engineering-shaver/teardown-05.png", "05", "Removing foil and cutter block"]
+];
+
+const materialRows = [
+  ["Outer housing", "PC / POM / PE", "Injection moulding", "Form, impact resistance, low-volume cost"],
+  ["Foil + cutter", "Stainless steel", "Stamping + rolling", "Hardness, edge retention, corrosion resistance"],
+  ["Drive structure", "Steel + engineering polymers", "Casting + moulding", "Stiffness and controlled motion"],
+  ["Motor + batteries", "Mixed metals / cells", "Purchased assemblies", "68.6% of material-phase energy"]
+];
+---
+
+<div class="reveng-case" data-reveng-case>
+  <header class="reveng-hero">
+    <div class="reveng-hero__copy reveng-reveal is-visible">
+      <a class="reveng-back" href="/#projects">Back to projects</a>
+      <p class="reveng-kicker">Product investigation / 2025</p>
+      <h1>Braun M60<br /><span>Reverse Engineering</span></h1>
+      <p class="reveng-deck">
+        I took a pocket shaver apart to understand the decisions hidden inside it: 44 component
+        instances, their materials and manufacturing routes, and the lifecycle cost of putting them
+        together.
+      </p>
+      <div class="reveng-tags" aria-label="Project skills">
+        {project.tags.map((tag) => <span>{tag}</span>)}
+      </div>
+    </div>
+
+    <figure class="reveng-hero__object reveng-reveal is-visible">
+      <span class="specimen-id">SPECIMEN M60 / 01</span>
+      <img
+        src="/images/projects/reverse-engineering-shaver/product.png"
+        alt="Braun MobileShave M60 with its protective cover rotated to expose the foil head"
+      />
+      <figcaption>Commercial product / Protective cover & foil assembly</figcaption>
+    </figure>
+
+    <div class="reveng-metrics reveng-reveal is-visible" aria-label="Project highlights">
+      <div><strong>44</strong><span>component instances</span></div>
+      <div><strong>86.4</strong><span>MJ first-life energy</span></div>
+      <div><strong>5.47</strong><span>kg CO₂ footprint</span></div>
+      <div><strong>−42.2</strong><span>MJ recovery potential</span></div>
+    </div>
+  </header>
+  <CaseDecision slug={project.slug} />
+
+  <div class="reveng-body">
+    <section class="reveng-section reveng-anatomy" aria-labelledby="anatomy-title">
+      <div class="reveng-section__head reveng-reveal">
+        <p class="reveng-index">01 / Object anatomy</p>
+        <h2 id="anatomy-title">One product.<br />Every decision exposed.</h2>
+        <p>
+          I disassembled the M60 to its smallest serviceable elements, weighed and numbered each
+          part, then grouped the system into housing, power, transmission and cutting functions.
+          The teardown turned an opaque consumer object into an auditable bill of materials.
+        </p>
+      </div>
+
+      <figure class="anatomy-plate reveng-reveal">
+        <button
+          class="image-open"
+          type="button"
+          data-lightbox-src="/images/projects/reverse-engineering-shaver/teardown-map.png"
+          data-lightbox-alt="Complete annotated component teardown of the Braun M60"
+          aria-label="Enlarge complete annotated teardown"
+        >
+          <img
+            src="/images/projects/reverse-engineering-shaver/teardown-map.png"
+            alt="Complete annotated component teardown of the Braun M60"
+            loading="lazy"
+          />
+        </button>
+        <figcaption>
+          <span>Physical teardown / annotated by hand</span>
+          <span>PC · POM · PP · PE · PU · stainless steel</span>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="reveng-section reveng-evidence" aria-labelledby="evidence-title">
+      <div class="evidence-intro reveng-reveal">
+        <p class="reveng-index">02 / Evidence log</p>
+        <h2 id="evidence-title">Disassembly as a way of reading.</h2>
+        <p>
+          Fasteners, snap fits, mould marks and wear traces revealed how the product was assembled,
+          where it was designed to flex, and which parts were intended to be replaced rather than
+          repaired.
+        </p>
+      </div>
+
+      <div class="evidence-grid">
+        {evidence.map(([src, number, caption], index) => (
+          <figure class:list={["evidence-shot", `evidence-shot--${index + 1}`, "reveng-reveal"]}>
+            <button
+              class="image-open"
+              type="button"
+              data-lightbox-src={src}
+              data-lightbox-alt={caption}
+              aria-label={`Enlarge ${caption}`}
+            >
+              <img src={src} alt={caption} loading="lazy" />
+            </button>
+            <figcaption><span>{number}</span>{caption}</figcaption>
+          </figure>
+        ))}
+        <figure class="evidence-shot evidence-shot--test reveng-reveal">
+          <button
+            class="image-open"
+            type="button"
+            data-lightbox-src="/images/projects/reverse-engineering-shaver/flame-test.png"
+            data-lightbox-alt="Flame testing a polymer sample for material identification"
+            aria-label="Enlarge flame test evidence"
+          >
+            <img
+              src="/images/projects/reverse-engineering-shaver/flame-test.png"
+              alt="Flame testing a polymer sample for material identification"
+              loading="lazy"
+            />
+          </button>
+          <figcaption><span>06</span>Flame-test identification</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="reveng-section reveng-ledger" aria-labelledby="ledger-title">
+      <div class="reveng-section__head reveng-reveal">
+        <p class="reveng-index">03 / Material + process ledger</p>
+        <h2 id="ledger-title">The bill of materials became a manufacturing map.</h2>
+        <p>
+          Visual inspection, technician input, flame testing and CES EduPack were combined to avoid
+          treating material identification as guesswork. Each selection was tied back to the
+          performance the part needed and the process that made its geometry economical.
+        </p>
+      </div>
+
+      <div class="material-table reveng-reveal" role="table" aria-label="Material and process mapping">
+        <div class="material-row material-row--head" role="row">
+          <span role="columnheader">System</span>
+          <span role="columnheader">Material family</span>
+          <span role="columnheader">Primary process</span>
+          <span role="columnheader">Design reading</span>
+        </div>
+        {materialRows.map((row) => (
+          <div class="material-row" role="row">
+            {row.map((cell) => <span role="cell">{cell}</span>)}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="reveng-section reveng-lifecycle" aria-labelledby="lifecycle-title">
+      <div class="reveng-section__head reveng-reveal">
+        <p class="reveng-index">04 / Lifecycle audit</p>
+        <h2 id="lifecycle-title">The impact sits upstream.</h2>
+        <p>
+          Granta Eco Audit showed that material production and transport dominate the first life.
+          Use energy is almost negligible, so a credible redesign has to change material choice,
+          mass and recovery rather than optimise the switch or battery runtime.
+        </p>
+      </div>
+
+      <div class="lifecycle-readout">
+        <div class="lifecycle-bars reveng-reveal">
+          {lifecycle.map((phase) => (
+            <div class="phase-row">
+              <div class="phase-label"><strong>{phase.label}</strong><span>{phase.value}</span></div>
+              <div class="phase-track" aria-label={`${phase.label}: ${phase.share}`}>
+                <i style={`--phase-width: ${Math.max(phase.width, 0.8)}%`}></i>
+              </div>
+              <span class="phase-share">{phase.share}</span>
+            </div>
+          ))}
+        </div>
+
+        <div class="lifecycle-note reveng-reveal">
+          <p>Largest material burden</p>
+          <strong>68.6%</strong>
+          <span>The motor’s share of material-phase embodied energy.</span>
+        </div>
+      </div>
+
+      <figure class="audit-source reveng-reveal">
+        <img
+          src="/images/projects/reverse-engineering-shaver/eco-audit.png"
+          alt="Lifecycle energy and carbon footprint table from the Granta Eco Audit"
+          loading="lazy"
+        />
+        <figcaption>First-life Granta Eco Audit / report source data</figcaption>
+      </figure>
+    </section>
+
+    <section class="reveng-section reveng-redesign" aria-labelledby="redesign-title">
+      <div class="reveng-section__head reveng-reveal">
+        <p class="reveng-index">05 / Redesign direction</p>
+        <h2 id="redesign-title">A premium redesign, with the trade-off left visible.</h2>
+        <p>
+          The client brief asked for a more industrial and premium product. Ashby screening led to
+          aluminium for the housing and titanium for the blade set, with die casting proposed for
+          production. The result improves tactility, corrosion resistance and recovery potential,
+          but does not pretend that premium metals arrive for free.
+        </p>
+      </div>
+
+      <div class="decision-shift reveng-reveal">
+        <div>
+          <span>Original</span>
+          <strong>PC + POM housing</strong>
+          <p>Injection moulded, light, economical and visually translucent.</p>
+        </div>
+        <b aria-hidden="true">→</b>
+        <div>
+          <span>Proposal</span>
+          <strong>Aluminium housing</strong>
+          <p>Die cast for a stiffer, corrosion-resistant and more premium shell.</p>
+        </div>
+        <div>
+          <span>Original</span>
+          <strong>Stainless blade set</strong>
+          <p>Hard, manufacturable and proven for the shaving interface.</p>
+        </div>
+        <b aria-hidden="true">→</b>
+        <div>
+          <span>Proposal</span>
+          <strong>Titanium blade set</strong>
+          <p>Lower density, high corrosion resistance and stronger premium signal.</p>
+        </div>
+      </div>
+
+      <div class="ashby-gallery">
+        <figure class="reveng-reveal">
+          <button
+            class="image-open"
+            type="button"
+            data-lightbox-src="/images/projects/reverse-engineering-shaver/ashby-hardness-price.png"
+            data-lightbox-alt="Ashby chart comparing material hardness and price"
+            aria-label="Enlarge material hardness and price chart"
+          >
+            <img
+              src="/images/projects/reverse-engineering-shaver/ashby-hardness-price.png"
+              alt="Ashby chart comparing material hardness and price"
+              loading="lazy"
+            />
+          </button>
+          <figcaption>Hardness × price</figcaption>
+        </figure>
+        <figure class="reveng-reveal">
+          <button
+            class="image-open"
+            type="button"
+            data-lightbox-src="/images/projects/reverse-engineering-shaver/ashby-hardness-carbon.png"
+            data-lightbox-alt="Ashby chart comparing hardness and carbon footprint"
+            aria-label="Enlarge material hardness and carbon chart"
+          >
+            <img
+              src="/images/projects/reverse-engineering-shaver/ashby-hardness-carbon.png"
+              alt="Ashby chart comparing hardness and carbon footprint"
+              loading="lazy"
+            />
+          </button>
+          <figcaption>Hardness × embodied carbon</figcaption>
+        </figure>
+      </div>
+
+      <div class="tradeoff reveng-reveal">
+        <p>Embodied energy</p>
+        <div><span>86.4 MJ</span><i></i><strong>95.8 MJ</strong></div>
+        <p>End-of-life recovery potential</p>
+        <div><span>42.2 MJ</span><i></i><strong>52.0 MJ</strong></div>
+        <small>
+          The proposal raises first-life energy while also raising recovery potential. I kept that
+          tension visible because responsible design is a decision between competing priorities,
+          not a cleaner-looking number.
+        </small>
+      </div>
+    </section>
+
+    <section class="reveng-close reveng-reveal">
+      <p class="reveng-index">Reflection</p>
+      <blockquote>
+        Reverse engineering taught me to read a product as a chain of connected choices: form
+        implies process, process implies material, and material carries a cost long before the user
+        turns the product on.
+      </blockquote>
+      <a href="/#projects">Return to project archive</a>
+    </section>
+  </div>
+
+  <dialog class="reveng-lightbox" data-reveng-lightbox>
+    <button class="lightbox-close" type="button" data-lightbox-close aria-label="Close image" title="Close">×</button>
+    <img data-lightbox-image src="" alt="" />
+  </dialog>
+</div>
+
+<script>
+  const caseRoot = document.querySelector<HTMLElement>("[data-reveng-case]");
+  const revealNodes = caseRoot?.querySelectorAll<HTMLElement>(".reveng-reveal") ?? [];
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -7%" }
+    );
+    revealNodes.forEach((node) => observer.observe(node));
+  } else {
+    revealNodes.forEach((node) => node.classList.add("is-visible"));
+  }
+
+  const lightbox = caseRoot?.querySelector<HTMLDialogElement>("[data-reveng-lightbox]");
+  const lightboxImage = lightbox?.querySelector<HTMLImageElement>("[data-lightbox-image]");
+
+  caseRoot?.querySelectorAll<HTMLButtonElement>("[data-lightbox-src]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!lightbox || !lightboxImage) return;
+      lightboxImage.src = button.dataset.lightboxSrc ?? "";
+      lightboxImage.alt = button.dataset.lightboxAlt ?? "Project evidence";
+      lightbox.showModal();
+    });
+  });
+
+  lightbox?.querySelector<HTMLButtonElement>("[data-lightbox-close]")?.addEventListener("click", () => {
+    lightbox.close();
+  });
+
+  lightbox?.addEventListener("click", (event) => {
+    if (event.target === lightbox) lightbox.close();
+  });
+</script>
+
+<style>
+  .reveng-case {
+    --rev-blue: #3467ff;
+    --rev-blue-bright: #6f92ff;
+    --rev-paper: #e9e9e5;
+    --rev-graphite: #141719;
+    margin-top: -82px;
+    overflow: hidden;
+    background: #050607;
+    color: var(--text);
+  }
+
+  .reveng-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.16fr) minmax(320px, 0.64fr);
+    grid-template-rows: 1fr auto;
+    gap: 42px 6vw;
+    width: min(100% - 48px, 1440px);
+    min-height: min(920px, 94svh);
+    margin: 0 auto;
+    padding: 156px 0 34px;
+  }
+
+  .reveng-hero::before {
+    position: absolute;
+    top: 112px;
+    right: 32%;
+    width: 1px;
+    height: calc(100% - 150px);
+    background: rgba(255, 255, 255, 0.09);
+    content: "";
+  }
+
+  .reveng-hero__copy {
+    position: relative;
+    z-index: 2;
+    align-self: center;
+    max-width: 900px;
+  }
+
+  .reveng-back {
+    display: inline-block;
+    margin-bottom: clamp(40px, 7vh, 86px);
+    color: rgba(246, 248, 243, 0.55);
+    font-size: 0.82rem;
+    text-underline-offset: 5px;
+  }
+
+  .reveng-kicker,
+  .reveng-index {
+    margin: 0 0 18px;
+    color: var(--rev-blue-bright);
+    font-size: 0.72rem;
+    font-weight: 750;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .reveng-hero h1 {
+    max-width: 980px;
+    margin: 0;
+    font-size: clamp(4rem, 7.5vw, 8.1rem);
+    font-weight: 650;
+    line-height: 0.82;
+  }
+
+  .reveng-hero h1 span {
+    color: rgba(246, 248, 243, 0.48);
+    font-weight: 520;
+  }
+
+  .reveng-deck {
+    max-width: 710px;
+    margin: 38px 0 0;
+    color: rgba(233, 233, 229, 0.7);
+    font-size: clamp(1.05rem, 1.35vw, 1.28rem);
+    line-height: 1.65;
+  }
+
+  .reveng-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 28px;
+  }
+
+  .reveng-tags span {
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 999px;
+    color: rgba(233, 233, 229, 0.62);
+    font-size: 0.72rem;
+  }
+
+  .reveng-hero__object {
+    position: relative;
+    align-self: center;
+    justify-self: center;
+    width: min(100%, 430px);
+    margin: 24px 0 0;
+  }
+
+  .reveng-hero__object::before {
+    position: absolute;
+    inset: 13% -24% 8%;
+    z-index: -1;
+    background: rgba(52, 103, 255, 0.12);
+    filter: blur(80px);
+    content: "";
+  }
+
+  .reveng-hero__object img {
+    width: 100%;
+    max-height: 650px;
+    object-fit: cover;
+    object-position: center;
+    clip-path: inset(0 6% 0 6%);
+    filter: saturate(0.92) contrast(1.06);
+  }
+
+  .specimen-id,
+  .reveng-hero__object figcaption {
+    position: absolute;
+    z-index: 1;
+    color: rgba(246, 248, 243, 0.5);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.63rem;
+    text-transform: uppercase;
+  }
+
+  .specimen-id {
+    top: 10%;
+    right: -3%;
+    writing-mode: vertical-rl;
+  }
+
+  .reveng-hero__object figcaption {
+    right: 5%;
+    bottom: 1%;
+  }
+
+  .reveng-metrics {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .reveng-metrics div {
+    display: grid;
+    gap: 6px;
+    padding: 22px 24px 0 0;
+  }
+
+  .reveng-metrics strong {
+    font-size: clamp(1.65rem, 2.8vw, 3rem);
+    font-weight: 580;
+  }
+
+  .reveng-metrics span {
+    color: rgba(246, 248, 243, 0.45);
+    font-size: 0.76rem;
+    text-transform: uppercase;
+  }
+
+  .reveng-body {
+    background: var(--rev-paper);
+    color: var(--rev-graphite);
+  }
+
+  .reveng-section,
+  .reveng-close {
+    width: min(100% - 48px, 1320px);
+    margin: 0 auto;
+    padding: clamp(92px, 12vw, 172px) 0;
+  }
+
+  .reveng-section + .reveng-section {
+    border-top: 1px solid rgba(20, 23, 25, 0.15);
+  }
+
+  .reveng-section__head,
+  .evidence-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.35fr);
+    column-gap: 8vw;
+    align-items: start;
+    margin-bottom: clamp(48px, 7vw, 92px);
+  }
+
+  .reveng-section__head .reveng-index,
+  .evidence-intro .reveng-index {
+    grid-column: 1;
+  }
+
+  .reveng-section__head h2,
+  .evidence-intro h2 {
+    grid-column: 1;
+    margin: 0;
+    font-size: clamp(2.6rem, 5.2vw, 6rem);
+    font-weight: 560;
+    line-height: 0.92;
+  }
+
+  .reveng-section__head > p:last-child,
+  .evidence-intro > p:last-child {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    max-width: 620px;
+    margin: 34px 0 0;
+    color: rgba(20, 23, 25, 0.68);
+    font-size: clamp(1.04rem, 1.35vw, 1.26rem);
+    line-height: 1.72;
+  }
+
+  .reveng-body .reveng-index {
+    color: #2450d6;
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  .image-open {
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
+  }
+
+  .image-open img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms cubic-bezier(0.2, 0.72, 0, 1);
+  }
+
+  .image-open:hover img {
+    transform: scale(1.018);
+  }
+
+  .anatomy-plate {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 26px;
+    align-items: end;
+  }
+
+  .anatomy-plate .image-open {
+    max-height: 900px;
+    background: #d8d7d1;
+  }
+
+  .anatomy-plate img {
+    object-position: center 40%;
+  }
+
+  .anatomy-plate figcaption {
+    display: grid;
+    gap: 12px;
+    padding-bottom: 2px;
+    color: rgba(20, 23, 25, 0.52);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+
+  .evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .evidence-shot {
+    display: grid;
+    gap: 10px;
+  }
+
+  .evidence-shot .image-open {
+    height: 100%;
+    min-height: 260px;
+    background: #c9cbc7;
+  }
+
+  .evidence-shot figcaption {
+    display: flex;
+    gap: 18px;
+    color: rgba(20, 23, 25, 0.58);
+    font-size: 0.76rem;
+    text-transform: uppercase;
+  }
+
+  .evidence-shot figcaption span {
+    color: #2450d6;
+    font-weight: 750;
+  }
+
+  .evidence-shot--1 { grid-column: 1 / span 4; }
+  .evidence-shot--2 { grid-column: 5 / span 3; }
+  .evidence-shot--3 { grid-column: 8 / span 5; }
+  .evidence-shot--4 { grid-column: 1 / span 5; }
+  .evidence-shot--5 { grid-column: 6 / span 3; }
+  .evidence-shot--test { grid-column: 9 / span 4; }
+
+  .evidence-shot--1 .image-open,
+  .evidence-shot--2 .image-open,
+  .evidence-shot--5 .image-open {
+    aspect-ratio: 0.78;
+  }
+
+  .evidence-shot--3 .image-open,
+  .evidence-shot--4 .image-open,
+  .evidence-shot--test .image-open {
+    aspect-ratio: 1.28;
+  }
+
+  .evidence-shot--test img {
+    object-position: 50% 42%;
+  }
+
+  .material-table {
+    border-top: 2px solid var(--rev-graphite);
+  }
+
+  .material-row {
+    display: grid;
+    grid-template-columns: 0.8fr 1fr 1fr 1.35fr;
+    border-bottom: 1px solid rgba(20, 23, 25, 0.18);
+  }
+
+  .material-row span {
+    padding: 20px 22px 20px 0;
+    color: rgba(20, 23, 25, 0.66);
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .material-row span:first-child {
+    color: var(--rev-graphite);
+    font-weight: 680;
+  }
+
+  .material-row--head span {
+    color: rgba(20, 23, 25, 0.4);
+    font-size: 0.69rem;
+    font-weight: 720;
+    text-transform: uppercase;
+  }
+
+  .lifecycle-readout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.55fr);
+    gap: clamp(48px, 6vw, 86px);
+    align-items: stretch;
+  }
+
+  .lifecycle-bars {
+    display: grid;
+    gap: 28px;
+  }
+
+  .phase-row {
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr) 58px;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .phase-label {
+    display: grid;
+    gap: 4px;
+  }
+
+  .phase-label strong {
+    font-size: 0.98rem;
+  }
+
+  .phase-label span,
+  .phase-share {
+    color: rgba(20, 23, 25, 0.48);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+  }
+
+  .phase-track {
+    height: 13px;
+    background: rgba(20, 23, 25, 0.1);
+  }
+
+  .phase-track i {
+    display: block;
+    width: var(--phase-width);
+    height: 100%;
+    background: var(--rev-blue);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 900ms cubic-bezier(0.2, 0.72, 0, 1) 180ms;
+  }
+
+  .is-visible .phase-track i,
+  .phase-row:has(.is-visible) .phase-track i {
+    transform: scaleX(1);
+  }
+
+  .lifecycle-note {
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 300px;
+    padding: 26px;
+    background: var(--rev-graphite);
+    color: var(--rev-paper);
+  }
+
+  .lifecycle-note p {
+    margin: 0 auto auto 0;
+    color: rgba(233, 233, 229, 0.5);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+  }
+
+  .lifecycle-note strong {
+    max-width: 100%;
+    font-size: clamp(3.5rem, 24cqi, 5.2rem);
+    font-weight: 540;
+    line-height: 0.9;
+    white-space: nowrap;
+  }
+
+  .lifecycle-note span {
+    margin-top: 18px;
+    color: rgba(233, 233, 229, 0.62);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .audit-source {
+    margin-top: 56px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(20, 23, 25, 0.14);
+  }
+
+  .audit-source img {
+    width: 100%;
+    background: white;
+  }
+
+  .audit-source figcaption,
+  .ashby-gallery figcaption {
+    margin-top: 12px;
+    color: rgba(20, 23, 25, 0.48);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .decision-shift {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr);
+    border-top: 2px solid var(--rev-graphite);
+  }
+
+  .decision-shift > div,
+  .decision-shift > b {
+    padding: 26px 18px 30px 0;
+    border-bottom: 1px solid rgba(20, 23, 25, 0.18);
+  }
+
+  .decision-shift > div {
+    display: grid;
+    gap: 8px;
+  }
+
+  .decision-shift > b {
+    align-content: center;
+    display: grid;
+    color: #2450d6;
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  .decision-shift span {
+    color: rgba(20, 23, 25, 0.42);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .decision-shift strong {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-weight: 620;
+  }
+
+  .decision-shift p {
+    max-width: 440px;
+    margin: 0;
+    color: rgba(20, 23, 25, 0.6);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .ashby-gallery {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 72px;
+  }
+
+  .ashby-gallery .image-open {
+    aspect-ratio: 1.34;
+    background: white;
+  }
+
+  .ashby-gallery img {
+    object-fit: contain;
+  }
+
+  .tradeoff {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 16px 34px;
+    margin-top: 68px;
+    padding: 34px;
+    background: #d8d9d4;
+  }
+
+  .tradeoff > p {
+    margin: 0;
+    color: rgba(20, 23, 25, 0.55);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+  }
+
+  .tradeoff > div {
+    display: grid;
+    grid-template-columns: max-content minmax(40px, 1fr) max-content;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .tradeoff > div span,
+  .tradeoff > div strong {
+    font-size: clamp(1.4rem, 2.7vw, 2.6rem);
+    font-weight: 550;
+  }
+
+  .tradeoff > div strong {
+    color: #2450d6;
+  }
+
+  .tradeoff > div i {
+    height: 1px;
+    background: rgba(20, 23, 25, 0.26);
+  }
+
+  .tradeoff small {
+    grid-column: 2;
+    max-width: 780px;
+    margin-top: 12px;
+    color: rgba(20, 23, 25, 0.62);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .reveng-close {
+    padding-bottom: clamp(110px, 15vw, 210px);
+    border-top: 1px solid rgba(20, 23, 25, 0.15);
+  }
+
+  .reveng-close blockquote {
+    max-width: 1080px;
+    margin: 0 0 54px;
+    font-size: clamp(2.3rem, 5vw, 5.7rem);
+    font-weight: 540;
+    line-height: 1.02;
+  }
+
+  .reveng-close a {
+    color: #2450d6;
+    font-size: 0.9rem;
+    text-underline-offset: 6px;
+  }
+
+  .reveng-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 700ms ease,
+      transform 800ms cubic-bezier(0.2, 0.72, 0, 1);
+  }
+
+  .reveng-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveng-lightbox {
+    width: min(94vw, 1440px);
+    max-width: none;
+    height: min(92svh, 980px);
+    padding: 34px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    background: rgba(5, 6, 7, 0.96);
+    color: white;
+  }
+
+  .reveng-lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(10px);
+  }
+
+  .reveng-lightbox img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    background: #0d0f10;
+    color: white;
+    cursor: pointer;
+  }
+
+  @media (max-width: 900px) {
+    .reveng-case {
+      margin-top: 0;
+    }
+
+    .reveng-hero {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding-top: 72px;
+    }
+
+    .reveng-hero::before {
+      display: none;
+    }
+
+    .reveng-back {
+      margin-bottom: 48px;
+    }
+
+    .reveng-hero__object {
+      width: min(72vw, 440px);
+      margin-top: 0;
+    }
+
+    .reveng-metrics {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .reveng-section__head,
+    .evidence-intro {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+
+    .reveng-section__head > p:last-child,
+    .evidence-intro > p:last-child {
+      grid-column: 1;
+      grid-row: auto;
+      margin-top: 0;
+    }
+
+    .anatomy-plate {
+      grid-template-columns: 1fr;
+    }
+
+    .anatomy-plate .image-open {
+      max-height: 760px;
+    }
+
+    .evidence-shot--1,
+    .evidence-shot--2,
+    .evidence-shot--3,
+    .evidence-shot--4,
+    .evidence-shot--5,
+    .evidence-shot--test {
+      grid-column: span 6;
+    }
+
+    .lifecycle-readout {
+      grid-template-columns: 1fr;
+    }
+
+    .material-row {
+      grid-template-columns: 0.8fr 1fr 1fr;
+    }
+
+    .material-row span:last-child {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .reveng-hero,
+    .reveng-section,
+    .reveng-close {
+      width: min(100% - 24px, 1320px);
+    }
+
+    .reveng-hero h1 {
+      font-size: clamp(3.15rem, 16vw, 5.6rem);
+      line-height: 0.86;
+    }
+
+    .reveng-deck {
+      margin-top: 26px;
+    }
+
+    .reveng-tags {
+      margin-top: 20px;
+    }
+
+    .reveng-hero__object {
+      width: min(68vw, 390px);
+    }
+
+    .reveng-metrics div {
+      padding: 18px 12px 8px 0;
+    }
+
+    .reveng-metrics span {
+      font-size: 0.64rem;
+    }
+
+    .evidence-grid {
+      gap: 22px 10px;
+    }
+
+    .evidence-shot--1,
+    .evidence-shot--2,
+    .evidence-shot--3,
+    .evidence-shot--4,
+    .evidence-shot--5,
+    .evidence-shot--test {
+      grid-column: 1 / -1;
+    }
+
+    .evidence-shot .image-open {
+      min-height: 0;
+      aspect-ratio: 1.12;
+    }
+
+    .material-table {
+      overflow-x: auto;
+    }
+
+    .material-row {
+      min-width: 610px;
+    }
+
+    .phase-row {
+      grid-template-columns: 112px minmax(0, 1fr) 45px;
+      gap: 10px;
+    }
+
+    .phase-label strong {
+      font-size: 0.82rem;
+    }
+
+    .audit-source {
+      overflow-x: auto;
+    }
+
+    .audit-source img {
+      min-width: 720px;
+    }
+
+    .decision-shift {
+      grid-template-columns: 1fr 28px 1fr;
+    }
+
+    .decision-shift > div,
+    .decision-shift > b {
+      padding-right: 8px;
+    }
+
+    .decision-shift p {
+      display: none;
+    }
+
+    .ashby-gallery {
+      grid-template-columns: 1fr;
+    }
+
+    .tradeoff {
+      grid-template-columns: 1fr;
+      padding: 22px;
+    }
+
+    .tradeoff > div,
+    .tradeoff small {
+      grid-column: 1;
+    }
+
+    .reveng-lightbox {
+      width: 96vw;
+      height: 90svh;
+      padding: 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveng-reveal,
+    .phase-track i,
+    .image-open img {
+      transition: none;
+    }
+  }
+</style>

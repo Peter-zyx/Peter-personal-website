@@ -1,0 +1,46 @@
+---
+import Header from "../components/Header.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Page not found | Yuxuan Zhou">
+  <Header />
+  <main class="not-found container">
+    <p class="eyebrow">404</p>
+    <h1>This route has not been prototyped yet.</h1>
+    <p>Return to the project archive and keep exploring the portfolio.</p>
+    <a href="/#projects">Back to projects</a>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    align-content: center;
+    min-height: calc(100vh - 100px);
+  }
+
+  h1 {
+    max-width: 820px;
+    margin: 0;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.9;
+  }
+
+  p:not(.eyebrow) {
+    max-width: 520px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  a {
+    width: fit-content;
+    margin-top: 16px;
+    padding: 12px 16px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--metal-soft);
+    color: var(--text);
+    text-decoration: none;
+  }
+</style>

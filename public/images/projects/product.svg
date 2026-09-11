@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#070707"/>
+  <g transform="translate(420 210)">
+    <path d="M180 0 360 104v208L180 416 0 312V104Z" fill="#171512" stroke="#d3b47a" stroke-width="3"/>
+    <path d="M0 104 180 208l180-104M180 208v208" fill="none" stroke="#f4f1ea" stroke-width="3" opacity=".55"/>
+    <path d="M78 151 258 47M105 318l180-104" stroke="#d3b47a" stroke-width="2" opacity=".45"/>
+  </g>
+  <g stroke="#f4f1ea" opacity=".14">
+    <path d="M120 710h960M120 760h960M120 810h960"/>
+    <path d="M180 650v200M360 650v200M540 650v200M720 650v200M900 650v200"/>
+  </g>
+  <text x="72" y="112" fill="#f4f1ea" font-family="Inter,Arial" font-size="64" font-weight="700">PRODUCT SYSTEMS</text>
+  <text x="74" y="166" fill="#a8a39a" font-family="Inter,Arial" font-size="26">form, material, usability, manufacture</text>
+</svg>

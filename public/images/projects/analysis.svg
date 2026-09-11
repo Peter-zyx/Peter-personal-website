@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#050505"/>
+  <g transform="translate(160 220)" fill="none">
+    <path d="M0 392c106-268 244-346 414-236 110 71 204 72 326-92" stroke="#d3b47a" stroke-width="5"/>
+    <path d="M0 392h880M0 0v392" stroke="#f4f1ea" stroke-width="3" opacity=".5"/>
+    <g stroke="#f4f1ea" opacity=".14">
+      <path d="M0 320h880M0 240h880M0 160h880M0 80h880"/>
+      <path d="M176 0v392M352 0v392M528 0v392M704 0v392M880 0v392"/>
+    </g>
+    <circle cx="414" cy="156" r="13" fill="#f4f1ea"/>
+    <circle cx="740" cy="64" r="13" fill="#d3b47a"/>
+  </g>
+  <text x="72" y="112" fill="#f4f1ea" font-family="Inter,Arial" font-size="64" font-weight="700">ENGINEERING ANALYSIS</text>
+  <text x="74" y="166" fill="#a8a39a" font-family="Inter,Arial" font-size="26">simulation, prediction, testing, evidence</text>
+</svg>

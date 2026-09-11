@@ -1,0 +1,379 @@
+---
+import CaseDecision from "./CaseDecision.astro";
+import type { Project } from "../lib/projects";
+type Props = { project: Project };
+const { project } = Astro.props;
+const assets = "/images/projects/smart-medication-monitor";
+const screens = [
+  ["app-home", "01 / Plan & connect", "A reminder starts a conversation.", "Daily prescriptions, BLE device status and 15-minute follow-ups bring the next action into one place."],
+  ["app-result", "02 / Read the evidence", "Two signals. One understandable event.", "Weight and camera results stay visible separately. Matching the expected count plus a TAKE action supports the event."],
+  ["app-doctor", "03 / Review locally", "A record with its context intact.", "Local history and a patient ID support an on-device Doctor View. Remote clinician access is future work."]
+];
+const evidence = [
+  ["82%", "Cross-session weight accuracy", "Train on 50 Round 1 events; test on 50 Round 2 events. The flat Random Forest baseline reached 74%."],
+  ["96.67%", "Camera internal 5-fold CV", "120 clips across six actions, from one participant in one session. Cross-user performance remains untested."],
+  ["150/150", "Python / C++ prediction agreement", "Recorded and synthetic events match the frozen Python pipeline. This checks implementation parity, not accuracy."],
+  ["100%", "Weight internal 5-fold CV", "100 real events pooled across two rounds. This describes internal separability, not an independent field result."]
+];
+---
+
+<div class="med-case">
+  <header class="med-hero med-wrap">
+    <div class="hero-copy">
+      <a class="med-back" href="/#projects">← Back to projects</a>
+      <p class="med-label">Connected health / August 2026</p>
+      <h1>Smart<br />Medication <span>Monitor.</span></h1>
+      <p class="med-deck">Making the moments<br class="desktop-break" /> around medication visible.</p>
+      <p class="hero-description">I connected physical sensing, embedded intelligence and an iPhone app to understand what happens between a reminder and a medication event.</p>
+      <div class="med-actions">
+        <a class="med-primary" href="#med-system">Explore the system <span aria-hidden="true">↘</span></a>
+        <a href={project.links?.[0].url}>View GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+
+    <div class="hero-instrument" aria-label="MedBox app with a conceptual illustration of its two sensing channels">
+      <div class="instrument-heading"><span class="status-dot"></span> MedBox / On-device intelligence</div>
+      <div class="signal-orbit orbit-one" aria-hidden="true"></div>
+      <div class="signal-orbit orbit-two" aria-hidden="true"></div>
+      <img class="hero-pill" src={`${assets}/orbit-icon.svg`} alt="" width="240" height="240" />
+      <div class="signal-note weight-note"><span>01 / Physical signal</span><strong>Weight change</strong><svg viewBox="0 0 180 44" aria-hidden="true"><path d="M0 12H40L49 10L54 14L62 12H73L79 35L86 31L91 34H180" /></svg><small>HX711 → ESP32-S3</small></div>
+      <figure class="hero-phone"><img src={`${assets}/app-result.webp`} alt="MedBox iOS result screen showing weight evidence and a separate visual signal in a development mock event" width="736" height="1600" /><figcaption>Actual app / Mock event</figcaption></figure>
+      <div class="signal-note vision-note"><span>02 / Visual signal</span><strong>Action context</strong><div class="landmarks" aria-hidden="true"><svg viewBox="0 0 140 65"><circle cx="70" cy="13" r="9"/><path d="M70 22v22m-24-12 24-5 25 5M46 32l12 19 22-26M95 32l13 22M70 44 55 63m15-19 14 19"/><g><circle cx="46" cy="32" r="3"/><circle cx="58" cy="51" r="3"/><circle cx="80" cy="25" r="3"/><circle cx="95" cy="32" r="3"/><circle cx="70" cy="44" r="3"/></g></svg></div><small>MediaPipe → Core ML</small></div>
+      <div class="instrument-footer"><span>Sense. Interpret. Record.</span><span>ESP32-S3 + iPhone</span></div>
+    </div>
+
+    <div class="hero-facts">
+      <div><span>Project scope</span><strong>Hardware → ML → iOS</strong></div>
+      <div><span>Weight holdout result</span><strong>74% <i>→</i> 82%</strong></div>
+      <div><span>Inference location</span><strong>Device + phone</strong></div>
+      <div><span>Outcome</span><strong>Working research prototype</strong></div>
+    </div>
+  </header>
+
+  <nav class="med-nav med-wrap" aria-label="Case study sections"><a href="#med-system">01 System</a><a href="#med-weight">02 Intelligence</a><a href="#med-interaction">03 Iteration</a><a href="#med-app">04 Experience</a><a href="#med-results">05 Evidence</a></nav>
+  <CaseDecision slug={project.slug} />
+
+  <div class="med-wrap">
+    <section class="med-section" id="med-system" aria-labelledby="system-title">
+      <div class="section-heading"><p class="med-label">01 / From reminder to evidence</p><h2 id="system-title">A small device.<br /><span>A complete system.</span></h2><p>A reminder acknowledgement leaves a gap. The prototype connects medication removal, visible actions and a timestamped record, preserving what each sensor can actually tell us.</p></div>
+      <div class="system-grid">
+        <article class="system-lane"><span class="lane-id">Physical sensing / ESP32-S3</span><h3>What left the platform?</h3><div class="system-node"><span>01</span><div><strong>Load cell + HX711</strong><p>Weight sampled at approximately 10 Hz.</p></div></div><div class="system-node"><span>02</span><div><strong>Rolling baseline + event window</strong><p>~3 s baseline · 5 s event · 1.5 s settling.</p></div></div><div class="system-node"><span>03</span><div><strong>Rules + 500-tree Random Forest</strong><p>On-board classification, sent to the app over BLE.</p></div></div></article>
+        <article class="system-lane"><span class="lane-id">Visual sensing / iPhone</span><h3>What happened next?</h3><div class="system-node"><span>01</span><div><strong>OV2640 camera</strong><p>ESP32 streams MJPEG over local Wi-Fi.</p></div></div><div class="system-node"><span>02</span><div><strong>MediaPipe hands + pose</strong><p>24 sampled frames become 2,576 temporal features.</p></div></div><div class="system-node"><span>03</span><div><strong>Core ML action classifier</strong><p>Six visible actions, processed on the phone.</p></div></div></article>
+      </div>
+      <div class="system-outcome"><span class="merge-symbol" aria-hidden="true">↘ &nbsp; ↙</span><div><h3>One event, with both signals preserved.</h3><p>SwiftUI brings together the expected dose, weight result and visual action. Raw camera frames are processed in memory and are not saved to history. The normal flow runs without a desktop computer.</p></div><span class="small-tag">BLE + local Wi-Fi</span></div>
+      <p class="med-note">The system records supporting behavioral evidence. Weight removal and an ingestion-like action cannot confirm swallowing.</p>
+    </section>
+
+    <section class="med-section" id="med-weight" aria-labelledby="weight-title">
+      <div class="section-heading"><p class="med-label">02 / Physical rules meet machine learning</p><h2 id="weight-title">Let physics handle the count.<br /><span>Let the model read the motion.</span></h2><p>One or two removed pills produce a useful net change. Near zero, the final weight alone cannot distinguish no removal, a pill returned or a disturbance. I routed these events to a model of the full trajectory.</p></div>
+      <div class="gate-demo" data-med-gate>
+        <div class="gate-controls"><p class="med-label">Explore the physical gate</p><h3>A little uncertainty<br />is part of the design.</h3><p>Move the weight ratio to see which branch receives the event.</p><label for="med-ratio">Removed mass / reference pill mass <output id="med-ratio-value" for="med-ratio">1.00×</output></label><input type="range" id="med-ratio" min="-0.5" max="3" step="0.01" value="1" aria-describedby="gate-footnote" /><div class="range-ends" aria-hidden="true"><span>−0.50×</span><span>3.00×</span></div><div class="gate-presets" aria-label="Example weight ratios"><button type="button" data-ratio="0">Near zero</button><button type="button" data-ratio="0.4">In the gap</button><button type="button" data-ratio="1">One pill</button><button type="button" data-ratio="2">Two pills</button></div></div>
+        <div class="gate-result" aria-live="polite" aria-atomic="true"><span class="lane-id">Stage 1 / Physical routing</span><strong data-gate-title>ONE</strong><p data-gate-body>The net change lies in the one-pill band. The physical rule returns ONE directly.</p><div class="gate-rule" data-gate-rule>0.50 ≤ r &lt; 1.50</div><small data-gate-detail>Reference mass: 0.848 g · Removed mass: 0.848 g</small></div>
+        <p id="gate-footnote" class="med-note">Interactive explanation of the documented thresholds, using a 0.848 g mock pill. This does not run the trained forest. Near-zero events need 24 trajectory features to classify NONE, RETURN or DISTURBANCE.</p>
+      </div>
+      <div class="weight-details"><div><span class="med-label">Why hierarchy?</span><h3>The same ending can hide different events.</h3><p>The dynamic branch excludes final net weight and looks at duration, dips, recovery, variation and area. A return and a disturbance can look similar; that ambiguity explains the remaining holdout errors.</p><ul><li><strong>24</strong> dynamic features</li><li><strong>500</strong> trees on ESP32</li><li><strong>3,174</strong> exported tree nodes</li></ul></div><figure class="report-plate"><a href={`${assets}/weight-trajectories.webp`} target="_blank" rel="noopener" aria-label="Open full-size recorded weight trajectories"><img src={`${assets}/weight-trajectories.webp`} alt="Five representative Round 2 weight trajectories for NONE, ONE, TWO, RETURN and DISTURBANCE" width="1500" height="1159" loading="lazy" /></a><figcaption>Recorded Round 2 events / Report, p. 19 <span>Enlarge ↗</span></figcaption></figure></div>
+    </section>
+
+    <section class="med-section interaction-section" id="med-interaction" aria-labelledby="interaction-title">
+      <div class="section-heading"><p class="med-label">03 / An interaction became a measurement problem</p><h2 id="interaction-title">The best button<br /><span>was off the device.</span></h2><p>Pressing the physical button changed the load path through the scale. I compared five button-triggered trials with five BLE-triggered trials, then moved the trigger into the app.</p></div>
+      <div class="ab-layout"><div class="ab-chart" role="img" aria-label="Mean absolute weight error: physical button 0.2144 grams, BLE OPEN 0.0482 grams. Five trials per trigger."><span class="lane-id">Mean absolute error / Lower is better</span><div class="ab-row"><div><span>Physical button</span><strong>0.2144 <small>g</small></strong></div><div class="ab-track"><i style="--bar-width: 100%"></i></div></div><div class="ab-row ab-row--ble"><div><span>BLE OPEN</span><strong>0.0482 <small>g</small></strong></div><div class="ab-track"><i style="--bar-width: 22.48%"></i></div></div><p class="med-note">5 + 5 trial engineering experiment / Report, pp. 22–23</p></div><div class="ab-insight"><strong>4.45<span>×</span></strong><h3>lower mean absolute error with BLE</h3><p>Interaction design became part of sensing quality. Adding the OV2640 later also occupied GPIO 4, reinforcing the decision to remove the button.</p></div></div>
+      <div class="design-takeaway"><span>Design takeaway</span><p>In a physical interface, the way a user starts a measurement can change the measurement itself.</p></div>
+    </section>
+
+    <section class="med-section" id="med-app" aria-labelledby="app-title">
+      <div class="section-heading"><p class="med-label">04 / Bringing the system into everyday use</p><h2 id="app-title">Evidence, translated<br /><span>into an experience.</span></h2><p>The bilingual SwiftUI app connects planning, device interaction and event review. Each result keeps the weight and camera evidence readable, including when the signals disagree.</p></div>
+      <div class="app-gallery">{screens.map(([src, index, title, body]) => <figure class="app-card"><div class="app-screen"><a href={`${assets}/${src}.webp`} target="_blank" rel="noopener" aria-label={`Enlarge MedBox ${index.slice(5)} screen`}><img src={`${assets}/${src}.webp`} alt={`Actual MedBox iOS app: ${index.slice(5)}. Report simulator screenshot with development data.`} width="736" height="1600" loading="lazy" /></a></div><figcaption><span class="med-label">{index}</span><h3>{title}</h3><p>{body}</p></figcaption></figure>)}</div>
+      <p class="med-note">Actual App screenshots from the report, pp. 15–17. Home and result screens use development Mock events. These images illustrate the interface, not measured hardware performance.</p>
+      <div class="app-principles"><div><span>01</span><strong>Keep inference close</strong><p>Weight classification on the microcontroller; vision on the iPhone.</p></div><div><span>02</span><strong>Keep the meaning precise</strong><p>Expected count + TAKE supports an event. Conflicting signals remain visible.</p></div><div><span>03</span><strong>Keep records local</strong><p>On-device history and Doctor View; no cloud or remote patient lookup.</p></div></div>
+    </section>
+
+    <section class="med-section" id="med-results" aria-labelledby="results-title">
+      <div class="section-heading"><p class="med-label">05 / What the experiments establish</p><h2 id="results-title">A working prototype.<br /><span>Evidence at every layer.</span></h2><p>The clearest model comparison uses the same cross-session holdout: hierarchical classification reached 82%, up eight percentage points from the flat Random Forest. The other tests answer different questions.</p></div>
+      <div class="evidence-grid">{evidence.map(([value, label, body]) => <article><strong>{value}</strong><h3>{label}</h3><p>{body}</p></article>)}</div>
+      <div class="confusion-grid"><figure class="report-plate"><a href={`${assets}/weight-confusion.webp`} target="_blank" rel="noopener" aria-label="Open full-size weight holdout confusion matrix"><img src={`${assets}/weight-confusion.webp`} alt="Weight holdout confusion matrix: 41 of 50 correct; nine disturbances mistaken for RETURN or NONE" width="1500" height="1318" loading="lazy" /></a><figcaption>Weight / Cross-session holdout <span>Enlarge ↗</span></figcaption></figure><figure class="report-plate"><a href={`${assets}/camera-confusion.webp`} target="_blank" rel="noopener" aria-label="Open full-size camera internal validation confusion matrix"><img src={`${assets}/camera-confusion.webp`} alt="Camera internal validation confusion matrix: 116 of 120 correct; four errors between ADJUST and TOUCH_FACE" width="1500" height="1314" loading="lazy" /></a><figcaption>Vision / One participant, one session <span>Enlarge ↗</span></figcaption></figure></div>
+      <div class="error-notes"><div><h3>Where weight recognition breaks</h3><p>All nine holdout errors came from DISTURBANCE. Seven were classified as RETURN and two as NONE, pointing towards richer disturbance data and more varied mechanical conditions.</p></div><div><h3>Where visual recognition overlaps</h3><p>Four internal-validation mistakes occurred between ADJUST and TOUCH_FACE. The next useful test separates participants, sessions, lighting and camera placement.</p></div></div>
+      <div class="verification"><span class="status-dot"></span><p>The final report records iPhone hardware flow verification as passed by 21 August 2026, alongside firmware compilation and software checks. Structured latency, power and long-duration stability measurements remain future work.</p></div>
+    </section>
+
+    <section class="med-section med-reflection" aria-labelledby="reflection-title"><p class="med-label">Reflection / The next iteration</p><h2 id="reflection-title">Design the evidence.<br /><span>Then earn the confidence.</span></h2><p class="reflection-deck">This project brought hardware, signal processing, model deployment and interface design into one loop. The most useful decisions came from understanding how those layers affect each other.</p><div class="next-grid"><div><span>01 / Broader evidence</span><p>Independent users and sessions, different pills and containers, and more varied disturbances.</p></div><div><span>02 / Physical completion</span><p>A real lid sensor or actuator. OPEN currently starts a timed event; it does not measure or actuate a lid.</p></div><div><span>03 / Product readiness</span><p>Repeatable device performance logs, secure pairing and authenticated, consent-based remote access.</p></div></div><div class="med-end"><div><span class="med-label">Explore the work</span><h3>From experiment to implementation.</h3></div><div class="med-actions">{project.links?.map(link => <a class={link.url.endsWith(".pdf") ? "med-primary" : ""} href={link.url}>{link.label}<span aria-hidden="true">↗</span></a>)}</div></div><a class="med-back" href="/#projects">← Return to the project circle</a></section>
+  </div>
+</div>
+
+<script>
+  const slider = document.querySelector<HTMLInputElement>("#med-ratio");
+  const root = document.querySelector<HTMLElement>("[data-med-gate]");
+  function updateGate() {
+    if (!slider || !root) return;
+    const ratio = Number(slider.value);
+    const nearZero = Math.abs(ratio) < 0.3;
+    const one = ratio >= 0.5 && ratio < 1.5;
+    const two = ratio >= 1.5 && ratio < 2.5;
+    const state = nearZero ? "dynamic" : one || two ? "count" : "uncertain";
+    root.dataset.state = state;
+    const set = (selector: string, text: string) => { const el = root.querySelector(selector); if (el) el.textContent = text; };
+    set("#med-ratio-value", `${ratio.toFixed(2)}×`);
+    set("[data-gate-title]", nearZero ? "DYNAMIC RF" : one ? "ONE" : two ? "TWO" : "UNCERTAIN");
+    set("[data-gate-body]", nearZero ? "The final change is near zero. Route the trajectory to the Random Forest to distinguish NONE, RETURN and DISTURBANCE." : one ? "The net change lies in the one-pill band. The physical rule returns ONE directly." : two ? "The net change lies in the two-pill band. The physical rule returns TWO directly." : "The ratio falls outside the accepted bands. Preserve uncertainty instead of forcing a pill count.");
+    set("[data-gate-rule]", nearZero ? "|r| < 0.30 → 24-feature Random Forest" : one ? "0.50 ≤ r < 1.50" : two ? "1.50 ≤ r < 2.50" : "Outside the near-zero, ONE and TWO bands");
+    set("[data-gate-detail]", `Reference mass: 0.848 g · Removed mass: ${(ratio * 0.848).toFixed(3)} g`);
+  }
+  slider?.addEventListener("input", updateGate);
+  root?.querySelectorAll<HTMLButtonElement>("[data-ratio]").forEach(button => button.addEventListener("click", () => { if (slider) { slider.value = button.dataset.ratio ?? "1"; updateGate(); } }));
+  updateGate();
+</script>
+
+<style>
+  .med-case { --mint: #b0e6ce; --dim: #808e88; --stroke: rgba(188,220,205,.17); background: #080c0b; overflow: clip; }
+  .med-wrap { width: min(100% - 96px, 1320px); margin-inline: auto; }
+  .med-label, .lane-id { color: var(--mint); font: 600 11px/1.5 ui-monospace, SFMono-Regular, monospace; letter-spacing: .09em; text-transform: uppercase; }
+  .med-label { margin: 0 0 23px; }
+  .med-back { display: inline-flex; color: #a7b1aa; text-decoration: none; font-size: 13px; padding-block: 12px; }
+  .med-back:hover { color: var(--mint); }
+  .med-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding-top: 36px; }
+  .hero-copy { padding: 12px 0 20px; }
+  .hero-copy > .med-label { margin-top: 45px; }
+  h1 { font-family: "Space Grotesk", sans-serif; font-size: clamp(60px, 6.1vw, 90px); line-height: .98; font-weight: 600; letter-spacing: -.065em; margin: 0; }
+  h1 span { color: var(--mint); }
+  .med-deck { font-size: clamp(22px,2.1vw,30px); line-height: 1.25; letter-spacing: -.03em; margin: 28px 0 16px; }
+  .hero-description { max-width: 470px; color: #a7b4ac; font-size: 15px; line-height: 1.75; }
+  .med-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .med-actions a { display: inline-flex; gap: 24px; align-items: center; justify-content: space-between; min-height: 46px; padding: 13px 19px; border: 1px solid var(--stroke); border-radius: 6px; font-size: 12px; font-weight: 600; text-decoration: none; transition: background .2s, border-color .2s; }
+  .med-actions a:hover { border-color: var(--mint); background: #233b30; }
+  .med-actions a.med-primary { background: var(--mint); color: #10241a; border-color: var(--mint); }
+  .med-actions a.med-primary:hover { background: #d7f6e7; }
+  .hero-instrument { position: relative; min-height: 680px; margin-top: 28px; background: radial-gradient(ellipse at 55% 46%, #1b3d2d80, transparent 67%); }
+  .instrument-heading { position: absolute; top: 22px; left: 18px; display: flex; gap: 9px; align-items: center; color: #b1c4b9; font: 10px/1.5 ui-monospace, monospace; text-transform: uppercase; letter-spacing: .05em; }
+  .status-dot { display: inline-block; width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: var(--mint); box-shadow: 0 0 15px #b0e6ce60; }
+  .signal-orbit { position: absolute; width: 430px; height: 430px; border: 1px solid #a0e0bc19; border-radius: 50%; left: 50%; top: 49%; transform: translate(-50%,-50%); }
+  .orbit-two { width: 530px; height: 530px; border-style: dashed; opacity: .6; }
+  .hero-phone { position: absolute; width: 214px; top: 82px; right: 36px; margin: 0; transform: rotate(6deg); }
+  .hero-phone img { width: 100%; height: auto; border: 6px solid #25332d; outline: 1px solid #6b887870; border-radius: 36px; box-shadow: 0 24px 60px #0009; }
+  .hero-phone figcaption { color: #8ea096; font: 9px/1.5 ui-monospace, monospace; text-align: center; margin-top: 13px; }
+  .hero-pill { position: absolute; top: 79px; left: 24px; width: 144px; height: auto; }
+  .signal-note { position: absolute; z-index: 2; padding: 18px; border: 1px solid #b0e6ce30; border-radius: 8px; background: #101c17ed; box-shadow: 0 15px 45px #0003; }
+  .signal-note span { display: block; color: #8fac9b; font: 9px/1.5 ui-monospace, monospace; text-transform: uppercase; }
+  .signal-note strong { display: block; font-size: 17px; font-weight: 500; margin-top: 7px; }
+  .signal-note small { color: #94a99c; font: 9px ui-monospace, monospace; }
+  .weight-note { left: 2px; top: 264px; width: 196px; }
+  .weight-note svg { display: block; margin: 17px 0 10px; width: 100%; fill: none; stroke: var(--mint); stroke-width: 1.6; }
+  .vision-note { left: 77px; bottom: 58px; width: 186px; }
+  .landmarks svg { display: block; height: 65px; margin: 12px auto; fill: none; stroke: #9ad4b9; stroke-width: 1.2; }
+  .landmarks g { fill: #b0e6ce; }
+  .instrument-footer { position: absolute; bottom: 1px; left: 0; right: 0; display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid var(--stroke); padding-top: 16px; color: #758b7d; font: 9px ui-monospace, monospace; text-transform: uppercase; }
+  .hero-facts { grid-column: 1/-1; display: grid; grid-template-columns: repeat(4,1fr); border-block: 1px solid var(--stroke); padding-block: 27px; margin-top: 15px; }
+  .hero-facts div { padding-left: 26px; border-left: 1px solid var(--stroke); }
+  .hero-facts div:first-child { padding-left: 0; border: 0; }
+  .hero-facts span { display: block; color: #81968a; font: 10px ui-monospace, monospace; text-transform: uppercase; margin-bottom: 12px; }
+  .hero-facts strong { font-size: 16px; font-weight: 500; }
+  .hero-facts i { color: var(--mint); font-style: normal; margin: 0 7px; }
+  .med-nav { display: flex; gap: 34px; padding-block: 25px; }
+  .med-nav a { color: #97ab9d; text-decoration: none; font: 10px/1.5 ui-monospace, monospace; text-transform: uppercase; white-space: nowrap; }
+  .med-nav a:hover { color: var(--mint); }
+  .med-section { padding: 104px 0; border-bottom: 1px solid var(--stroke); scroll-margin-top: 112px; }
+  .section-heading { max-width: 920px; margin-bottom: 48px; }
+  h2 { font-family: "Space Grotesk", sans-serif; margin: 0; font-size: clamp(34px,4.1vw,60px); font-weight: 500; letter-spacing: -.055em; line-height: 1.06; }
+  h2 span { color: #82998b; }
+  .section-heading > p:last-child { max-width: 715px; color: #a6b3aa; font-size: 16px; line-height: 1.8; margin: 26px 0 0; }
+  h3 { font-weight: 500; letter-spacing: -.025em; }
+  .system-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--stroke); border-radius: 10px; overflow: hidden; }
+  .system-lane { padding: 36px; background: #101813; }
+  .system-lane + .system-lane { border-left: 1px solid var(--stroke); background: #0d1614; }
+  .system-lane h3 { font-size: 25px; margin: 20px 0 34px; }
+  .system-node { display: flex; gap: 20px; padding: 20px 0; border-top: 1px solid var(--stroke); }
+  .system-node > span { color: #729c81; font: 11px ui-monospace, monospace; padding-top: 4px; }
+  .system-node strong { font-size: 15px; font-weight: 500; }
+  .system-node p, .system-outcome p { color: #98aa9d; font-size: 13px; line-height: 1.7; margin: 8px 0 0; }
+  .system-outcome { display: flex; align-items: center; gap: 24px; padding: 30px 20px; border-bottom: 1px solid var(--stroke); }
+  .merge-symbol { color: var(--mint); font-size: 28px; white-space: nowrap; }
+  .system-outcome h3 { margin: 0; font-size: 21px; }
+  .system-outcome p { max-width: 720px; }
+  .small-tag { margin-left: auto; color: var(--mint); padding: 9px 11px; border: 1px solid var(--stroke); border-radius: 4px; font: 10px ui-monospace, monospace; white-space: nowrap; }
+  .med-note { color: #859a8d; font-size: 11px; line-height: 1.8; margin: 20px 0 0; }
+  .gate-demo { display: grid; grid-template-columns: 1fr 1fr; padding: 38px; gap: 36px; border: 1px solid var(--stroke); border-radius: 10px; background: #101813; }
+  .gate-controls h3 { font-size: 29px; line-height: 1.15; margin: 0 0 16px; }
+  .gate-controls > p:not(.med-label) { color: #99ad9f; font-size: 13px; line-height: 1.7; max-width: 360px; }
+  .gate-controls label { display: flex; align-items: center; justify-content: space-between; gap: 14px; color: #afc1b5; font-size: 11px; margin-top: 30px; }
+  output { font: 22px ui-monospace, monospace; color: var(--mint); }
+  input[type=range] { display: block; width: 100%; accent-color: var(--mint); margin: 18px 0 5px; height: 24px; cursor: pointer; }
+  .range-ends { display: flex; justify-content: space-between; color: #91a598; font: 10px ui-monospace, monospace; }
+  .gate-presets { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 24px; }
+  .gate-presets button { min-height: 36px; padding: 8px 11px; color: #bdd0c2; font-size: 11px; background: transparent; border: 1px solid var(--stroke); border-radius: 4px; cursor: pointer; }
+  .gate-presets button:hover { background: #274333; }
+  .gate-result { display: flex; flex-direction: column; justify-content: center; background: #1e352980; border: 1px solid #a8debf30; border-radius: 6px; padding: 30px; }
+  .gate-result > strong { font: 500 clamp(26px,3.4vw,48px)/1.2 "Space Grotesk",sans-serif; color: var(--mint); margin: 30px 0 10px; letter-spacing: -.035em; }
+  .gate-result p { color: #b0c4b7; font-size: 14px; line-height: 1.7; min-height: 72px; }
+  .gate-rule { border-top: 1px solid var(--stroke); padding-top: 20px; font: 12px/1.6 ui-monospace,monospace; color: #c5dece; }
+  .gate-result small { margin-top: 20px; color: #8ea898; font: 10px/1.8 ui-monospace, monospace; }
+  .gate-demo > .med-note { grid-column: 1/-1; margin: 0; }
+  .gate-demo[data-state=uncertain] .gate-result { background: #3c322880; border-color: #c6a27050; }
+  .gate-demo[data-state=uncertain] .gate-result > strong { color: #e3c299; }
+  .weight-details { display: grid; grid-template-columns: .75fr 1.25fr; gap: 56px; margin-top: 66px; align-items: center; }
+  .weight-details h3 { font-size: 28px; line-height: 1.2; margin: 18px 0; }
+  .weight-details p { color: #9eb0a3; font-size: 14px; line-height: 1.8; }
+  .weight-details ul { list-style: none; padding: 0; margin: 28px 0 0; }
+  .weight-details li { color: #99ac9f; font-size: 12px; padding: 12px 0; border-top: 1px solid var(--stroke); }
+  .weight-details li strong { display: inline-block; width: 75px; color: var(--mint); font: 20px ui-monospace,monospace; }
+  figure { margin: 0; }
+  .report-plate { min-width: 0; border: 1px solid var(--stroke); border-radius: 7px; overflow: hidden; }
+  .report-plate a { display: block; background: white; padding: 12px; }
+  .report-plate img { width: 100%; height: auto; }
+  .report-plate figcaption { display: flex; justify-content: space-between; gap: 12px; padding: 15px; color: #9eafa3; font: 9px/1.6 ui-monospace,monospace; }
+  .report-plate figcaption span { color: var(--mint); white-space: nowrap; }
+  .ab-layout { display: grid; grid-template-columns: 1.15fr .85fr; gap: 65px; align-items: center; }
+  .ab-chart { padding: 34px; border: 1px solid var(--stroke); border-radius: 8px; background: #111a15; }
+  .ab-row { margin-top: 34px; }
+  .ab-row > div:first-child { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 14px; font-size: 13px; color: #b8c6bc; }
+  .ab-row strong { font: 25px ui-monospace,monospace; color: #d3b697; }
+  .ab-row small { font-size: 13px; }
+  .ab-track { height: 27px; background: #ffffff05; border-radius: 3px; overflow: hidden; }
+  .ab-track i { display: block; width: var(--bar-width); height: 100%; background: #9b8167; }
+  .ab-row--ble strong { color: var(--mint); }
+  .ab-row--ble i { background: var(--mint); }
+  .ab-insight > strong { font: 500 104px/.95 "Space Grotesk",sans-serif; letter-spacing: -.07em; color: var(--mint); }
+  .ab-insight > strong span { font-size: 55px; margin-left: 8px; }
+  .ab-insight h3 { font-size: 22px; max-width: 270px; }
+  .ab-insight p { font-size: 14px; color: #9eafa3; line-height: 1.8; max-width: 370px; }
+  .design-takeaway { display: grid; grid-template-columns: 190px 1fr; gap: 24px; margin-top: 55px; padding: 28px 0 0; border-top: 1px solid var(--stroke); }
+  .design-takeaway > span { font: 10px ui-monospace,monospace; text-transform: uppercase; color: var(--mint); padding-top: 7px; }
+  .design-takeaway p { margin: 0; font-size: 23px; line-height: 1.5; color: #baccc0; max-width: 800px; }
+  .app-gallery { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; }
+  .app-screen { display: grid; place-items: center; padding: 36px 24px; background: radial-gradient(ellipse at 50% 70%, #2e483750, transparent 75%), #111a15; border: 1px solid var(--stroke); border-radius: 8px; }
+  .app-screen a { display: block; width: min(100%,232px); }
+  .app-screen img { width: 100%; height: auto; border: 5px solid #26372c; border-radius: 30px; box-shadow: 0 16px 30px #0005; }
+  .app-card figcaption { margin-top: 26px; }
+  .app-card h3 { font-size: 22px; line-height: 1.3; margin: 14px 0; }
+  .app-card p { font-size: 13px; line-height: 1.8; color: #9bae9f; }
+  .app-principles { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; margin-top: 45px; border-top: 1px solid var(--stroke); padding-top: 30px; }
+  .app-principles span { display: block; color: #789986; font: 11px ui-monospace,monospace; margin-bottom: 18px; }
+  .app-principles strong { font-size: 14px; font-weight: 500; }
+  .app-principles p { font-size: 12px; line-height: 1.8; color: #94a699; max-width: 300px; }
+  .evidence-grid { display: grid; grid-template-columns: repeat(4,1fr); border: 1px solid var(--stroke); border-radius: 8px; background: #101914; }
+  .evidence-grid article { padding: 28px; }
+  .evidence-grid article + article { border-left: 1px solid var(--stroke); }
+  .evidence-grid article > strong { font: 500 clamp(25px,3vw,43px)/1 "Space Grotesk",sans-serif; color: var(--mint); letter-spacing: -.04em; }
+  .evidence-grid h3 { font-size: 15px; line-height: 1.5; min-height: 45px; margin: 20px 0 12px; }
+  .evidence-grid p { font-size: 12px; line-height: 1.8; color: #96aa9d; margin: 0; }
+  .confusion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 40px; }
+  .error-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 22px; }
+  .error-notes h3 { font-size: 18px; }
+  .error-notes p { color: #9aad9f; font-size: 13px; line-height: 1.8; }
+  .verification { display: flex; align-items: baseline; gap: 17px; padding: 26px; background: #b0e6ce08; border: 1px solid var(--stroke); border-radius: 6px; margin-top: 28px; }
+  .verification p { color: #b0c2b5; margin: 0; font-size: 12px; line-height: 1.9; }
+  .med-reflection { border: 0; padding-bottom: 60px; }
+  .reflection-deck { color: #aabfb0; max-width: 735px; font-size: 17px; line-height: 1.85; margin-top: 30px; }
+  .next-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 35px; margin-top: 46px; }
+  .next-grid > div { border-top: 1px solid var(--stroke); padding-top: 23px; }
+  .next-grid span { font: 10px ui-monospace,monospace; color: var(--mint); text-transform: uppercase; }
+  .next-grid p { color: #9caf9f; font-size: 13px; line-height: 1.8; }
+  .med-end { margin: 70px 0 25px; padding: 35px; background: #15241b; border: 1px solid #afdfc433; border-radius: 8px; }
+  .med-end .med-label { margin-bottom: 10px; }
+  .med-end h3 { margin: 0; font-size: 28px; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--mint); outline-offset: 5px; }
+  @media (max-width: 1100px) {
+    .med-wrap { width: calc(100% - 56px); }
+    .med-hero { gap: 24px; }
+    .hero-instrument { min-height: 650px; }
+    .hero-phone { width: 185px; right: 8px; top: 108px; }
+    .hero-pill { width: 120px; left: 0; }
+    .weight-note { width: 165px; left: 0; top: 290px; }
+    .vision-note { left: 48px; bottom: 43px; width: 176px; }
+    .signal-orbit { width: 340px; height: 340px; }
+    .orbit-two { width: 415px; height: 415px; }
+    .hero-facts strong { font-size: 13px; }
+    .evidence-grid article { padding: 22px; }
+    .app-gallery { gap: 20px; }
+    .app-screen { padding: 24px 16px; }
+  }
+  @media (max-width: 800px) {
+    .med-hero { grid-template-columns: 1fr; }
+    h1 { font-size: clamp(64px,11vw,88px); }
+    .hero-copy { padding-bottom: 0; }
+    .hero-copy > .med-label { margin-top: 26px; }
+    .hero-instrument { width: min(100%,540px); margin: 0 auto; min-height: 610px; }
+    .hero-phone { right: 45px; width: 210px; top: 64px; }
+    .hero-pill { left: 35px; width: 138px; top: 60px; }
+    .weight-note { left: 18px; top: 237px; width: 190px; }
+    .vision-note { left: 65px; bottom: 48px; }
+    .instrument-heading { top: 0; }
+    .signal-orbit { width: 390px; height: 390px; }
+    .orbit-two { width: 480px; height: 480px; }
+    .hero-facts { grid-template-columns: 1fr 1fr; row-gap: 28px; }
+    .hero-facts div:nth-child(3) { padding-left: 0; border: 0; }
+    .hero-facts strong { font-size: 15px; }
+    .med-nav { flex-wrap: wrap; gap: 20px; }
+    .med-section { padding-block: 72px; }
+    .system-lane { padding: 25px; }
+    .system-outcome { flex-wrap: wrap; padding-inline: 0; }
+    .small-tag { margin-left: 0; }
+    .gate-demo { padding: 25px; gap: 28px; grid-template-columns: 1fr; }
+    .gate-result { min-height: 290px; }
+    .weight-details { grid-template-columns: 1fr; gap: 25px; }
+    .ab-layout { gap: 30px; }
+    .ab-chart { padding: 24px; }
+    .ab-insight > strong { font-size: 74px; }
+    .design-takeaway { grid-template-columns: 1fr; gap: 15px; }
+    .app-gallery { grid-template-columns: 1fr; gap: 36px; }
+    .app-card { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center; }
+    .app-card figcaption { margin-top: 0; }
+    .app-principles { gap: 20px; }
+    .evidence-grid { grid-template-columns: 1fr 1fr; }
+    .evidence-grid article:nth-child(3) { border-left: 0; }
+    .evidence-grid article:nth-child(n+3) { border-top: 1px solid var(--stroke); }
+    .evidence-grid article > strong { font-size: 40px; }
+    .next-grid { gap: 22px; }
+  }
+  @media (max-width: 540px) {
+    .med-wrap { width: calc(100% - 40px); }
+    .med-hero { padding-top: 14px; }
+    h1 { font-size: clamp(53px,14vw,74px); }
+    .med-deck { font-size: 24px; }
+    .hero-description { font-size: 14px; }
+    .hero-instrument { min-height: 570px; margin-top: 28px; }
+    .hero-phone { width: 171px; right: 15px; top: 75px; }
+    .hero-phone img { border-radius: 29px; }
+    .hero-pill { width: 102px; left: 10px; top: 67px; }
+    .weight-note { left: 0; top: 218px; width: 155px; padding: 14px; }
+    .signal-note strong { font-size: 15px; }
+    .signal-note span { font-size: 8px; }
+    .vision-note { left: 26px; bottom: 46px; width: 159px; padding: 14px; }
+    .instrument-heading { left: 0; font-size: 9px; }
+    .instrument-footer { font-size: 8px; }
+    .signal-orbit { width: 300px; height: 300px; }
+    .orbit-two { width: 355px; height: 355px; }
+    .hero-facts { padding-block: 24px; margin-top: 10px; }
+    .hero-facts div { padding-left: 16px; }
+    .hero-facts strong { font-size: 12px; }
+    .hero-facts span { font-size: 9px; }
+    .med-nav { gap: 15px 23px; }
+    .med-nav a { font-size: 9px; }
+    .section-heading { margin-bottom: 30px; }
+    .section-heading > p:last-child { font-size: 14px; }
+    .med-label { font-size: 10px; }
+    .system-grid { grid-template-columns: 1fr; }
+    .system-lane + .system-lane { border-left: 0; border-top: 1px solid var(--stroke); }
+    .gate-demo { padding: 20px; }
+    .gate-controls label { font-size: 10px; }
+    .gate-result { padding: 22px; }
+    .gate-result > strong { font-size: 34px; }
+    .ab-layout { grid-template-columns: 1fr; }
+    .ab-insight { padding-top: 10px; }
+    .ab-insight > strong { font-size: 90px; }
+    .ab-insight h3 { max-width: none; }
+    .design-takeaway p { font-size: 20px; }
+    .app-card { display: block; }
+    .app-screen { padding-block: 30px; }
+    .app-card figcaption { margin-top: 24px; }
+    .app-principles, .next-grid { grid-template-columns: 1fr; gap: 20px; }
+    .app-principles span { margin-bottom: 10px; }
+    .evidence-grid article { padding: 20px 15px; }
+    .evidence-grid article > strong { font-size: 32px; }
+    .evidence-grid h3 { font-size: 13px; }
+    .evidence-grid p { font-size: 11px; }
+    .confusion-grid, .error-notes { grid-template-columns: 1fr; gap: 24px; }
+    .error-notes { gap: 7px; }
+    .med-end { padding: 25px; }
+    .med-end h3 { font-size: 24px; }
+    .med-end .med-actions a { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .med-case *, .med-case *::before, .med-case *::after { scroll-behavior: auto !important; transition: none !important; } }
+</style>

@@ -1,0 +1,20 @@
+{
+  "name": "yuxuan-zhou-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "astro": "^5.12.0",
+    "three": "^0.185.1",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "@types/three": "^0.185.1"
+  }
+}

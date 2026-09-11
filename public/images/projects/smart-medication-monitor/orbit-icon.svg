@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="shell" x1="59" y1="50" x2="170" y2="191" gradientUnits="userSpaceOnUse"><stop stop-color="#fcfff9"/><stop offset=".45" stop-color="#d3e5de"/><stop offset="1" stop-color="#6d8980"/></linearGradient>
+    <linearGradient id="mint" x1="91" y1="112" x2="147" y2="189" gradientUnits="userSpaceOnUse"><stop stop-color="#aef0d6"/><stop offset="1" stop-color="#287868"/></linearGradient>
+    <filter id="shadow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9"/></filter>
+  </defs>
+  <ellipse cx="121" cy="207" rx="59" ry="10" fill="#8ac7b0" opacity=".16" filter="url(#shadow)"/>
+  <circle cx="120" cy="117" r="99" stroke="#8fceba" stroke-opacity=".3" stroke-dasharray="2 9"/>
+  <path d="M35 85a91 91 0 0 1 35-44M177 190a91 91 0 0 0 29-43" stroke="#b1ecd7" stroke-width="2" stroke-linecap="round"/>
+  <g transform="rotate(36 120 120)">
+    <rect x="79" y="38" width="82" height="164" rx="41" fill="url(#shell)" stroke="#edfff6" stroke-opacity=".7"/>
+    <path d="M79 120h82v41a41 41 0 0 1-82 0z" fill="url(#mint)"/>
+    <path d="M79 120h82" stroke="#194b40" stroke-opacity=".45"/>
+    <path d="M91 95V80c0-16 11-29 24-30" stroke="white" stroke-opacity=".7" stroke-width="4" stroke-linecap="round"/>
+    <path d="M91 134v26c0 13 6 24 16 29" stroke="#d4ffea" stroke-opacity=".4" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <circle cx="205" cy="83" r="6" fill="#a5f3d0"/><circle cx="40" cy="169" r="3" fill="#a5f3d0" opacity=".7"/>
+</svg>

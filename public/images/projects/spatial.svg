@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#070707"/>
+  <g transform="translate(260 190)" fill="none" stroke-linejoin="round">
+    <path d="M0 420 330 0l350 420Z" stroke="#d3b47a" stroke-width="3" fill="#14120f"/>
+    <path d="M130 420V252h168v168M398 420V210h152v210" stroke="#f4f1ea" stroke-width="3" opacity=".58"/>
+    <path d="M96 298h488M174 198h326M252 98h170" stroke="#f4f1ea" stroke-width="2" opacity=".22"/>
+  </g>
+  <text x="72" y="112" fill="#f4f1ea" font-family="Inter,Arial" font-size="64" font-weight="700">SPATIAL EXPERIENCE</text>
+  <text x="74" y="166" fill="#a8a39a" font-family="Inter,Arial" font-size="26">research, space, prototypes, use</text>
+</svg>

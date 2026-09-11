@@ -1,0 +1,86 @@
+"""
+---- AI ROBOT CONTROL ----
+"""
+
+#---IMPORTS---
+import sensor, time
+from ei_object_detection import DetectionLoop
+from HackbotV2 import move, stop
+from machine import LED
+from random import choice
+
+#---CAMERA SETUP---
+sensor.reset()
+sensor.set_pixformat(sensor.RGB565)
+sensor.set_framesize(sensor.QVGA)
+sensor.skip_frames(time=1000)
+
+#---INTERVALS---
+DETECTION_INTERVAL = 400
+
+last_detection = time.ticks_ms()
+last_ball = time.ticks_ms()
+
+#---LEDS---
+Red = LED("LED_RED")
+Blue = LED("LED_BLUE")
+Green = LED("LED_GREEN")
+
+#---WRITE YOUR MOTOR CONTROL LOGIC HERE---
+
+def motor_loop(look):
+
+    ball = False
+    goal = False
+    goal1 = False
+    redrobot = False
+    robot1 = False
+    if look == []:
+        move(-50, 50)
+        time.sleep_ms(100)
+        stop()
+        return
+
+    for i in look:
+        dot = i
+        print(i)
+        check = dot[0]
+
+        if check == 1:
+            ball = True
+        if check == 2:
+            goal = True
+        if check == 3:
+            goal1 = True
+        if check == 4:
+            redrobot = True
+        if check == 5:
+            robot1 = True
+        enemygoal = goal
+        friendlygoal = goal1
+    if ball == True and enemygoal == True:
+        move(100,100)
+        time.sleep_ms(100)
+        return
+    if ball == True and friendlygoal == True:
+        move(50,-50)
+        return
+    if robot1 == True:
+        move(50,100)
+        return
+    if ball == True:
+        move(50,50)
+        time.sleep_ms(100)
+        return
+
+#---MAIN LOOP---
+clock = time.clock()
+while True:
+    now = time.ticks_ms()
+
+    if time.ticks_diff(now, last_detection) > DETECTION_INTERVAL:
+        look = DetectionLoop()
+        last_detection = now
+        motor_loop(look)
+
+clock.tick()

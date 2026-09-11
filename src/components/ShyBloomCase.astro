@@ -1,0 +1,287 @@
+---
+import CaseDecision from "./CaseDecision.astro";
+import type { Project } from "../lib/projects";
+type Props = { project: Project };
+const { project } = Astro.props;
+const img = "/images/projects/light-control-lamp";
+const mechanics = [
+  ["01", "Rotate", "cad-drive", "Servo + pinion", "One servo turns the pinion at the base, giving the flower a single mechanical input.", "CAD of the servo holder and pinion gear"],
+  ["02", "Translate", "cad-slider", "Rack + moving ring", "The rack converts rotation into vertical movement of the lower ring around the central pillar.", "CAD of the vertical rack connected to the lower sliding ring"],
+  ["03", "Unfold", "cad-upper-ring", "Linked petal supports", "The upper ring anchors the arms. Movement of the lower ring changes their angle together.", "CAD of the upper ring and attached radial petal arms"]
+];
+const fixes = [
+  ["01", "Steady the joints.", "joint-detail", "Loose beams moved sideways.", "Washers on both sides and a fixing nut plus a locknut reduced play at the connections.", "Close-up of a petal support bolted in place with washers and nuts"],
+  ["02", "Constrain the travel.", "bare-prototype", "Overlong beam slots allowed unwanted movement.", "Shortening the slotted portion constrained the shorter link more consistently through the motion.", "Uncovered physical ShyBloom prototype showing the petal linkages"],
+  ["03", "Guide the rack.", "rack-guide", "The rack shifted forwards and backwards.", "Front and rear round supports, plus wooden side guides, stabilised its vertical path.", "Physical rack and pinion with added wooden side guides"]
+];
+---
+
+<div class="bloom-case">
+  <header class="bloom-hero bloom-wrap">
+    <div class="hero-copy"><a class="back-link" href="/#projects">← Back to projects</a><p class="bloom-kicker">{project.title} / {project.year}</p><h1>Shy<span>Bloom.</span></h1><p class="hero-line">A little light.<br />A living gesture.</p><p class="hero-intro">A flower lantern that responds to the light around it—opening, glowing and quietly breathing through a simple physical interaction.</p><div class="hero-actions"><a class="primary" href="#bloom-interaction">Make it bloom <span aria-hidden="true">↘</span></a><a href="#bloom-film">Watch the prototype <span aria-hidden="true">▶</span></a></div><p class="team-credit">Group 40 · Cici Song &amp; Yuxuan Zhou<br /><span>DE2 Gizmo / Physical Computing</span></p></div>
+    <figure class="hero-flower"><img src={`${img}/prototype-lit.webp`} alt="ShyBloom physical prototype glowing pink through red flower petals, with its white linkage and central light column visible" width="1186" height="1460" fetchpriority="high" /><div class="hero-image-label"><span>Working prototype</span><strong>Light becomes<br />a movement.</strong></div><figcaption>Original prototype photograph / Group 40</figcaption></figure>
+    <div class="hero-facts"><div><strong>01</strong><span>Servo driving the whole bloom</span></div><div><strong>05</strong><span>LEDs inside the central pillar</span></div><div><strong>Bela</strong><span>Physical computing platform</span></div></div>
+  </header>
+
+  <nav class="bloom-nav bloom-wrap" aria-label="ShyBloom case study chapters"><a href="#bloom-idea">01 / Idea</a><a href="#bloom-interaction">02 / Interaction</a><a href="#bloom-mechanics">03 / Mechanism</a><a href="#bloom-film">04 / Prototype</a><a href="#bloom-reflection">05 / Reflection</a></nav>
+  <CaseDecision slug={project.slug} />
+
+  <section class="bloom-wrap bloom-section idea" id="bloom-idea" aria-labelledby="idea-title"><div class="section-heading"><p class="bloom-kicker">01 / A responsive object</p><h2 id="idea-title">Borrow a gesture<br /><em>from nature.</em></h2></div><div class="idea-grid"><div><p class="large-copy">What if a lamp felt<br />a little more alive?</p><p>Inspired by the responsive movement of mimosa, ShyBloom pairs a flower-like form with an umbrella mechanism. Its changing silhouette is part of the interaction, alongside the light it produces.</p><p>The concept links a hand’s shadow and a darkened room through the same input: less light reaching the sensor at the top of the flower.</p><div class="idea-principle"><span>The design principle</span><strong>One sensor. One actuator.<br />An expressive response.</strong></div></div><figure class="sketch-figure"><a href={`${img}/concept-sketch.webp`} target="_blank" rel="noopener" aria-label="Enlarge the original ShyBloom concept sketch"><img src={`${img}/concept-sketch.webp`} alt="Original hand-drawn ShyBloom concept with rose-like petals, an LDR, a geared slider and folding petal links" width="1546" height="1079" loading="lazy" /></a><figcaption>Original concept sketch / Portfolio p. 2 <span>↗</span></figcaption></figure></div></section>
+
+  <section class="interaction-chapter" id="bloom-interaction" aria-labelledby="interaction-title"><div class="bloom-wrap bloom-section"><div class="section-heading"><p class="bloom-kicker">02 / Light, translated into behaviour</p><h2 id="interaction-title">Change the light.<br /><em>See the response.</em></h2><p>Lower the light reaching the LDR to open the flower. Adjust the glow with the brightness control, then try the button-controlled breathing mode.</p></div>
+    <div class="bloom-interaction" data-bloom-demo data-open="false" data-breathing="false" data-paused="false" style="--glow:0">
+      <div class="interaction-stage"><div class="stage-label"><span>Interaction sketch</span><span data-ambient-label>Bright surroundings</span></div>
+        <svg class="bloom-diagram" viewBox="0 0 600 530" role="img" aria-labelledby="bloom-svg-title bloom-svg-desc"><title id="bloom-svg-title">Interactive ShyBloom behaviour illustration</title><desc id="bloom-svg-desc" data-bloom-description>Bright light: flower closed, LEDs off. This is a simplified illustration of the documented interaction.</desc><defs><radialGradient id="bloom-light"><stop stop-color="#ffaabd" stop-opacity=".7"/><stop offset="1" stop-color="#f36584" stop-opacity="0"/></radialGradient><linearGradient id="bloom-petal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f5a8a9" stop-opacity=".85"/><stop offset="1" stop-color="#b14b66" stop-opacity=".4"/></linearGradient></defs>
+          <ellipse cx="300" cy="474" rx="188" ry="16" fill="#080c0a" opacity=".45"/><circle cx="300" cy="223" r="180" fill="none" stroke="#b7aab0" stroke-opacity=".13" stroke-dasharray="3 8"/>
+          <g class="light-level"><g class="bloom-glow"><ellipse cx="300" cy="220" rx="230" ry="220" fill="url(#bloom-light)"/></g></g>
+          <path d="M202 429 366 415 417 451 251 469Z" fill="#a3aea0"/><path d="m251 469 166-18v22l-166 20Z" fill="#687966"/><path d="m202 429 49 40v24l-49-40Z" fill="#84927c"/>
+          <rect x="283" y="176" width="34" height="262" rx="9" fill="#768979" stroke="#b2b8a5"/><path d="M296 190V420" stroke="#c6d2b5" stroke-width="3" opacity=".4"/>
+          <g class="light-level"><g class="bloom-glow"><rect x="289" y="184" width="23" height="110" rx="11" fill="#ffbccc"/></g></g>
+          <g class="petal petal-rear"><path d="M300 197C243 153 260 64 300 26C340 64 357 153 300 197Z" fill="url(#bloom-petal)" stroke="#e5a4a5" stroke-width="1.5"/></g>
+          <g class="petal petal-left"><path d="M280 188C222 157 211 69 254 34C291 59 312 139 280 188Z" fill="url(#bloom-petal)" stroke="#e5a4a5" stroke-width="1.5"/><path d="M280 184 254 59" stroke="#dce1c6" stroke-width="5" stroke-linecap="round"/></g>
+          <g class="petal petal-right"><path d="M320 188C378 157 389 69 346 34C309 59 288 139 320 188Z" fill="url(#bloom-petal)" stroke="#e5a4a5" stroke-width="1.5"/><path d="M320 184 346 59" stroke="#dce1c6" stroke-width="5" stroke-linecap="round"/></g>
+          <path class="support support-left" d="M289 339 269 132" fill="none" stroke="#b5c3a5" stroke-width="4"/><path class="support support-right" d="M311 339 331 132" fill="none" stroke="#b5c3a5" stroke-width="4"/>
+          <rect class="slider-ring" x="276" y="329" width="48" height="21" rx="4" fill="#d0c5a8"/>
+          <rect x="273" y="172" width="54" height="23" rx="4" fill="#d9c9a5"/><ellipse cx="300" cy="172" rx="10" ry="5" fill="#5d6264" stroke="#e9dcbe" stroke-width="2"/>
+          <path d="M336 280V435" stroke="#c8b99e" stroke-width="8" stroke-dasharray="3 3"/><g class="diagram-gear"><circle cx="364" cy="405" r="28" fill="#d6c7a5" stroke="#f2e6c8" stroke-width="5" stroke-dasharray="3 4"/><circle cx="364" cy="405" r="5" fill="#747566"/><path d="M364 387V399M346 405H358M364 411V423M370 405H382" stroke="#a49576" stroke-width="2"/></g>
+          <path d="M300 166V139M303 143h68" fill="none" stroke="#d4b0a4" stroke-width="1"/><text x="379" y="147" fill="#d4b0a4" font-size="12">LDR</text>
+        </svg>
+        <div class="stage-status" aria-live="polite" aria-atomic="true"><span class="status-dot"></span><strong data-bloom-state>Resting</strong><span data-bloom-detail>Petals closed · LEDs off</span></div>
+      </div>
+      <div class="interaction-controls" data-bloom-controls hidden><p class="bloom-kicker">Try the interaction</p><div class="control-block"><label for="bloom-light-input">Light reaching the sensor <output for="bloom-light-input" data-light-output>75%</output></label><input id="bloom-light-input" type="range" min="0" max="100" value="75" step="1" aria-describedby="light-help" /><div class="range-ends"><span>Shade</span><span>Bright light</span></div><p id="light-help">Relative input, not a lux measurement.</p><div class="light-presets"><button type="button" data-light-preset="15">Shade the sensor</button><button type="button" data-light-preset="75">Bright room</button></div></div><div class="control-block"><label for="bloom-brightness-input">LED brightness <output for="bloom-brightness-input" data-brightness-output>70%</output></label><input id="bloom-brightness-input" type="range" min="0" max="100" value="70" step="1" disabled /><div class="range-ends"><span>Low</span><span>High</span></div></div><button class="breathing-button" type="button" data-breathing-button aria-pressed="false" disabled><span class="breathing-icon" aria-hidden="true">◌</span><span>Breathing mode</span><b data-breathing-label>Off</b></button><p class="control-hint" data-control-hint>Shade the sensor to activate the light controls.</p><p class="motion-note">Reduced motion is enabled: the glow stays steady.</p></div>
+      <noscript><div class="static-interaction"><p>The documented interaction</p><ul><li>Bright light → petals close and LEDs switch off.</li><li>Darkness or a shadow over the LDR → petals open and LEDs turn on.</li><li>The potentiometer adjusts brightness; a button toggles breathing mode.</li></ul></div></noscript>
+    </div><p class="source-note interaction-note">Illustration of the behaviour described in the portfolio. The hand interaction relies on shading the LDR; the system does not measure hand distance.</p>
+  </div></section>
+
+  <section class="bloom-wrap bloom-section mechanics" id="bloom-mechanics" aria-labelledby="mechanism-title"><div class="section-heading"><p class="bloom-kicker">03 / The mechanism beneath the petals</p><h2 id="mechanism-title">An umbrella,<br /><em>turned into a flower.</em></h2><p>A rack-and-pinion lifts the lower ring along a fixed central pillar. Linked supports turn that translation into coordinated petal movement, driven by one servo at the base.</p></div><div class="mechanism-overview"><figure class="assembly-figure"><span class="bloom-kicker">Fusion 360 / Assembly CAD</span><img src={`${img}/cad-assembly.webp`} alt="ShyBloom CAD assembly showing the central pillar, radial supports, moving ring and rack-and-pinion drive" width="565" height="629" loading="lazy" /><figcaption>Team CAD model / Portfolio p. 3</figcaption></figure><div class="mechanism-notes"><div><span>Fixed reference</span><h3>The upper ring anchors the motion.</h3><p>The central pillar supports the stationary ring and houses five LEDs. The LDR sits at the top, where a hand can cast a shadow over it.</p></div><div><span>Moving element</span><h3>The lower ring coordinates the arms.</h3><p>Its vertical travel changes the linkage geometry. Guiding that travel is as important as driving it.</p></div><div class="cad-states"><figure><img src={`${img}/cad-closed.webp`} alt="CAD detail of the closed petal linkage" width="408" height="432" loading="lazy" /><figcaption>Closed</figcaption></figure><figure><img src={`${img}/cad-open.webp`} alt="CAD detail of the open petal linkage" width="599" height="475" loading="lazy" /><figcaption>Open</figcaption></figure></div></div></div><div class="mechanism-steps">{mechanics.map(([number,verb,file,title,body,alt])=><article><div class="step-title"><span>{number}</span><h3>{verb}</h3><span aria-hidden="true">↗</span></div><img src={`${img}/${file}.webp`} alt={alt} width="550" height="550" loading="lazy" /><h4>{title}</h4><p>{body}</p></article>)}</div><a class="text-link" href={`${img}/portfolio-page-3.webp`} target="_blank" rel="noopener">View the annotated mechanism sheet <span aria-hidden="true">↗</span></a></section>
+
+  <section class="control-chapter"><div class="bloom-wrap bloom-section"><div class="section-heading"><p class="bloom-kicker">Sensing &amp; control</p><h2>A small system,<br /><em>with room for expression.</em></h2><p>Bela connects the light sensor, potentiometer and button to the servo and LEDs. The supplied application uses Arduino-style C++ through Bela’s Arduino integration.</p></div><div class="signal-map" aria-label="ShyBloom system architecture"><div class="signal-inputs"><div><span>Light input</span><strong>LDR</strong><small>Ambient light and hand shadow</small></div><div><span>Continuous control</span><strong>Potentiometer</strong><small>LED brightness</small></div><div><span>Discrete control</span><strong>Button</strong><small>Toggle breathing mode</small></div></div><div class="signal-controller"><span>Read → Decide → Drive</span><strong>Bela</strong><small>Arduino / C++ application</small><span class="signal-arrow" aria-hidden="true">→</span></div><div class="signal-outputs"><div><span>Movement</span><strong>Servo</strong><small>Rack, slider and petal linkage</small></div><div><span>Illumination</span><strong>5 LEDs</strong><small>Steady or breathing brightness</small></div></div></div><div class="control-details"><article><span>Respond</span><h3>A threshold makes the decision.</h3><p>The supplied code compares the LDR reading to a fixed threshold. The proposal’s adaptive ambient baseline was an earlier idea, rather than a feature of this snapshot.</p></article><article><span>Express</span><h3>Brightness changes the mood.</h3><p>The potentiometer sets the light level. Breathing mode ramps brightness up and down within that selected level.</p></article><article><span>Move</span><h3>Small steps soften the motion.</h3><p>The servo command is divided into incremental steps with short delays, making the opening and closing appear more gradual.</p></article></div><details class="source-details"><summary>View the electronics sheet &amp; source notes</summary><a href={`${img}/portfolio-page-4.webp`} target="_blank" rel="noopener"><img src={`${img}/portfolio-page-4.webp`} alt="Original portfolio electronics and code sheet, with Bela wiring illustration and application logic" width="2400" height="1697" loading="lazy" /></a><p>The portfolio describes the intended response. The archived code has inconsistent position guards that need review before hardware reuse, and its potentiometer pin differs from the drawing. The interactive sketch above illustrates the documented behaviour and is not a firmware emulator.</p><a class="text-link" href="/downloads/shybloom-source.zip" download>Download the original source snapshot <span aria-hidden="true">↓</span></a></details></div></section>
+
+  <section class="bloom-wrap bloom-section prototype" id="bloom-film" aria-labelledby="prototype-title"><div class="section-heading"><p class="bloom-kicker">04 / From CAD to a physical response</p><h2 id="prototype-title">Watch the flower<br /><em>come to life.</em></h2><p>The team’s one-minute film shows the illuminated prototype, physical controls, CAD and workshop assembly. The exposed mechanism makes the relationship between movement and light visible.</p></div><figure class="film-figure"><video controls playsinline preload="none" poster={`${img}/video-poster.jpg`} width="1280" height="720" aria-label="ShyBloom original team demonstration film" aria-describedby="film-description"><source src="/videos/shybloom-demo.mp4" type="video/mp4" /><p><a href="/videos/shybloom-demo.mp4">Download the ShyBloom demonstration video</a>.</p></video><figcaption><span>ShyBloom / Original team demonstration</span><span>01:00 · Play with sound optional</span></figcaption></figure><p id="film-description" class="source-note film-description">Video overview: the assembled flower is shown in ambient light and illuminated in darkness, followed by interaction with the physical controls, CAD views, component assembly and the electronics setup.</p><div class="prototype-pair"><figure><img src={`${img}/prototype-day.webp`} alt="Finished ShyBloom prototype in ambient light, with red petals, white printed arms, a central pillar and grass-covered base" width="1200" height="1600" loading="lazy" /><figcaption>Form in ambient light / Physical prototype</figcaption></figure><figure><img src={`${img}/prototype-lit.webp`} alt="The same ShyBloom prototype during illuminated bench testing" width="1186" height="1460" loading="lazy" /><figcaption>Light through the flower / Bench test</figcaption></figure></div></section>
+
+  <section class="bloom-wrap bloom-section iterations" aria-labelledby="iterations-title"><div class="section-heading"><p class="bloom-kicker">The work between the renders</p><h2 id="iterations-title">A softer gesture needs<br /><em>a steadier mechanism.</em></h2><p>The main fabrication challenges came from unwanted movement: loose joints, excessive slot travel and a rack that drifted out of alignment. Small mechanical changes made the motion more consistent.</p></div><div class="fix-grid">{fixes.map(([number,title,file,issue,change,alt])=><article><figure><img src={`${img}/${file}.webp`} alt={alt} width="600" height="800" loading="lazy" /></figure><span class="fix-number">Iteration {number}</span><h3>{title}</h3><p class="fix-issue">{issue}</p><p>{change}</p></article>)}</div><p class="source-note">Reported challenges and improvements / Portfolio p. 5. These are prototype observations, without quantified endurance or repeatability testing.</p></section>
+
+  <section class="reflection-chapter" id="bloom-reflection" aria-labelledby="reflection-title"><div class="bloom-wrap bloom-section"><div class="section-heading"><p class="bloom-kicker">05 / Outcome &amp; next steps</p><h2 id="reflection-title">More than switching<br /><em>a light on.</em></h2><p>ShyBloom connects sensing, illumination and mechanical movement in one expressive object. The project’s value lies in that integration: a small change in the environment becomes a visible physical gesture.</p></div><div class="reflection-grid"><article><span>Delivered</span><h3>A tangible interaction.</h3><p>A fabricated flower-lantern prototype, a linked opening mechanism, integrated lighting and controls, a demonstration film and a five-page design portfolio.</p></article><article><span>Develop next</span><h3>Refine the light and motion.</h3><p>The portfolio proposes RGB or NeoPixel lighting and placing light sources on the petals. More consistent guidance and further cycle testing would support a more durable mechanism.</p></article></div><div class="bloom-credit"><p class="bloom-kicker">A two-person project</p><h3>Cici Song &amp; Yuxuan Zhou</h3><p>Group 40 / DE2 Gizmo / Physical Computing. Concept development, CAD, electronics and fabrication are presented here as shared project work.</p></div><div class="resource-links"><a href="/reports/shybloom-portfolio.pdf"><span>Project portfolio</span><strong>Read the full design story <i aria-hidden="true">↗</i></strong><small>5 pages · 2.1 MB · Web reading copy</small></a><a href="/downloads/shybloom-source.zip" download><span>Original source archive</span><strong>Explore the Bela implementation <i aria-hidden="true">↓</i></strong><small>Arduino-style C++ + Bela runtime + Pure Data template</small></a></div><a class="back-link" href="/#projects">← Return to the project circle</a></div></section>
+</div>
+
+<script>
+  const demo = document.querySelector<HTMLElement>("[data-bloom-demo]");
+  if (demo) {
+    const light = demo.querySelector<HTMLInputElement>("#bloom-light-input")!;
+    const brightness = demo.querySelector<HTMLInputElement>("#bloom-brightness-input")!;
+    const breathingButton = demo.querySelector<HTMLButtonElement>("[data-breathing-button]")!;
+    let breathing = false;
+    const setText = (selector: string, text: string) => { const element = demo.querySelector(selector); if (element) element.textContent = text; };
+    function update() {
+      if (!demo) return;
+      const open = Number(light.value) < 25;
+      const level = Number(brightness.value);
+      demo.dataset.open = String(open);
+      demo.dataset.breathing = String(open && breathing && level > 0);
+      demo.style.setProperty("--glow", open ? String(level / 100) : "0");
+      brightness.disabled = !open;
+      breathingButton.disabled = !open;
+      breathingButton.setAttribute("aria-pressed", String(breathing));
+      setText("[data-light-output]", `${light.value}%`);
+      setText("[data-brightness-output]", `${brightness.value}%`);
+      setText("[data-ambient-label]", open ? "Sensor in shade / darkness" : "Bright surroundings");
+      const state = !open ? "Resting" : level === 0 ? "Open · light off" : breathing ? "Breathing" : "Blooming";
+      const detail = !open ? "Petals closed · LEDs off" : level === 0 ? "Petals open · brightness set to zero" : breathing ? `Petals open · glow up to ${level}%` : `Petals open · steady glow at ${level}%`;
+      setText("[data-bloom-state]", state);
+      setText("[data-bloom-detail]", detail);
+      setText("[data-bloom-description]", `${state}. ${detail}. Simplified illustration of the documented interaction.`);
+      setText("[data-breathing-label]", breathing ? "On" : "Off");
+      setText("[data-control-hint]", open ? "The knob sets brightness; the button changes its rhythm." : "Shade the sensor to activate the light controls.");
+    }
+    light.addEventListener("input", update);
+    brightness.addEventListener("input", update);
+    breathingButton.addEventListener("click", () => { breathing = !breathing; update(); });
+    demo.querySelectorAll<HTMLButtonElement>("[data-light-preset]").forEach(button => button.addEventListener("click", () => { light.value = button.dataset.lightPreset!; update(); }));
+    demo.querySelector<HTMLElement>("[data-bloom-controls]")!.hidden = false;
+    let onScreen = false;
+    const pause = () => { demo.dataset.paused = String(!onScreen || document.hidden); };
+    const observer = new IntersectionObserver(entries => { onScreen = entries[0].isIntersecting; pause(); }, { threshold: .05 });
+    observer.observe(demo);
+    document.addEventListener("visibilitychange", pause);
+    update();
+  }
+</script>
+
+<style>
+  .bloom-case{--bloom-bg:#171419;--bloom-ink:#f3ede6;--bloom-muted:#b0a7ab;--bloom-line:#3c333a;--bloom-rose:#edacb3;background:var(--bloom-bg);color:var(--bloom-ink);overflow:clip}
+  .bloom-wrap{width:min(100% - 64px,1240px);margin-inline:auto}
+  .bloom-case :is(h1,h2,h3,h4,p,figure){margin:0}
+  .bloom-case :is(h1,h2,h3,h4){font-family:"Space Grotesk",sans-serif;font-weight:500;letter-spacing:-.045em}
+  .bloom-case h2 em{font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.055em;color:var(--bloom-rose)}
+  .bloom-case p{line-height:1.75;font-size:1rem}
+  .bloom-case img{height:auto}
+  .bloom-case .bloom-kicker{font-size:.68rem;line-height:1.6;text-transform:uppercase;letter-spacing:.13em;font-weight:650;color:var(--bloom-muted)}
+  .bloom-case .source-note{font-size:.75rem;color:var(--bloom-muted);line-height:1.7}
+  .bloom-case figcaption{font-size:.7rem;color:var(--bloom-muted);line-height:1.6}
+  .bloom-case a{text-underline-offset:5px}
+  .bloom-case :is(a,button,input,summary):focus-visible{outline:3px solid var(--bloom-rose);outline-offset:5px}
+  .bloom-case section[id]{scroll-margin-top:108px}
+  .bloom-case [hidden]{display:none!important}
+  .back-link{display:inline-flex;align-items:center;min-height:44px;color:var(--bloom-muted);font-size:.8rem;text-decoration:none}
+  .bloom-hero{display:grid;grid-template-columns:1fr 1fr;gap:0 65px;padding-top:32px}
+  .hero-copy>.bloom-kicker{margin-top:38px;max-width:310px}
+  .hero-copy h1{font-size:clamp(5rem,9vw,8.6rem);letter-spacing:-.07em;line-height:.94;margin:25px 0 30px}
+  .hero-copy h1 span{display:block;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:400;letter-spacing:-.065em;color:#f1b8b7}
+  .hero-line{font-family:"Space Grotesk",sans-serif;font-size:1.9rem!important;letter-spacing:-.04em;line-height:1.14!important}
+  .hero-intro{max-width:420px;color:var(--bloom-muted);margin-top:20px!important;font-size:.95rem!important}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:28px}
+  .hero-actions a{display:inline-flex;align-items:center;justify-content:space-between;gap:25px;padding:15px 17px;border:1px solid var(--bloom-line);font-size:.75rem;text-decoration:none;border-radius:3px}
+  .hero-actions .primary{background:#eeb5b4;color:#30212a;border-color:#eeb5b4}
+  .hero-actions a:hover{border-color:var(--bloom-rose)}
+  .team-credit{margin:30px 0 0!important;font-size:.7rem!important;line-height:1.8!important}
+  .team-credit span{color:var(--bloom-muted)}
+  .hero-flower{position:relative;border-radius:240px 240px 6px 6px;overflow:hidden;min-height:690px;margin-top:18px!important;background:#21171e}
+  .hero-flower>img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;object-position:48% 50%}
+  .hero-flower:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(17,9,16,.94),transparent 48%,rgba(20,10,20,.1));pointer-events:none}
+  .hero-image-label{position:absolute;bottom:70px;left:32px;right:25px;z-index:1}
+  .hero-image-label span{font-size:.65rem;text-transform:uppercase;letter-spacing:.13em;color:#e8c6d3}
+  .hero-image-label strong{display:block;font-family:"Space Grotesk",sans-serif;font-weight:500;font-size:2.5rem;line-height:1.1;letter-spacing:-.045em;margin-top:15px}
+  .hero-flower figcaption{position:absolute;bottom:27px;left:32px;right:25px;z-index:1;color:#c9b6bf}
+  .hero-facts{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:35px;padding:35px 0;margin-top:32px;border-top:1px solid var(--bloom-line)}
+  .hero-facts>div{display:flex;align-items:center;gap:20px}
+  .hero-facts strong{font-family:"Space Grotesk",sans-serif;font-size:2.3rem;font-weight:500;letter-spacing:-.05em}
+  .hero-facts span{font-size:.75rem;line-height:1.6;color:var(--bloom-muted);max-width:170px}
+  .bloom-nav{display:flex;flex-wrap:wrap;gap:10px 40px;border-block:1px solid var(--bloom-line);padding:12px 0}
+  .bloom-nav a{font-size:.75rem;text-decoration:none;min-height:32px;display:flex;align-items:center;color:var(--bloom-muted)}
+  .bloom-nav a:hover{color:var(--bloom-rose)}
+  .bloom-section{padding-block:95px}
+  .section-heading{max-width:760px;margin-bottom:45px}
+  .section-heading h2{font-size:clamp(2.5rem,4.7vw,4.3rem);line-height:1.05;margin:22px 0 25px}
+  .section-heading>p:last-child:not(.bloom-kicker){color:var(--bloom-muted);max-width:660px}
+  .idea-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:75px;align-items:center}
+  .large-copy{font-family:"Space Grotesk",sans-serif;font-size:2rem!important;line-height:1.13!important;letter-spacing:-.04em;margin-bottom:24px!important}
+  .idea-grid>div>p:not(.large-copy){color:var(--bloom-muted);font-size:.95rem;margin-top:18px}
+  .idea-principle{border-top:1px solid var(--bloom-line);margin-top:30px;padding-top:22px}
+  .idea-principle span{display:block;font-size:.65rem;color:var(--bloom-muted);text-transform:uppercase;letter-spacing:.1em}
+  .idea-principle strong{display:block;margin-top:12px;font-size:1.1rem;font-weight:500;line-height:1.5}
+  .sketch-figure{padding:25px;background:#eee8df;border-radius:4px;color:#3b3534}
+  .sketch-figure img{width:100%;mix-blend-mode:multiply}
+  .sketch-figure figcaption{display:flex;justify-content:space-between;color:#686060;margin-top:20px}
+  .interaction-chapter{background:#24252a}
+  .bloom-interaction{display:grid;grid-template-columns:1.3fr 1fr;border:1px solid #4f444b;border-radius:6px;overflow:hidden}
+  .interaction-stage{min-width:0;position:relative;display:flex;flex-direction:column;justify-content:space-between;background:#1a1e1d}
+  .stage-label{display:flex;justify-content:space-between;gap:15px;padding:23px 25px;font-size:.64rem;color:#b7aaa9;line-height:1.6}
+  .bloom-diagram{display:block;width:100%;height:auto;max-height:490px}
+  .stage-status{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;border-top:1px solid #3b4540;padding:20px 25px}
+  .stage-status strong{font-size:1.05rem;font-weight:500}
+  .stage-status>span:last-child{grid-column:2;font-size:.7rem;color:#b3b7a9;margin-top:5px}
+  .status-dot{width:7px;height:7px;border-radius:50%;background:#7d8978}
+  [data-open="true"] .status-dot{background:#f1a8b5;box-shadow:0 0 10px #d385a0}
+  .interaction-controls{padding:35px;background:#302b31}
+  .control-block{margin-top:30px}
+  .control-block label{display:flex;align-items:center;justify-content:space-between;gap:20px;font-size:.8rem;line-height:1.5}
+  .control-block output{font-variant-numeric:tabular-nums;color:var(--bloom-rose);white-space:nowrap}
+  .control-block input{display:block;width:100%;margin:16px 0 0;height:28px;accent-color:#e9acb4;cursor:pointer}
+  .control-block input:disabled{cursor:not-allowed;opacity:.35}
+  .range-ends{display:flex;justify-content:space-between;font-size:.65rem;color:var(--bloom-muted);margin-top:5px}
+  .control-block>p{font-size:.65rem;color:var(--bloom-muted);margin-top:10px}
+  .light-presets{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+  .light-presets button{background:transparent;border:1px solid #6b555e;color:#e8cbd0;border-radius:30px;padding:11px 14px;min-height:44px;font-size:.7rem;cursor:pointer}
+  .light-presets button:hover{background:#453640}
+  .breathing-button{width:100%;display:flex;align-items:center;gap:14px;padding:15px;border:1px solid #81636f;border-radius:3px;background:#3d3039;color:#f1dfe3;margin-top:30px;font-size:.8rem;cursor:pointer;min-height:55px}
+  .breathing-button b{margin-left:auto;font-size:.7rem;font-weight:500}
+  .breathing-icon{font-size:1.5rem;line-height:1}
+  .breathing-button[aria-pressed="true"]{background:#654350;border-color:#e4a6ba}
+  .breathing-button:disabled{opacity:.4;cursor:not-allowed}
+  .bloom-case .control-hint{margin-top:15px;font-size:.72rem;color:var(--bloom-muted);line-height:1.65}
+  .bloom-case .interaction-note{margin-top:20px;max-width:800px}
+  .static-interaction{padding:35px;color:var(--bloom-muted);line-height:1.8;font-size:.9rem}
+  .static-interaction ul{padding-left:18px}
+  .motion-note{display:none;font-size:.65rem!important;color:#c7b2bb;margin-top:12px!important}
+  .petal{transition:transform .8s cubic-bezier(.22,.61,.36,1)}
+  .petal-left{transform-origin:280px 184px}.petal-right{transform-origin:320px 184px}.petal-rear{transform-origin:300px 190px}
+  [data-open="true"] .petal-left{transform:rotate(-56deg)}[data-open="true"] .petal-right{transform:rotate(56deg)}[data-open="true"] .petal-rear{transform:scale(.85,.65)}
+  .slider-ring{transition:transform .8s}.diagram-gear{transform-origin:364px 405px;transition:transform .8s}
+  [data-open="true"] .slider-ring{transform:translateY(-67px)}[data-open="true"] .diagram-gear{transform:rotate(-95deg)}
+  .support{transition:d .8s}[data-open="true"] .support-left{d:path("M289 272 229 170")}[data-open="true"] .support-right{d:path("M311 272 371 170")}
+  .light-level{opacity:var(--glow);transition:opacity .6s}
+  [data-breathing="true"] .bloom-glow{animation:bloom-breathe 3.6s ease-in-out infinite}
+  [data-paused="true"] .bloom-glow{animation-play-state:paused}
+  @keyframes bloom-breathe{0%,100%{opacity:.18}50%{opacity:1}}
+  .mechanics{--bloom-rose:#edc3b9}
+  .mechanism-overview{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:center}
+  .assembly-figure{background:#eceee2;padding:28px;border-radius:4px;color:#3d4d42}
+  .assembly-figure .bloom-kicker{color:#596451}
+  .assembly-figure>img{width:100%;height:470px;object-fit:contain;mix-blend-mode:multiply;margin:20px 0}
+  .assembly-figure figcaption{color:#596451}
+  .mechanism-notes>div:not(.cad-states)+div{margin-top:30px}
+  .mechanism-notes>div>span{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:#c0cbb6}
+  .mechanism-notes h3{font-size:1.7rem;line-height:1.14;margin:13px 0}
+  .mechanism-notes p{font-size:.9rem;color:var(--bloom-muted)}
+  .cad-states{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px}
+  .cad-states figure{background:#fff;padding:15px;min-width:0}
+  .cad-states img{width:100%;height:160px;object-fit:contain}
+  .cad-states figcaption{color:#52604d;margin-top:12px}
+  .mechanism-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:45px}
+  .mechanism-steps article{padding-top:20px;border-top:1px solid var(--bloom-line)}
+  .step-title{display:flex;align-items:center;gap:20px;margin-bottom:20px}
+  .step-title span{font-size:.7rem;color:var(--bloom-muted)}
+  .step-title span:last-child{margin-left:auto;font-size:1.1rem}
+  .step-title h3{font-size:1.6rem}
+  .mechanism-steps article>img{width:100%;height:240px;object-fit:contain;padding:20px;background:#fff}
+  .mechanism-steps h4{font-size:1.1rem;margin:22px 0 12px}
+  .mechanism-steps p{font-size:.88rem;color:var(--bloom-muted)}
+  .text-link{display:inline-flex;align-items:center;justify-content:space-between;gap:35px;min-height:44px;font-size:.8rem;text-decoration:none;border-bottom:1px solid currentColor;margin-top:28px}
+  .control-chapter{--bloom-muted:#626159;--bloom-ink:#303e34;--bloom-rose:#8a4d61;--bloom-line:#cdd0c3;background:#e9eadf;color:var(--bloom-ink);color-scheme:light}
+  .signal-map{display:grid;grid-template-columns:1fr .85fr 1fr;gap:40px;align-items:center}
+  .signal-inputs,.signal-outputs{display:grid;gap:12px}
+  .signal-inputs>div,.signal-outputs>div{padding:20px 22px;border:1px solid #c3cabb;background:#f2f2e9}
+  .signal-map span,.signal-map small{display:block;font-size:.65rem;color:#5d695b;line-height:1.6}
+  .signal-map strong{display:block;font-size:1.25rem;font-family:"Space Grotesk",sans-serif;font-weight:500;margin:8px 0}
+  .signal-controller{position:relative;background:#304938;padding:40px 22px;text-align:center;border-radius:100px}
+  .signal-controller strong{font-size:3rem;color:#edf2db;letter-spacing:-.05em}
+  .signal-controller span,.signal-controller small{color:#c8d2bd}
+  .signal-controller:before,.signal-controller:after{content:"";position:absolute;top:50%;width:40px;height:1px;background:#8a9b7e}
+  .signal-controller:before{left:-40px}.signal-controller:after{right:-40px}
+  .signal-controller .signal-arrow{position:absolute;right:-29px;top:calc(50% - 14px);font-size:1.2rem;color:#536f49;z-index:1;background:#e9eadf}
+  .control-details{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:38px;margin-top:45px;padding-top:30px;border-top:1px solid var(--bloom-line)}
+  .control-details article>span{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--bloom-muted)}
+  .control-details h3{font-size:1.5rem;line-height:1.15;margin:13px 0}
+  .control-details p{font-size:.88rem;color:var(--bloom-muted)}
+  .source-details{border-block:1px solid var(--bloom-line);margin-top:35px;padding:0 0 4px}
+  .source-details summary{padding:20px 0;cursor:pointer;font-size:.8rem}
+  .source-details>a>img{width:100%;height:auto}
+  .source-details>p{font-size:.8rem;color:var(--bloom-muted);margin-top:20px;max-width:900px}
+  .source-details .text-link{margin:15px 0}
+  .film-figure{background:#211c24;border:1px solid #45333f;border-radius:4px;overflow:hidden}
+  .film-figure video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#090909}
+  .film-figure figcaption{display:flex;justify-content:space-between;gap:20px;padding:18px 22px}
+  .film-description{margin-top:18px!important;max-width:900px}
+  .prototype-pair{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-top:40px}
+  .prototype-pair figure{min-width:0}
+  .prototype-pair img{width:100%;height:490px;object-fit:cover;object-position:50% 60%;border-radius:4px}
+  .prototype-pair figcaption{padding-top:14px}
+  .iterations{padding-top:0}
+  .fix-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;margin-bottom:30px}
+  .fix-grid article{min-width:0}
+  .fix-grid figure{background:#343037;border-radius:4px;overflow:hidden}
+  .fix-grid img{width:100%;height:300px;object-fit:cover}
+  .fix-grid article:nth-child(2) img{object-fit:contain}
+  .fix-number{display:block;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--bloom-rose);margin-top:24px}
+  .fix-grid h3{font-size:1.7rem;margin:13px 0}
+  .fix-grid p{font-size:.9rem;color:var(--bloom-muted)}
+  .fix-grid .fix-issue{color:#e4d7db;margin-bottom:15px}
+  .reflection-chapter{background:#30252c}
+  .reflection-grid{display:grid;grid-template-columns:1fr 1fr;gap:65px;padding-top:30px;border-top:1px solid #5a434f}
+  .reflection-grid article>span{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:#dcb2bf}
+  .reflection-grid h3{font-size:1.7rem;margin:15px 0}
+  .reflection-grid p{font-size:.95rem;color:#c0b0b8}
+  .bloom-credit{padding-top:30px;margin-top:40px;border-top:1px solid #5a434f}
+  .bloom-credit h3{font-size:1.5rem;margin:12px 0}
+  .bloom-credit>p:last-child{font-size:.8rem;color:#c0b0b8;max-width:800px}
+  .resource-links{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:40px 0 30px}
+  .resource-links>a{display:block;padding:25px;background:#392c35;border:1px solid #664f5a;text-decoration:none;border-radius:4px}
+  .resource-links>a:hover{border-color:var(--bloom-rose)}
+  .resource-links span{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:#cdb2bd}
+  .resource-links strong{display:flex;justify-content:space-between;gap:20px;font-size:1.3rem;font-weight:500;font-family:"Space Grotesk",sans-serif;margin:18px 0}
+  .resource-links i{font-style:normal;color:#e8b3be}
+  .resource-links small{display:block;font-size:.7rem;line-height:1.6;color:#bfaab4}
+  @media(max-width:1000px){.bloom-hero{gap:0 35px}.hero-flower{min-height:680px}.hero-image-label strong{font-size:2rem}.hero-facts>div{gap:14px}.hero-facts strong{font-size:2rem}.idea-grid{gap:35px}.bloom-interaction{grid-template-columns:1.1fr 1fr}.interaction-controls{padding:25px}.mechanism-overview{gap:35px}.assembly-figure>img{height:420px}.cad-states img{height:140px}.signal-map{gap:25px}.signal-controller:before,.signal-controller:after{width:25px}.signal-controller:before{left:-25px}.signal-controller:after{right:-25px}.signal-controller .signal-arrow{right:-21px}.control-details{gap:25px}.fix-grid{gap:22px}.fix-grid img{height:260px}.prototype-pair img{height:410px}}
+  @media(max-width:700px){.bloom-wrap{width:calc(100% - 36px)}.bloom-hero{grid-template-columns:1fr;padding-top:20px}.hero-copy>.bloom-kicker{margin-top:27px}.hero-copy h1{font-size:clamp(5rem,21vw,7.7rem);margin:20px 0 25px}.hero-intro{max-width:430px}.hero-line{font-size:1.8rem!important}.hero-actions{gap:10px}.hero-actions a{font-size:.72rem;gap:18px;padding:14px}.team-credit{margin-top:23px!important}.hero-flower{min-height:485px;margin-top:30px!important;border-radius:190px 190px 4px 4px}.hero-image-label{left:24px;bottom:65px}.hero-image-label strong{font-size:2.2rem}.hero-flower figcaption{left:24px;font-size:.65rem}.hero-facts{gap:15px;margin-top:25px;padding:25px 0}.hero-facts>div{display:block}.hero-facts strong{display:block;font-size:1.9rem}.hero-facts span{display:block;font-size:.65rem;margin-top:8px;line-height:1.5}.bloom-nav{gap:2px 20px;padding-block:9px}.bloom-nav a{font-size:.65rem;min-height:38px}.bloom-section{padding-block:65px}.section-heading{margin-bottom:30px}.section-heading h2{font-size:clamp(2.25rem,8.9vw,3.6rem);margin:17px 0 22px}.section-heading>p:last-child:not(.bloom-kicker){font-size:.93rem}.idea-grid{grid-template-columns:1fr;gap:30px}.large-copy{font-size:1.8rem!important}.sketch-figure{padding:18px}.bloom-interaction{grid-template-columns:1fr}.stage-label{padding:18px;font-size:.6rem}.bloom-diagram{max-height:360px}.stage-status{padding:18px}.interaction-controls{padding:25px 20px}.control-block{margin-top:25px}.control-block label{font-size:.77rem}.light-presets button{font-size:.68rem}.mechanism-overview{grid-template-columns:1fr;gap:30px}.assembly-figure{padding:22px}.assembly-figure>img{height:365px}.mechanism-notes h3{font-size:1.7rem}.cad-states img{height:170px}.mechanism-steps{grid-template-columns:1fr;gap:32px;margin-top:35px}.mechanism-steps article>img{height:240px}.mechanism-steps h4{font-size:1.3rem;margin-top:18px}.mechanism-steps p{max-width:450px}.signal-map{grid-template-columns:1fr;gap:26px}.signal-inputs{grid-template-columns:1fr;gap:8px}.signal-inputs>div,.signal-outputs>div{padding:17px 20px}.signal-controller{max-width:270px;width:100%;margin:auto;padding:28px 20px}.signal-controller:before,.signal-controller:after{width:1px;height:26px;left:50%;right:auto;top:auto}.signal-controller:before{top:-26px}.signal-controller:after{bottom:-26px}.signal-controller .signal-arrow{right:auto;left:calc(50% - 7px);top:auto;bottom:-22px;transform:rotate(90deg);font-size:1rem}.signal-outputs{grid-template-columns:1fr 1fr;gap:8px}.signal-outputs>div{padding:17px 15px}.signal-map strong{font-size:1.2rem}.signal-controller strong{font-size:2.8rem}.control-details{grid-template-columns:1fr;gap:30px}.source-details summary{font-size:.75rem;line-height:1.6}.source-details>p{font-size:.75rem}.film-figure figcaption{padding:14px;font-size:.62rem;flex-wrap:wrap;gap:8px}.prototype-pair{gap:15px;margin-top:28px}.prototype-pair img{height:280px}.prototype-pair figcaption{font-size:.65rem;line-height:1.6}.iterations{padding-top:0}.fix-grid{grid-template-columns:1fr;gap:38px}.fix-grid img{height:330px}.fix-grid h3{font-size:1.8rem}.fix-grid article{padding-bottom:28px;border-bottom:1px solid var(--bloom-line)}.reflection-grid{grid-template-columns:1fr;gap:32px}.resource-links{grid-template-columns:1fr;gap:12px}.resource-links>a{padding:23px}.resource-links strong{font-size:1.25rem}.bloom-case section[id]{scroll-margin-top:150px}.text-link{font-size:.75rem;gap:20px}.static-interaction{padding:25px}}
+  @media(prefers-reduced-motion:reduce){.petal,.slider-ring,.diagram-gear,.support,.light-level{transition:none}[data-breathing="true"] .bloom-glow{animation:none}.motion-note{display:block}}
+</style>

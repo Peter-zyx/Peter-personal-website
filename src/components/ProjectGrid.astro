@@ -1,0 +1,648 @@
+---
+import {projectIcons, presentation} from "../lib/projectPresentation";
+import type { Project } from "../lib/projects";
+
+type Props = {
+  projects: Project[];
+  categories: string[];
+};
+
+const { projects } = Astro.props;
+
+const objectImages: Record<string, string> = {
+  "AI & Robotics": "/images/projects/object-ai.svg",
+  "Mobility & Sustainability": "/images/projects/object-mobility.svg",
+  "Product & Industrial Design": "/images/projects/object-product.svg",
+  "Engineering Analysis": "/images/projects/object-analysis.svg",
+  "Spatial & Experience Design": "/images/projects/object-spatial.svg"
+};
+
+const projectObjectImages = projectIcons;
+---
+
+<section class="project-store" id="projects" aria-labelledby="projects-title">
+  <div class="store-bar">
+    <div>
+      <span class="store-mark">Yuxuan Archive</span>
+      <span class="store-sub">Selected work</span>
+    </div>
+    <div class="store-controls" aria-hidden="true">
+      <span>Projects</span>
+      <span>Circle</span>
+      <span>{projects.length}</span>
+    </div>
+  </div>
+
+  <h2 class="sr-only" id="projects-title">Project circle archive</h2>
+
+  <div class="circle-stage" data-project-store>
+    <div class="circle-line" aria-hidden="true"></div>
+
+    <div class="project-orbit" data-project-orbit>
+      {
+        projects.map((project, index) => {
+          const image = projectObjectImages[project.slug] ?? objectImages[project.category] ?? project.hero;
+          const hasRenderImage = Boolean(projectObjectImages[project.slug]);
+
+          return (
+            <button
+              class:list={[
+                "project-object",
+                hasRenderImage ? "project-object--render" : "",
+                
+                
+              ]}
+              type="button"
+              data-category={project.category}
+              data-title={project.title}
+              data-year={project.year}
+              data-summary={project.summary}
+              data-tags={JSON.stringify(project.tags.slice(0, 4))}
+              data-url={`/projects/${project.slug}/`}
+              data-image={image}
+              data-render={hasRenderImage ? "true" : "false"}
+              data-variant=""
+              data-index={index}
+              aria-label={`Preview ${project.title}`}
+            >
+              <img src={image} alt="" loading="lazy" width="160" height="160" />
+              <span class="object-label" aria-hidden="true">{presentation[project.slug]?.name ?? project.title}</span>
+            </button>
+          );
+        })
+      }
+    </div>
+
+    <aside class="brief-panel" data-brief-panel aria-live="polite" aria-hidden="true">
+      <div class="brief-copy">
+        <div class="brief-kicker">
+          <span data-brief-category>Project</span>
+          <span data-brief-year>2025</span>
+        </div>
+        <h3 data-brief-title>Select a project</h3>
+        <p data-brief-summary>Click a project object to preview the brief.</p>
+        <div class="brief-tags" data-brief-tags></div>
+      </div>
+      <div class="brief-object">
+        <img data-brief-image src="/images/projects/object-product.svg" alt="" />
+        <a data-brief-link href="/#projects">Open</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-project-store]");
+  const objects = Array.from(document.querySelectorAll<HTMLButtonElement>(".project-object"));
+  const panel = document.querySelector<HTMLElement>("[data-brief-panel]");
+  const orbit = document.querySelector<HTMLElement>("[data-project-orbit]");
+  const ring = document.querySelector<HTMLElement>(".circle-line");
+  const briefCategory = document.querySelector<HTMLElement>("[data-brief-category]");
+  const briefYear = document.querySelector<HTMLElement>("[data-brief-year]");
+  const briefTitle = document.querySelector<HTMLElement>("[data-brief-title]");
+  const briefSummary = document.querySelector<HTMLElement>("[data-brief-summary]");
+  const briefTags = document.querySelector<HTMLElement>("[data-brief-tags]");
+  const briefImage = document.querySelector<HTMLImageElement>("[data-brief-image]");
+  const briefObject = document.querySelector<HTMLElement>(".brief-object");
+  const briefLink = document.querySelector<HTMLAnchorElement>("[data-brief-link]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  let selected: HTMLButtonElement | undefined;
+  let selectedIndex = -1;
+  let rotation = -Math.PI * 0.52;
+  let focus = 0;
+  let last = performance.now();
+  let stageRect = root?.getBoundingClientRect();
+  let objectSize = objects[0]?.offsetWidth ?? 90;
+  const baseAngles = objects.map((_, index) => (Math.PI * 2 * index) / Math.max(objects.length, 1) - Math.PI / 2);
+
+  function shortestAngleDelta(target: number, current: number) {
+    return Math.atan2(Math.sin(target - current), Math.cos(target - current));
+  }
+
+  function updatePanel(object: HTMLButtonElement) {
+    if (briefCategory) briefCategory.textContent = object.dataset.category ?? "";
+    if (briefYear) briefYear.textContent = object.dataset.year ?? "";
+    if (briefTitle) briefTitle.textContent = object.dataset.title ?? "";
+    if (briefSummary) briefSummary.textContent = object.dataset.summary ?? "";
+    if (briefImage) briefImage.src = object.dataset.image ?? "";
+    briefObject?.classList.toggle("brief-object--render", object.dataset.render === "true");
+    briefObject?.classList.toggle("brief-object--forest", object.dataset.variant === "forest");
+    if (briefLink) briefLink.href = object.dataset.url ?? "#";
+
+    if (briefTags) {
+      briefTags.innerHTML = "";
+      const tags = JSON.parse(object.dataset.tags ?? "[]") as string[];
+      tags.forEach((tag) => {
+        const chip = document.createElement("span");
+        chip.textContent = tag;
+        briefTags.append(chip);
+      });
+    }
+  }
+
+  function selectObject(object: HTMLButtonElement) {
+    selected = object;
+    selectedIndex = Number(object.dataset.index ?? -1);
+    root?.classList.add("is-focused");
+    orbit?.classList.add("is-paused");
+    panel?.classList.add("is-visible");
+    panel?.setAttribute("aria-hidden", "false");
+    objects.forEach((item) => item.classList.toggle("is-selected", item === object));
+    updatePanel(object);
+  }
+
+  function closePanel() {
+    selected = undefined;
+    selectedIndex = -1;
+    root?.classList.remove("is-focused");
+    orbit?.classList.remove("is-paused");
+    panel?.classList.remove("is-visible");
+    panel?.setAttribute("aria-hidden", "true");
+    objects.forEach((item) => item.classList.remove("is-selected"));
+  }
+
+  function measure() {
+    stageRect = root?.getBoundingClientRect();
+    objectSize = objects[0]?.offsetWidth ?? 90;
+  }
+
+  function render(now: number) {
+    if (!root || !stageRect) return;
+    const dt = Math.min(now - last, 48);
+    last = now;
+
+    const targetFocus = selected ? 1 : 0;
+    focus += (targetFocus - focus) * 0.105;
+
+    if (selected && selectedIndex >= 0) {
+      const targetRotation = -baseAngles[selectedIndex];
+      rotation += shortestAngleDelta(targetRotation, rotation) * 0.105;
+    } else if (!reduceMotion.matches) {
+      rotation += dt * 0.000105;
+    }
+
+    const width = stageRect.width;
+    const height = stageRect.height;
+    const baseRadius = Math.min(
+      Math.max(width * 0.285, 290),
+      Math.max(height * 0.39, 300),
+      Math.max(0, (width - objectSize) / 2 - 10),
+      Math.max(0, (height - objectSize * 1.2) / 2 - 18)
+    );
+    const radius = baseRadius * (1 + focus * 0.28);
+    const centerX = width / 2 - focus * Math.min(width * 0.2, 300);
+    const centerY = height / 2 + focus * Math.min(height * 0.012, 10);
+    const ringSize = radius * 2;
+
+    ring?.style.setProperty("--ring-size", `${ringSize}px`);
+    ring?.style.setProperty("--ring-x", `${centerX}px`);
+    ring?.style.setProperty("--ring-y", `${centerY}px`);
+    panel?.style.setProperty("--panel-focus", `${focus}`);
+
+    objects.forEach((object, index) => {
+      const angle = baseAngles[index] + rotation;
+      const x = centerX + Math.cos(angle) * radius;
+      const y = centerY + Math.sin(angle) * radius;
+      const isSelected = object === selected;
+      const selectedScale = isSelected ? 1 + focus * 0.88 : 1 - focus * 0.08;
+      const verticalFade = 0.78 + Math.max(0, Math.sin(angle)) * 0.12;
+      const opacity = isSelected ? 1 : Math.max(0.44, verticalFade - focus * 0.2);
+
+      object.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${selectedScale})`;
+      object.style.zIndex = String(isSelected ? 12 : Math.round(y));
+      object.style.opacity = String(opacity);
+      object.style.setProperty("--image-rotation", `${-(angle + Math.PI / 2)}rad`);
+    });
+
+    requestAnimationFrame(render);
+  }
+
+  objects.forEach((object) => {
+    object.addEventListener("click", (event) => {
+      event.stopPropagation();
+      selectObject(object);
+    });
+  });
+
+  briefLink?.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
+  root?.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (!selected) return;
+    if (target.closest(".project-object") || target.closest("[data-brief-panel]")) return;
+    closePanel();
+  });
+
+  root?.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closePanel();
+  });
+
+  window.addEventListener("resize", measure, { passive: true });
+  measure();
+  requestAnimationFrame(render);
+</script>
+
+<style>
+  .project-store {
+    position: relative;
+    min-height: calc(100svh - 82px);
+    overflow: hidden;
+    scroll-margin-top: 96px;
+    padding: 32px 16px 24px;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(112, 201, 209, 0.08), transparent 32rem),
+      transparent;
+  }
+
+  .store-bar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: min(100%, 1500px);
+    margin: 0 auto;
+    color: var(--muted);
+  }
+
+  .store-bar > div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .store-mark {
+    color: var(--text);
+    font-size: 1.05rem;
+    font-weight: 780;
+  }
+
+  .store-sub,
+  .store-controls span {
+    color: var(--soft);
+    font-size: 0.82rem;
+  }
+
+  .store-controls span:nth-child(2),
+  .store-controls span:nth-child(3) {
+    min-height: 30px;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.035);
+    color: var(--text);
+  }
+
+  .circle-stage {
+    position: relative;
+    width: min(100%, 1560px);
+    height: calc(100svh - 230px);
+    min-height: 460px;
+    margin: 24px auto 0;
+    outline: none;
+  }
+
+  .circle-line {
+    --ring-size: 760px;
+    --ring-x: 50%;
+    --ring-y: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--ring-size);
+    aspect-ratio: 1;
+    border: 1px solid rgba(246, 248, 243, 0.13);
+    border-radius: 50%;
+    opacity: 0.95;
+    transform: translate3d(var(--ring-x), var(--ring-y), 0) translate(-50%, -50%);
+    transition:
+      width 720ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 240ms ease;
+  }
+
+  .circle-line::before {
+    position: absolute;
+    inset: 14%;
+    content: "";
+    border: 1px solid rgba(112, 201, 209, 0.07);
+    border-radius: inherit;
+  }
+
+  .project-orbit {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .project-object {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    width: clamp(60px, min(7.7vw, 11svh), 112px);
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    place-items: center;
+    will-change: transform, opacity;
+    transition:
+      opacity 260ms ease,
+      filter 260ms ease;
+  }
+
+  .project-object:hover,
+  .project-object.is-selected {
+    filter:
+      drop-shadow(0 24px 42px rgba(112, 201, 209, 0.14))
+      drop-shadow(0 8px 20px rgba(246, 248, 243, 0.08));
+  }
+
+  .project-object img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: rotate(var(--image-rotation));
+    transition:
+      transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 260ms ease;
+    filter: saturate(0.86) contrast(1.05);
+    mix-blend-mode: screen;
+  }
+
+  .project-object--render img {
+    width: 120%;
+    height: 120%;
+    border-radius: 8px;
+    object-fit: contain;
+    transform: none;
+    filter: none;
+    mix-blend-mode: normal;
+  }
+
+  .project-object--shaver img {
+    width: 58%;
+    height: 58%;
+  }
+
+  .project-object--forest img {
+    width: 92%;
+    height: 92%;
+    filter: saturate(0.58) contrast(1.14) brightness(0.84);
+  }
+
+  .project-object--forest.is-selected img {
+    filter: saturate(0.7) contrast(1.16) brightness(0.92);
+  }
+
+  .project-object.is-selected img {
+    filter: saturate(1) contrast(1.12);
+  }
+
+  .project-object--render.is-selected img {
+    filter: none;
+  }
+
+  .brief-panel {
+    position: absolute;
+    top: 50%;
+    right: clamp(16px, 5vw, 86px);
+    z-index: 24;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 118px;
+    gap: 18px;
+    width: min(410px, 34vw);
+    min-height: 148px;
+    padding: 16px;
+    border: 1px solid rgba(246, 248, 243, 0.12);
+    border-radius: 28px;
+    background: rgba(8, 9, 8, 0.9);
+    color: var(--text);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%) translateX(24px) scale(0.98);
+    transition:
+      opacity 260ms ease,
+      transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    backdrop-filter: blur(22px);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+  }
+
+  .brief-panel.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+
+  .brief-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .brief-kicker {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--metal);
+    font-size: 0.68rem;
+    font-weight: 760;
+    text-transform: uppercase;
+  }
+
+  .brief-panel h3 {
+    margin: 14px 0 8px;
+    font-size: 1.24rem;
+    line-height: 1.06;
+  }
+
+  .brief-panel p {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    color: var(--muted);
+    font-size: 0.86rem;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .brief-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .brief-tags span {
+    max-width: 100%;
+    padding: 5px 7px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.66rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .brief-object {
+    position: relative;
+    display: grid;
+    min-height: 116px;
+    overflow: hidden;
+    border: 1px solid rgba(246, 248, 243, 0.1);
+    border-radius: 18px;
+    background:
+      radial-gradient(circle at 50% 38%, rgba(112, 201, 209, 0.22), transparent 62%),
+      rgba(246, 248, 243, 0.055);
+    place-items: center;
+  }
+
+  .brief-object img {
+    width: 74%;
+    height: 74%;
+    object-fit: contain;
+    opacity: 0.92;
+    filter: saturate(0.92) contrast(1.1);
+    mix-blend-mode: screen;
+  }
+
+  .brief-object--render {
+    background:
+      radial-gradient(circle at 50% 44%, rgba(196, 212, 207, 0.18), transparent 64%),
+      rgba(246, 248, 243, 0.05);
+  }
+
+  .brief-object--render img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    opacity: 1;
+    filter: saturate(0.94) contrast(1.12) brightness(0.95);
+    mix-blend-mode: normal;
+  }
+
+  .brief-object--forest img {
+    width: 88%;
+    height: 88%;
+    filter: saturate(0.62) contrast(1.14) brightness(0.88);
+  }
+
+  .brief-object a {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--metal-bright);
+    color: var(--ink);
+    font-size: 0.78rem;
+    font-weight: 760;
+    text-decoration: none;
+    transition:
+      transform 180ms ease,
+      opacity 180ms ease;
+  }
+
+  .brief-object a:hover {
+    opacity: 0.82;
+    transform: translateY(-1px);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 980px) {
+    .project-store {
+      padding-top: 32px;
+    }
+
+    .store-bar {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .circle-stage {
+      height: 560px;
+      min-height: 560px;
+    }
+
+    .brief-panel {
+      top: auto;
+      right: 12px;
+      bottom: 22px;
+      left: 12px;
+      grid-template-columns: minmax(0, 1fr) 108px;
+      width: auto;
+      transform: translateY(18px) scale(0.98);
+    }
+
+    .brief-panel.is-visible {
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .project-store {
+      padding-inline: 10px;
+    }
+
+    .store-controls {
+      flex-wrap: wrap;
+    }
+
+    .circle-stage {
+      height: 560px;
+      min-height: 560px;
+    }
+
+    .project-object {
+      width: clamp(52px, 16vw, 72px);
+    }
+
+    .brief-panel {
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 24px;
+    }
+
+    .brief-panel h3 {
+      font-size: 1.04rem;
+    }
+
+    .brief-panel p {
+      -webkit-line-clamp: 3;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-object,
+    .project-object img,
+    .brief-panel,
+    .circle-line {
+      transition: none;
+    }
+  }
+  .object-label{position:absolute;left:50%;bottom:-26px;transform:translateX(-50%);padding:7px 10px;border:1px solid #5a665f;background:#101613;color:#e9eee9;font:500 10px/1.4 Arial,sans-serif;white-space:nowrap;opacity:0;pointer-events:none;border-radius:4px}
+  .project-object:hover .object-label,.project-object:focus-visible .object-label{opacity:1}
+  .project-object:focus-visible{outline:2px solid #c7d7ce;outline-offset:9px;border-radius:8px}
+  .project-object.is-selected .object-label{opacity:0}
+  @media(hover:none){.object-label{display:none}}
+</style>

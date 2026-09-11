@@ -1,0 +1,235 @@
+<div class="visual reveal" aria-hidden="true">
+  <div class="screen-lines"></div>
+  <div class="visual-topline">
+    <span>Prototype field</span>
+    <span>07.2026</span>
+  </div>
+  <div class="orbital-stage">
+    <div class="orbital">
+      <span class="ring ring-a"></span>
+      <span class="ring ring-b"></span>
+      <span class="ring ring-c"></span>
+      <span class="axis axis-x"></span>
+      <span class="axis axis-y"></span>
+      <span class="core"></span>
+    </div>
+    <span class="shadow"></span>
+  </div>
+  <div class="metrics">
+    <span><strong>AI</strong> vision</span>
+    <span><strong>Mobility</strong> systems</span>
+    <span><strong>Physical</strong> prototypes</span>
+  </div>
+</div>
+
+<style>
+  .visual {
+    position: relative;
+    display: grid;
+    min-height: 620px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background:
+      radial-gradient(circle at 50% 55%, rgba(218, 184, 119, 0.22), transparent 19rem),
+      radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.08), transparent 18rem),
+      linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.012));
+    box-shadow:
+      0 36px 120px var(--shadow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    place-items: center;
+  }
+
+  .visual::before {
+    position: absolute;
+    inset: 34px;
+    content: "";
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+  }
+
+  .visual::after {
+    position: absolute;
+    inset: auto 10% 18% 10%;
+    height: 1px;
+    content: "";
+    background: linear-gradient(90deg, transparent, rgba(218, 184, 119, 0.55), transparent);
+    filter: blur(0.5px);
+  }
+
+  .screen-lines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(circle at 50% 45%, black, transparent 72%);
+  }
+
+  .visual-topline {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    left: 22px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--soft);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .orbital-stage {
+    position: relative;
+    display: grid;
+    width: min(72vw, 430px);
+    aspect-ratio: 1;
+    place-items: center;
+    perspective: 900px;
+  }
+
+  .orbital {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    transform-style: preserve-3d;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .ring,
+  .core {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+
+  .ring {
+    border: 1px solid rgba(246, 242, 234, 0.34);
+    box-shadow:
+      inset 0 0 30px rgba(218, 184, 119, 0.08),
+      0 0 42px rgba(218, 184, 119, 0.12);
+  }
+
+  .ring-a {
+    transform: rotateX(64deg) rotateZ(18deg);
+    animation: orbit-a 14s linear infinite;
+  }
+
+  .ring-b {
+    transform: rotateX(68deg) rotateY(58deg);
+    animation: orbit-b 16s linear infinite reverse;
+  }
+
+  .ring-c {
+    inset: 64px;
+    border-color: rgba(218, 184, 119, 0.64);
+    transform: rotateX(72deg) rotateZ(-32deg);
+  }
+
+  .axis {
+    position: absolute;
+    inset: 50% 5%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(246, 242, 234, 0.32), transparent);
+    transform-origin: center;
+  }
+
+  .axis-x {
+    transform: rotateZ(12deg);
+  }
+
+  .axis-y {
+    transform: rotateZ(102deg);
+  }
+
+  .core {
+    inset: 38%;
+    background:
+      radial-gradient(circle at 34% 27%, #fffaf0, #f1d79c 23%, #7a6845 55%, #17130c 100%);
+    box-shadow:
+      0 0 40px rgba(218, 184, 119, 0.38),
+      0 0 96px rgba(255, 255, 255, 0.1);
+  }
+
+  .shadow {
+    position: absolute;
+    right: 12%;
+    bottom: 10%;
+    left: 12%;
+    height: 52px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(218, 184, 119, 0.26), transparent 68%);
+    filter: blur(12px);
+    transform: rotateX(72deg);
+  }
+
+  .metrics {
+    position: absolute;
+    right: 22px;
+    bottom: 22px;
+    left: 22px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .metrics span {
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(5, 5, 5, 0.52);
+    color: var(--muted);
+    font-size: 0.76rem;
+    text-align: center;
+  }
+
+  .metrics strong {
+    color: var(--text);
+    font-weight: 760;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-3deg);
+    }
+    50% {
+      transform: translateY(-16px) rotate(3deg);
+    }
+  }
+
+  @keyframes orbit-a {
+    to {
+      transform: rotateX(64deg) rotateZ(378deg);
+    }
+  }
+
+  @keyframes orbit-b {
+    to {
+      transform: rotateX(68deg) rotateY(58deg) rotateZ(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orbital,
+    .ring-a,
+    .ring-b {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .visual {
+      min-height: 460px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .metrics {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

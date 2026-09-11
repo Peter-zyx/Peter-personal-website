@@ -1,0 +1,368 @@
+---
+import CaseDecision from "./CaseDecision.astro";
+import type { Project } from "../lib/projects";
+import { bladeMaterials } from "../lib/prostheticAnalysis";
+type Props = { project: Project };
+const { project } = Astro.props;
+const img = "/images/projects/prosthetic-limb-analysis";
+const report = "/reports/prosthetic-running-blade.pdf";
+const initial = bladeMaterials.cfrp;
+const modes = [
+  { label: "CFRP / Iterated", values: [149, 148.1, 147], color: "#e9b27d" },
+  { label: "Aluminium / Iterated", values: [117.6, 116, 115], color: "#d8ded6" },
+  { label: "CFRP / Baseline", values: [97.7, 97.6, 97.2], color: "#90b5ba" },
+  { label: "Aluminium / Baseline", values: [76.7, 76.5, 76.3], color: "#a894b4" }
+];
+---
+
+<div class="fea-case" data-fea-case>
+  <header class="fea-hero fea-wrap">
+    <div class="hero-copy">
+      <a class="fea-back" href="/#projects">← Back to projects</a>
+      <p class="fea-kicker">Engineering analysis / {project.year}</p>
+      <h1>Prosthetic Limb<br /><span>Analysis.</span></h1>
+      <p class="hero-deck">Shaping a blade.<br />Understanding its response.</p>
+      <p class="hero-intro">I used finite element analysis to explore how geometry and material change a running blade’s stress, flexibility and vibration behaviour.</p>
+      <div class="fea-actions"><a class="primary" href="#fea-comparison">Compare the designs <span aria-hidden="true">↘</span></a><a href={report}>Read the report <span aria-hidden="true">↗</span></a></div>
+    </div>
+    <figure class="blade-plate">
+      <div class="plate-header"><span>Design study / 02</span><span>Iterated geometry</span></div>
+      <img class="blade-render" src={`${img}/final-cad.webp`} alt="Actual CAD image of the iterated running blade, showing the smoother curved body and raised front tip" width="599" height="553" />
+      <div class="drawing-inset"><img src={`${img}/final-drawing.webp`} alt="Technical drawing of the final blade, with overall height 353.45 mm and a raised tip" width="367" height="263" /><span>Geometry from the report</span></div>
+      <figcaption><span><b>353.5</b> mm overall height</span><span><b>R90</b> main transition</span><span><b>R16.3</b> front tip</span></figcaption>
+    </figure>
+    <div class="hero-results"><div><span>Final CFRP / First mode</span><strong>147 <small>Hz</small></strong></div><div><span>Final CFRP / Peak stress</span><strong>63.4 <small>MPa</small></strong></div><div><span>Final CFRP / Tip displacement</span><strong>3.24 <small>mm</small></strong></div><div><span>Study scope</span><strong>2 × 2 × 3</strong><small>materials · geometries · meshes</small></div></div>
+  </header>
+
+  <nav class="fea-nav fea-wrap" aria-label="Case study navigation"><a href="#fea-brief">01 / Model</a><a href="#fea-geometry">02 / Geometry</a><a href="#fea-comparison">03 / Results</a><a href="#fea-mesh">04 / Convergence</a><a href="#fea-fatigue">05 / Fatigue</a></nav>
+  <CaseDecision slug={project.slug} />
+
+  <div class="fea-wrap">
+    <section class="fea-section" id="fea-brief" aria-labelledby="brief-title">
+      <div class="section-head"><p class="fea-kicker">01 / Defining the model</p><h2 id="brief-title">A spring-like structure.<br /><span>Several competing demands.</span></h2><p>A running blade needs flexibility for elastic energy storage, alongside structural durability and a suitable dynamic response. This study compares those structural responses under a consistent, simplified ANSYS setup.</p></div>
+      <div class="brief-grid"><div class="brief-copy"><h3>The analysis setup</h3><ol class="setup-list"><li><span>01</span><div><strong>Constrain the upper connection</strong><p>The mounting area is modelled as a fixed support. Displacement increases towards the free foot end.</p></div></li><li><span>02</span><div><strong>Apply normal and friction loads</strong><p>Motion is defined along +x, with friction acting in −x. The report uses simplified static loading.</p></div></li><li><span>03</span><div><strong>Compare like with like</strong><p>Two materials, two geometries and three quadratic mesh sizes support the comparison.</p></div></li></ol><div class="criteria"><span>Criteria from the project brief</span><div><strong>&gt;50 Hz</strong><small>first natural frequency</small></div><div><strong>10⁶ cycles</strong><small>minimum fatigue life</small></div></div></div><figure class="source-figure setup-figure"><a href={`${img}/boundary-conditions.webp`} target="_blank" rel="noopener" aria-label="Enlarge ANSYS boundary condition setup"><img src={`${img}/boundary-conditions.webp`} alt="ANSYS running blade setup, with upper fixed support in blue and applied load arrows at the foot" width="460" height="502" loading="lazy" /></a><figcaption>Fixed support and load directions / Report p. 3 <span>↗</span></figcaption></figure></div>
+      <div class="material-assumption"><span class="fea-kicker">Material assumption</span><h3>CFRP, represented as an equivalent isotropic material.</h3><p>The model uses E = 65 GPa, ν = 0.30 and ρ = 1,550 kg/m³. It simplifies the overall response without defining a laminate lay-up; fibre direction and stacking effects remain outside this analysis.</p></div>
+    </section>
+
+    <section class="fea-section" id="fea-geometry" aria-labelledby="geometry-title">
+      <div class="section-head"><p class="fea-kicker">02 / A change in the load path</p><h2 id="geometry-title">From a straight foot<br /><span>to a smoother return.</span></h2><p>The initial blade paired a curved body with a straight contact section. I introduced a raised front tip and a smoother lower profile to investigate whether the geometry could increase stiffness and improve its modal response.</p></div>
+      <div class="geometry-grid"><figure class="geometry-card"><div class="geometry-image"><img src={`${img}/baseline-cad.webp`} alt="Baseline CAD running blade with a straight foot contact section" width="415" height="352" loading="lazy" /></div><figcaption><span class="fea-kicker">01 / Baseline</span><h3>A straight contact section.</h3><p>Approximately 296 mm overall horizontal length, with a 250 mm foot section.</p><a href={`${img}/baseline-drawing.webp`} target="_blank" rel="noopener">View dimensioned drawing ↗</a></figcaption></figure><figure class="geometry-card"><div class="geometry-image"><img src={`${img}/final-cad.webp`} alt="Iterated CAD running blade with a smoother lower curve and raised front section" width="599" height="553" loading="lazy" /></div><figcaption><span class="fea-kicker">02 / Iterated</span><h3>A raised tip and smoother curve.</h3><p>353.5 mm overall height, a 90 mm main transition radius and a 16.3 mm tip radius.</p><a href={`${img}/final-drawing.webp`} target="_blank" rel="noopener">View dimensioned drawing ↗</a></figcaption></figure></div>
+      <div class="geometry-insight"><span>Engineering intent</span><p>Reduce the severity of the curved transition while changing the balance between stiffness and mass.</p></div>
+    </section>
+
+    <section class="fea-section" id="fea-comparison" aria-labelledby="comparison-title">
+      <div class="section-head"><p class="fea-kicker">03 / Read the response</p><h2 id="comparison-title">Same analysis.<br /><span>Different structural behaviour.</span></h2><p>Switch material and result to compare the baseline and iterated fine-mesh solutions. These are the original ANSYS outputs from the report, with rounded values brought forward for comparison.</p></div>
+      <div class="result-explorer" data-fea-explorer>
+        <div class="explorer-controls"><fieldset><legend>Material</legend><div class="segmented"><label><input type="radio" name="blade-material" value="cfrp" checked /><span>CFRP</span></label><label><input type="radio" name="blade-material" value="aluminium" /><span>Aluminium 2014 T4</span></label></div></fieldset><fieldset><legend>Result</legend><div class="segmented"><label><input type="radio" name="blade-result" value="stress" checked /><span>Equivalent stress</span></label><label><input type="radio" name="blade-result" value="deformation" /><span>Total deformation</span></label></div></fieldset></div>
+        <div class="comparison-status" aria-live="polite" aria-atomic="true"><strong data-comparison-title>CFRP / Equivalent stress</strong><span data-comparison-delta>10.6% lower peak stress after iteration</span></div>
+        <div class="contour-grid">{["baseline", "final"].map((stage, i) => <figure class="contour-card"><div class="contour-title"><span>{i === 0 ? "01 / Baseline" : "02 / Iterated"}</span><strong><span data-contour-value={stage}>{initial.stress[i].toFixed(1)}</span> <small data-contour-unit>MPa</small></strong></div><a data-contour-link={stage} href={`${img}/cfrp-${stage}-stress.webp`} target="_blank" rel="noopener" aria-label={`Enlarge ${stage} ANSYS contour`}><img data-contour-image={stage} src={`${img}/cfrp-${stage}-stress.webp`} alt={`CFRP ${stage} fine-mesh equivalent stress contour`} width={stage === "baseline" ? 427 : 456} height={stage === "baseline" ? 373 : 324} loading="lazy" /></a><figcaption><span data-contour-source={stage}>Report p. {initial.pages[i]} / Fine mesh</span><span>Enlarge ↗</span></figcaption></figure>)}</div>
+        <p class="source-note">Each ANSYS plot uses its own legend range. Compare the numerical values, not colour alone. The report rounds final CFRP stress to 63.4 MPa; the source contour displays 63.477 MPa.</p>
+        <div class="tradeoff-table"><table><caption data-table-caption>CFRP / Fine-mesh results and reported mass</caption><thead><tr><th scope="col">Measure</th><th scope="col">Baseline</th><th scope="col">Iterated</th></tr></thead><tbody><tr><th scope="row">First natural frequency</th><td data-result-cell="frequency-0">97.2 Hz</td><td data-result-cell="frequency-1">147 Hz</td></tr><tr><th scope="row">Maximum deformation</th><td data-result-cell="deformation-0">6.68 mm</td><td data-result-cell="deformation-1">3.24 mm</td></tr><tr><th scope="row">Peak equivalent stress</th><td data-result-cell="stress-0">70.9 MPa</td><td data-result-cell="stress-1">63.4 MPa</td></tr><tr><th scope="row">Approximate mass</th><td data-result-cell="mass-0">0.8 kg</td><td data-result-cell="mass-1">1.3 kg</td></tr></tbody></table></div>
+        <p class="material-note" data-material-note>{initial.note}</p>
+      </div>
+      <div class="tradeoff-summary"><div><span class="fea-kicker">CFRP / Fine mesh</span><strong>+51.2<small>%</small></strong><p>first natural frequency</p></div><div><span class="fea-kicker">CFRP / Fine mesh</span><strong>−51.5<small>%</small></strong><p>maximum deformation</p></div><div class="mass-tradeoff"><span class="fea-kicker">The trade-off</span><h3>Stiffer also meant heavier.</h3><p>The report gives approximately 0.8 → 1.3 kg for CFRP. Lower deformation and a higher first mode improve these analysis metrics; they do not alone establish better energy return or running performance.</p></div></div>
+    </section>
+
+    <section class="fea-section" id="fea-mesh" aria-labelledby="mesh-title">
+      <div class="section-head"><p class="fea-kicker">04 / Check the numerical foundation</p><h2 id="mesh-title">Refine the mesh.<br /><span>Watch the result settle.</span></h2><p>Quadratic elements were refined globally and around the inner curve and foot contact region, where stronger stress gradients and bending were expected. The reported modal results changed little with finer meshes.</p></div>
+      <div class="mesh-layout"><div class="mesh-evidence"><figure class="source-figure"><a href={`${img}/mesh.webp`} target="_blank" rel="noopener" aria-label="Enlarge the baseline blade mesh"><img src={`${img}/mesh.webp`} alt="Quadratic finite element mesh around the baseline blade curve and foot" width="354" height="323" loading="lazy" /></a><figcaption>Quadratic mesh / Report p. 3 <span>↗</span></figcaption></figure><div class="mesh-sizes"><div><span>Coarse</span><strong>24 / 12 <small>mm</small></strong></div><div><span>Medium</span><strong>16 / 8 <small>mm</small></strong></div><div><span>Fine</span><strong>10 / 5 <small>mm</small></strong></div></div><p class="source-note">Global / local element size</p></div><div class="mesh-chart"><p class="fea-kicker">First natural frequency / Hz</p><svg viewBox="0 0 600 300" role="img" aria-labelledby="mesh-chart-title mesh-chart-desc"><title id="mesh-chart-title">Natural frequency across three mesh refinements</title><desc id="mesh-chart-desc">CFRP iterated: 149, 148.1, 147 Hz. Aluminium iterated: 117.6, 116, 115 Hz. CFRP baseline: 97.7, 97.6, 97.2 Hz. Aluminium baseline: 76.7, 76.5, 76.3 Hz.</desc>{[50,75,100,125,150].map(v => <g><line x1="58" x2="535" y1={250-(v-50)*2} y2={250-(v-50)*2} class="chart-grid" /><text x="42" y={255-(v-50)*2} text-anchor="end">{v}</text></g>)}{modes.map(mode => <g><polyline points={mode.values.map((v,i)=>`${90+i*200},${250-(v-50)*2}`).join(" ")} fill="none" stroke={mode.color} stroke-width="2" />{mode.values.map((v,i)=><circle cx={90+i*200} cy={250-(v-50)*2} r="4" fill={mode.color} />)}<text x="505" y={254-(mode.values[2]-50)*2} style={`fill:${mode.color}`}>{mode.values[2]}</text></g>)}{["Coarse","Medium","Fine"].map((label,i)=><text x={90+i*200} y="285" text-anchor="middle">{label}</text>)}</svg><div class="chart-legend">{modes.map(mode=><span><i style={`background:${mode.color}`}></i>{mode.label}</span>)}</div><p class="source-note">Replotted from the report’s modal results. Both geometries exceed the brief’s 50 Hz threshold for both materials.</p><details><summary>View the numerical convergence table</summary><div class="table-scroll"><table><thead><tr><th scope="col">Model / Hz</th><th scope="col">Coarse</th><th scope="col">Medium</th><th scope="col">Fine</th></tr></thead><tbody>{modes.map(mode=><tr><th scope="row">{mode.label}</th>{mode.values.map(value=><td>{value}</td>)}</tr>)}</tbody></table></div></details></div></div>
+      <p class="mesh-conclusion">Mesh stability supports the numerical comparison. It does not remove uncertainty in the boundary conditions, loading or material model.</p>
+    </section>
+
+    <section class="fea-section" id="fea-fatigue" aria-labelledby="fatigue-title">
+      <div class="section-head"><p class="fea-kicker">05 / Durability, with different evidence</p><h2 id="fatigue-title">Two materials.<br /><span>Two assessment methods.</span></h2><p>The aluminium model could be assessed with the ANSYS fatigue tool. Without a reliable S–N curve for the chosen CFRP approximation, I used a separate strength-based screening.</p></div>
+      <div class="fatigue-grid"><article class="fatigue-card"><span class="fea-kicker">Aluminium / Predicted fatigue life</span><strong class="fatigue-value">10⁸ <small>cycles</small></strong><p>The reported minimum life exceeds the 10⁶-cycle criterion in both geometries under the modelled conditions.</p><figure class="fatigue-image"><a href={`${img}/aluminium-fatigue.webp`} target="_blank" rel="noopener" aria-label="Enlarge aluminium fatigue life result"><img src={`${img}/aluminium-fatigue.webp`} alt="Iterated aluminium fatigue plot with minimum and maximum both displayed as 1e8 cycles" width="429" height="403" loading="lazy" /></a><figcaption>ANSYS fatigue result / Report p. 13</figcaption></figure><p class="source-note">A model prediction under the stated setup, rather than measured service life or physical endurance validation.</p></article><article class="fatigue-card cfrp-screen"><span class="fea-kicker">CFRP / Strength-based screening</span><strong class="fatigue-value">266.7 <small>MPa</small></strong><p>A representative 800 MPa strength divided by a safety factor of 3 gives the report’s allowable-stress threshold.</p><div class="stress-screen"><div><span>Allowable stress</span><strong>266.7 MPa</strong></div><div class="screen-track"><i style="width:100%"></i></div><div><span>Final peak stress</span><strong>63.4 MPa</strong></div><div class="screen-track actual"><i style="width:23.77%"></i></div></div><h3>A margin, not a fatigue-life prediction.</h3><p>The static stress is well below this simplified threshold. The check does not model laminate fatigue, damage accumulation or a number of cycles to failure.</p><p class="source-note">No CFRP S–N fatigue analysis was performed in this study. Report pp. 6 and 11.</p></article></div>
+    </section>
+
+    <section class="fea-section reflection" aria-labelledby="reflection-title"><p class="fea-kicker">Reflection / From numerical improvement to physical performance</p><h2 id="reflection-title">The next model<br /><span>needs more of the real world.</span></h2><p class="reflection-intro">The geometry change improved the reported stress, displacement and modal results. My main takeaway is to separate that numerical improvement from claims about how the blade would perform for an athlete.</p><div class="next-steps"><article><span>01 / Connection</span><h3>Introduce socket compliance.</h3><p>A perfectly fixed support can make the blade appear too stiff, underestimating displacement and overestimating natural frequency.</p></article><article><span>02 / Loading</span><h3>Model the running cycle.</h3><p>Impact and time-varying forces would test behaviour beyond the simplified static loading used in this comparison.</p></article><article><span>03 / Composite</span><h3>Resolve the laminate.</h3><p>Fibre orientation, stacking sequence and suitable failure criteria would make the CFRP analysis more representative.</p></article></div><div class="report-end"><div><span class="fea-kicker">The full study / 14 pages</span><h3>Sketches, simulations<br />and the reasoning between them.</h3></div><a href={report}>Read the FEA report <span aria-hidden="true">↗</span></a></div><a class="fea-back" href="/#projects">← Return to the project circle</a></section>
+  </div>
+</div>
+
+<script>
+  import { withBase } from "../lib/paths";
+  import { bladeMaterials, type BladeMaterial, type BladeResult } from "../lib/prostheticAnalysis";
+  const explorer = document.querySelector<HTMLElement>("[data-fea-explorer]");
+  function updateComparison() {
+    if (!explorer) return;
+    const material = explorer.querySelector<HTMLInputElement>('input[name="blade-material"]:checked')?.value as BladeMaterial;
+    const result = explorer.querySelector<HTMLInputElement>('input[name="blade-result"]:checked')?.value as BladeResult;
+    if (!(material in bladeMaterials) || !["stress","deformation"].includes(result)) return;
+    const data = bladeMaterials[material];
+    const unit = result === "stress" ? "MPa" : "mm";
+    const resultLabel = result === "stress" ? "Equivalent stress" : "Total deformation";
+    const set = (selector: string, value: string) => { const element = explorer.querySelector(selector); if (element) element.textContent = value; };
+    set("[data-comparison-title]", `${data.label} / ${resultLabel}`);
+    set("[data-comparison-delta]", `${((1-data[result][1]/data[result][0])*100).toFixed(1)}% lower ${result === "stress" ? "peak stress" : "maximum deformation"} after iteration`);
+    set("[data-table-caption]", `${data.label} / Fine-mesh results and reported mass`);
+    set("[data-material-note]", data.note);
+    (["baseline","final"] as const).forEach((stage,i) => {
+      const src = withBase(`/images/projects/prosthetic-limb-analysis/${material}-${stage}-${result}.webp`);
+      const image = explorer.querySelector<HTMLImageElement>(`[data-contour-image="${stage}"]`);
+      const link = explorer.querySelector<HTMLAnchorElement>(`[data-contour-link="${stage}"]`);
+      if (image) { image.src = src; image.alt = `${data.label} ${stage} fine-mesh ${resultLabel.toLowerCase()} contour`; }
+      if (link) link.href = src;
+      set(`[data-contour-value="${stage}"]`, data[result][i].toFixed(result === "stress" ? 1 : 2));
+      set(`[data-contour-source="${stage}"]`, `Report p. ${data.pages[i]} / Fine mesh`);
+      for (const [key, suffix] of [["frequency","Hz"],["deformation","mm"],["stress","MPa"],["mass","kg"]] as const) {
+        set(`[data-result-cell="${key}-${i}"]`, `${key === "deformation" ? data[key][i].toFixed(2) : data[key][i]} ${suffix}`);
+      }
+    });
+    explorer.querySelectorAll("[data-contour-unit]").forEach(el => { el.textContent = unit; });
+  }
+  explorer?.querySelectorAll("input").forEach(input => input.addEventListener("change", updateComparison));
+</script>
+
+<style>
+  .fea-case { --copper: #e9b27d; --muted-fea: #a5aaa6; --line-fea: #d6dfd21f; color: #eeeee7; background: #0e1110; }
+  .fea-wrap { width: min(100% - 96px,1320px); margin-inline: auto; }
+  .fea-kicker { margin: 0 0 23px; color: var(--copper); font: 500 11px/1.6 ui-monospace,monospace; letter-spacing: .07em; text-transform: uppercase; }
+  .fea-back { display: inline-flex; padding-block: 12px; color: #a6aca6; text-decoration: none; font-size: 12px; }
+  .fea-back:hover { color: var(--copper); }
+  .fea-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; padding-top: 45px; }
+  .hero-copy > .fea-kicker { margin-top: 36px; }
+  h1 { font: 500 clamp(68px,7.4vw,108px)/.92 "Space Grotesk",sans-serif; letter-spacing: -.07em; margin: 0; }
+  h1 span { color: #8b948b; }
+  .hero-deck { font-size: 26px; line-height: 1.3; letter-spacing: -.035em; margin: 28px 0 18px; }
+  .hero-intro { max-width: 440px; color: var(--muted-fea); font-size: 14px; line-height: 1.8; }
+  .fea-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 10px; }
+  .fea-actions a { display: inline-flex; align-items: center; gap: 25px; min-height: 46px; padding: 13px 17px; border: 1px solid var(--line-fea); border-radius: 4px; text-decoration: none; font-size: 12px; }
+  .fea-actions .primary { background: var(--copper); border-color: var(--copper); color: #281d12; }
+  .fea-actions a:hover { border-color: var(--copper); }
+  figure { margin: 0; }
+  .blade-plate { position: relative; align-self: stretch; display: flex; flex-direction: column; background: #f5f5f2; color: #353c35; margin-top: 18px; min-width: 0; }
+  .plate-header { display: flex; justify-content: space-between; gap: 12px; padding: 22px; border-bottom: 1px solid #1112; font: 9px ui-monospace,monospace; text-transform: uppercase; }
+  .blade-render { width: 100%; height: auto; max-height: 500px; object-fit: contain; margin: auto; }
+  .drawing-inset { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 12px 25px; border-top: 1px solid #1112; }
+  .drawing-inset img { width: 110px; height: auto; }
+  .drawing-inset span { max-width: 115px; text-align: right; color: #72776e; font: 9px/1.6 ui-monospace,monospace; text-transform: uppercase; }
+  .blade-plate figcaption { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; padding: 20px; border-top: 1px solid #1112; font: 9px/1.7 ui-monospace,monospace; }
+  .blade-plate figcaption b { display: block; font-size: 18px; font-weight: 500; }
+  .hero-results { grid-column: 1/-1; display: grid; grid-template-columns: repeat(4,1fr); padding-block: 30px; border-block: 1px solid var(--line-fea); margin-top: 7px; }
+  .hero-results > div { padding-inline: 25px; border-left: 1px solid var(--line-fea); }
+  .hero-results > div:first-child { border: 0; padding-left: 0; }
+  .hero-results span { display: block; font: 9px/1.7 ui-monospace,monospace; color: #959d92; text-transform: uppercase; margin-bottom: 15px; }
+  .hero-results strong { font: 500 38px/1 "Space Grotesk",sans-serif; letter-spacing: -.04em; }
+  .hero-results strong small { font: 16px ui-monospace,monospace; color: #969f93; }
+  .hero-results > div > small { display: block; margin-top: 9px; color: #959d92; font: 9px ui-monospace,monospace; }
+  .fea-nav { display: flex; gap: 34px; padding-block: 27px; flex-wrap: wrap; }
+  .fea-nav a { text-decoration: none; font: 10px ui-monospace,monospace; text-transform: uppercase; color: #a3aa9e; }
+  .fea-nav a:hover { color: var(--copper); }
+  .fea-section { padding: 100px 0; border-bottom: 1px solid var(--line-fea); scroll-margin-top: 115px; }
+  .section-head { margin-bottom: 48px; }
+  h2 { margin: 0; font: 500 clamp(36px,4.3vw,62px)/1.06 "Space Grotesk",sans-serif; letter-spacing: -.055em; }
+  h2 span { color: #919a8f; }
+  .section-head > p:last-child { max-width: 730px; color: var(--muted-fea); font-size: 16px; line-height: 1.8; margin: 25px 0 0; }
+  h3 { font-weight: 500; letter-spacing: -.025em; }
+  .brief-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 70px; align-items: center; }
+  .brief-copy > h3 { font-size: 27px; margin: 0 0 25px; }
+  .setup-list { list-style: none; padding: 0; margin: 0; }
+  .setup-list li { display: flex; gap: 24px; border-top: 1px solid var(--line-fea); padding-block: 22px; }
+  .setup-list li > span { color: var(--copper); font: 10px ui-monospace,monospace; padding-top: 4px; }
+  .setup-list strong { font-size: 16px; font-weight: 500; }
+  .setup-list p { color: var(--muted-fea); font-size: 13px; line-height: 1.8; margin: 9px 0 0; }
+  .source-figure { border: 1px solid var(--line-fea); min-width: 0; }
+  .source-figure a { display: block; background: #eff1f3; }
+  .source-figure img { width: 100%; height: auto; }
+  .source-figure figcaption { display: flex; justify-content: space-between; gap: 12px; color: #a6ada3; font: 9px/1.7 ui-monospace,monospace; padding: 15px; }
+  .criteria { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 22px; border: 1px solid var(--line-fea); background: #191f18; }
+  .criteria > span { grid-column: 1/-1; font: 9px ui-monospace,monospace; color: #a5b09f; text-transform: uppercase; }
+  .criteria strong { display: block; font: 25px "Space Grotesk",sans-serif; color: var(--copper); }
+  .criteria small { color: #a5b09f; font-size: 10px; }
+  .material-assumption { margin-top: 50px; border-left: 2px solid var(--copper); padding: 6px 0 6px 25px; }
+  .material-assumption h3 { font-size: 23px; margin: 12px 0; }
+  .material-assumption p { max-width: 850px; color: var(--muted-fea); font-size: 14px; line-height: 1.8; }
+  .geometry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .geometry-image { display: grid; grid-template-rows: minmax(0,1fr); place-items: center; height: 420px; padding: 26px; background: #f6f6f3; }
+  .geometry-image img { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+  .geometry-card figcaption { padding-top: 25px; }
+  .geometry-card h3 { margin: 14px 0; font-size: 27px; }
+  .geometry-card p { color: var(--muted-fea); font-size: 14px; line-height: 1.8; max-width: 460px; }
+  .geometry-card a { font-size: 12px; color: #d2b698; text-underline-offset: 5px; }
+  .geometry-insight { display: grid; grid-template-columns: 180px 1fr; gap: 24px; margin-top: 48px; border-top: 1px solid var(--line-fea); padding-top: 27px; }
+  .geometry-insight > span { color: var(--copper); font: 10px/1.8 ui-monospace,monospace; text-transform: uppercase; padding-top: 5px; }
+  .geometry-insight p { max-width: 750px; font-size: 24px; line-height: 1.5; margin: 0; }
+  .result-explorer { padding: 32px; border: 1px solid var(--line-fea); background: #141a15; }
+  .explorer-controls { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; }
+  fieldset { padding: 0; margin: 0; border: 0; min-width: 0; }
+  legend { color: #9ca797; font: 10px ui-monospace,monospace; text-transform: uppercase; margin-bottom: 13px; }
+  .segmented { display: flex; flex-wrap: wrap; gap: 5px; padding: 4px; background: #0a100b; border: 1px solid var(--line-fea); border-radius: 5px; }
+  .segmented label { position: relative; display: block; cursor: pointer; }
+  .segmented input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .segmented span { display: flex; min-height: 39px; align-items: center; padding: 10px 16px; border-radius: 3px; color: #b1b8ac; font-size: 12px; }
+  .segmented input:checked + span { color: #21190f; background: var(--copper); }
+  .segmented input:focus-visible + span { outline: 2px solid white; outline-offset: 3px; }
+  .comparison-status { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; border-top: 1px solid var(--line-fea); margin-top: 27px; padding: 27px 0 22px; }
+  .comparison-status strong { font-size: 18px; font-weight: 500; }
+  .comparison-status > span { color: var(--copper); font-size: 11px; }
+  .contour-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .contour-card { min-width: 0; border: 1px solid var(--line-fea); background: #111711; }
+  .contour-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px; }
+  .contour-title > span { color: #b5bdb0; font: 10px ui-monospace,monospace; text-transform: uppercase; }
+  .contour-title strong { font: 27px "Space Grotesk",sans-serif; }
+  .contour-title small { font: 11px ui-monospace,monospace; color: #a3ae9d; }
+  .contour-card > a { display: grid; place-items: center; background: #e7ebf8; }
+  .contour-card img { width: 100%; height: auto; aspect-ratio: 1.25; object-fit: contain; }
+  .contour-card figcaption { display: flex; justify-content: space-between; gap: 9px; padding: 14px; font: 9px/1.7 ui-monospace,monospace; color: #9fac97; }
+  .source-note { color: #9aa493; font-size: 11px; line-height: 1.8; margin: 18px 0 0; }
+  table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+  caption { text-align: left; padding: 28px 0 19px; color: #b2bfa9; font: 10px ui-monospace,monospace; text-transform: uppercase; }
+  th, td { padding: 16px 12px; border-bottom: 1px solid var(--line-fea); font-weight: 400; }
+  th:first-child { padding-left: 0; }
+  thead th { color: #93a087; font: 10px ui-monospace,monospace; }
+  tbody th { color: #b6c0b0; }
+  td { font-family: ui-monospace,monospace; white-space: nowrap; }
+  .tradeoff-table td:last-child { color: var(--copper); }
+  .material-note { margin: 23px 0 0; color: #aab7a1; font-size: 12px; line-height: 1.8; }
+  .tradeoff-summary { display: grid; grid-template-columns: .7fr .7fr 1.25fr; gap: 40px; margin-top: 50px; }
+  .tradeoff-summary .fea-kicker { display: block; }
+  .tradeoff-summary > div > strong { font: 500 clamp(44px,4.6vw,65px)/1 "Space Grotesk",sans-serif; letter-spacing: -.05em; color: var(--copper); }
+  .tradeoff-summary small { font-size: 25px; margin-left: 4px; }
+  .tradeoff-summary p { font-size: 13px; color: #a6b29d; line-height: 1.8; }
+  .mass-tradeoff { border-left: 1px solid var(--line-fea); padding-left: 35px; }
+  .mass-tradeoff h3 { font-size: 24px; margin: 0; }
+  .mesh-layout { display: grid; grid-template-columns: .7fr 1.3fr; gap: 45px; align-items: start; }
+  .mesh-sizes { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 25px; }
+  .mesh-sizes span { display: block; font: 9px ui-monospace,monospace; color: #9daa94; margin-bottom: 12px; }
+  .mesh-sizes strong { font: 18px "Space Grotesk",sans-serif; }
+  .mesh-sizes small { display: block; font: 10px ui-monospace,monospace; color: #8d9a84; margin-top: 5px; }
+  .mesh-chart { padding: 30px; background: #171c17; border: 1px solid var(--line-fea); }
+  .mesh-chart svg { width: 100%; display: block; overflow: visible; }
+  .mesh-chart text { fill: #a7b39d; font: 11px ui-monospace,monospace; }
+  .chart-grid { stroke: #d6dfd21a; }
+  .chart-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 18px; }
+  .chart-legend span { display: flex; align-items: center; gap: 10px; color: #bac5b2; font: 9px ui-monospace,monospace; }
+  .chart-legend i { width: 15px; height: 2px; }
+  details { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--line-fea); }
+  summary { font-size: 12px; color: var(--copper); cursor: pointer; padding-block: 5px; }
+  .table-scroll { overflow-x: auto; margin-top: 15px; }
+  .table-scroll table { font-size: 11px; }
+  .table-scroll th { white-space: nowrap; }
+  .mesh-conclusion { margin: 40px 0 0; max-width: 780px; border-left: 2px solid var(--copper); padding-left: 24px; font-size: 19px; line-height: 1.6; color: #c0c9b8; }
+  .fatigue-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  .fatigue-card { border: 1px solid var(--line-fea); padding: 32px; background: #171d17; }
+  .fatigue-value { display: block; font: 500 clamp(48px,5vw,72px)/1.1 "Space Grotesk",sans-serif; letter-spacing: -.05em; margin: 20px 0; }
+  .fatigue-value small { font: 16px ui-monospace,monospace; letter-spacing: 0; color: #a4b19a; }
+  .fatigue-card > p { color: #aab59f; font-size: 14px; line-height: 1.8; }
+  .fatigue-image { margin-top: 27px; }
+  .fatigue-image a { display: block; background: #d8e0f2; }
+  .fatigue-image img { width: 100%; height: 300px; object-fit: contain; }
+  .fatigue-image figcaption { font: 9px/1.7 ui-monospace,monospace; color: #a3b096; padding-top: 13px; }
+  .fatigue-card > .source-note { font-size: 11px; }
+  .stress-screen { padding-block: 24px 30px; }
+  .stress-screen > div:not(.screen-track) { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 16px 0 12px; font-size: 12px; color: #b9c5ad; }
+  .stress-screen strong { font: 15px ui-monospace,monospace; color: var(--copper); }
+  .screen-track { height: 24px; background: #090f0990; }
+  .screen-track i { display: block; height: 100%; background: #829378; }
+  .screen-track.actual i { background: var(--copper); }
+  .cfrp-screen h3 { margin-top: 20px; font-size: 27px; line-height: 1.2; }
+  .reflection { border: 0; padding-bottom: 60px; }
+  .reflection-intro { color: #a9b39f; max-width: 780px; font-size: 17px; line-height: 1.85; margin: 28px 0 0; }
+  .next-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 36px; margin-top: 50px; }
+  .next-steps article { padding-top: 23px; border-top: 1px solid var(--line-fea); }
+  .next-steps span { font: 10px ui-monospace,monospace; color: var(--copper); text-transform: uppercase; }
+  .next-steps h3 { font-size: 22px; line-height: 1.2; margin: 20px 0 14px; }
+  .next-steps p { color: #a5b199; font-size: 13px; line-height: 1.8; }
+  .report-end { display: flex; justify-content: space-between; gap: 30px; align-items: center; margin: 65px 0 25px; padding: 36px; background: #e1e3d9; color: #242a1d; }
+  .report-end .fea-kicker { color: #676c59; margin-bottom: 15px; }
+  .report-end h3 { font-size: 30px; line-height: 1.2; margin: 0; }
+  .report-end > a { display: flex; justify-content: space-between; align-items: center; gap: 30px; white-space: nowrap; padding: 17px 22px; background: #252e21; color: #edf0e5; text-decoration: none; font-size: 12px; }
+  a:focus-visible, summary:focus-visible { outline: 2px solid var(--copper); outline-offset: 5px; }
+  @media(max-width:1100px) {
+    .fea-wrap { width: calc(100% - 56px); }
+    .fea-hero { gap: 30px; }
+    .hero-results > div { padding-inline: 18px; }
+    .hero-results strong { font-size: 32px; }
+    .brief-grid { gap: 35px; }
+    .geometry-image { height: 350px; }
+    .tradeoff-summary { gap: 25px; }
+    .mass-tradeoff { padding-left: 24px; }
+    .mesh-layout { gap: 25px; }
+    .mesh-chart { padding: 23px; }
+    .fatigue-card { padding: 25px; }
+  }
+  @media(max-width:800px) {
+    .fea-hero { grid-template-columns: 1fr; padding-top: 22px; }
+    h1 { font-size: clamp(65px,12vw,95px); }
+    .blade-plate { width: min(100%,560px); margin-inline: auto; }
+    .blade-render { max-height: 480px; }
+    .hero-results { grid-template-columns: 1fr 1fr; row-gap: 28px; }
+    .hero-results > div:nth-child(3) { border: 0; padding-left: 0; }
+    .hero-results strong { font-size: 37px; }
+    .fea-nav { gap: 20px; }
+    .fea-section { padding-block: 70px; }
+    .brief-grid { grid-template-columns: 1fr 1fr; gap: 25px; }
+    .setup-list li { gap: 15px; }
+    .criteria { padding: 18px; }
+    .criteria strong { font-size: 21px; }
+    .geometry-image { height: 290px; padding: 18px; }
+    .geometry-card h3 { font-size: 23px; }
+    .geometry-insight { grid-template-columns: 1fr; gap: 15px; }
+    .result-explorer { padding: 22px; }
+    .contour-title { flex-wrap: wrap; padding: 15px; }
+    .tradeoff-summary { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 25px; }
+    .mass-tradeoff { grid-column: 1/-1; border-left: 0; border-top: 1px solid var(--line-fea); padding: 25px 0 0; }
+    .mesh-layout { grid-template-columns: 1fr; gap: 32px; }
+    .mesh-evidence { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+    .mesh-sizes { grid-template-columns: 1fr; margin: 0; gap: 22px; }
+    .mesh-sizes small { display: inline; }
+    .mesh-evidence > .source-note { margin: 0; }
+    .fatigue-grid { gap: 20px; }
+    .fatigue-card { padding: 21px; }
+    .fatigue-image img { height: 230px; }
+    .fatigue-value { font-size: 45px; }
+    .next-steps { gap: 24px; }
+    .report-end { flex-direction: column; align-items: start; }
+  }
+  @media(max-width:540px) {
+    .fea-wrap { width: calc(100% - 40px); }
+    h1 { font-size: clamp(54px,15vw,78px); }
+    .hero-copy > .fea-kicker { margin-top: 25px; }
+    .hero-deck { font-size: 25px; }
+    .fea-kicker { font-size: 10px; }
+    .fea-actions a { font-size: 11px; padding: 13px; gap: 15px; }
+    .plate-header { padding: 17px; font-size: 8px; }
+    .blade-render { max-height: 350px; }
+    .blade-plate figcaption { padding: 15px; gap: 8px; font-size: 8px; }
+    .blade-plate figcaption b { font-size: 17px; }
+    .drawing-inset img { width: 95px; }
+    .hero-results > div { padding-inline: 15px; }
+    .hero-results span { font-size: 8px; }
+    .hero-results strong { font-size: 32px; }
+    .hero-results strong small { font-size: 13px; }
+    .hero-results > div > small { font-size: 8px; line-height: 1.6; }
+    .fea-nav { gap: 18px 23px; }
+    .fea-nav a { font-size: 9px; }
+    .section-head { margin-bottom: 32px; }
+    .section-head > p:last-child { font-size: 14px; }
+    .brief-grid, .geometry-grid { grid-template-columns: 1fr; }
+    .setup-figure { max-width: 360px; }
+    .criteria strong { font-size: 25px; }
+    .geometry-image { height: 330px; }
+    .geometry-grid { gap: 38px; }
+    .geometry-insight p { font-size: 21px; }
+    .result-explorer { padding: 16px; }
+    .segmented span { padding: 10px; font-size: 11px; }
+    .contour-grid { grid-template-columns: 1fr; }
+    .comparison-status strong { font-size: 17px; }
+    .contour-title { flex-wrap: nowrap; }
+    table { font-size: 11px; }
+    th,td { padding: 14px 6px; }
+    .tradeoff-table tbody th { width: 46%; }
+    .tradeoff-table td { font-size: 10px; }
+    .tradeoff-summary > div > strong { font-size: clamp(32px,10vw,46px); }
+    .tradeoff-summary small { font-size: 20px; }
+    .tradeoff-summary .fea-kicker { font-size: 9px; }
+    .mesh-chart { padding: 18px 12px; }
+    .chart-legend { gap: 13px 9px; }
+    .chart-legend span { font-size: 8px; gap: 6px; }
+    .mesh-evidence { grid-template-columns: 1.25fr .75fr; gap: 20px; }
+    .mesh-conclusion { font-size: 17px; }
+    .fatigue-grid, .next-steps { grid-template-columns: 1fr; }
+    .fatigue-card { padding: 25px; }
+    .fatigue-value { font-size: 58px; }
+    .fatigue-image img { height: auto; }
+    .reflection-intro { font-size: 15px; }
+    .report-end { padding: 25px; }
+    .report-end h3 { font-size: 27px; }
+  }
+</style>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#070707"/>
+  <path d="M0 680C180 590 322 616 486 544c168-74 250-210 434-216 112-4 202 38 280 88v484H0Z" fill="#12110f"/>
+  <g stroke="#d3b47a" stroke-width="2" opacity=".55" fill="none">
+    <circle cx="598" cy="420" r="210"/>
+    <circle cx="598" cy="420" r="118"/>
+    <path d="M388 420h420M598 210v420M450 270l296 300M746 270 450 570"/>
+  </g>
+  <g fill="#f4f1ea">
+    <circle cx="598" cy="420" r="30"/>
+    <circle cx="448" cy="302" r="10"/>
+    <circle cx="762" cy="526" r="10"/>
+    <circle cx="690" cy="250" r="7"/>
+  </g>
+  <text x="72" y="112" fill="#f4f1ea" font-family="Inter,Arial" font-size="64" font-weight="700">AI &amp; ROBOTICS</text>
+  <text x="74" y="166" fill="#a8a39a" font-family="Inter,Arial" font-size="26">vision, control, sensing, motion</text>
+</svg>

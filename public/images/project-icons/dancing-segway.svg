@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 20 205 205" fill="none"><title>Dancing Segway project illustration</title>
+  <defs><linearGradient id="pcb" x1="65" y1="53" x2="177" y2="181" gradientUnits="userSpaceOnUse"><stop stop-color="#869c72"/><stop offset="1" stop-color="#364c3d"/></linearGradient><linearGradient id="tyre" x1="37" y1="105" x2="65" y2="175" gradientUnits="userSpaceOnUse"><stop stop-color="#565a53"/><stop offset=".48" stop-color="#1c211d"/><stop offset="1" stop-color="#383e34"/></linearGradient></defs>
+  <ellipse cx="124" cy="208" rx="82" ry="13" fill="#a6b690" opacity=".13"/>
+  <g transform="rotate(-17 120 126)">
+    <rect x="28" y="112" width="35" height="72" rx="15" fill="url(#tyre)" stroke="#70766a" stroke-width="2"/>
+    <rect x="178" y="112" width="35" height="72" rx="15" fill="url(#tyre)" stroke="#70766a" stroke-width="2"/>
+    <path d="M54 104H188V177L169 192H71L54 177Z" fill="#a9ad97" stroke="#dad9c4" stroke-width="3"/>
+    <path d="M68 95V176M177 95V176" stroke="#d4d4c1" stroke-width="6"/>
+    <rect x="50" y="59" width="141" height="112" rx="5" fill="url(#pcb)" stroke="#cbd0b1" stroke-width="3"/>
+    <path d="M60 151H95V133H118M153 68V85H179M134 141V159H179M60 87H74V116" stroke="#b8c78b" stroke-width="2" opacity=".7"/>
+    <rect x="76" y="79" width="68" height="68" rx="2" fill="#263e32" stroke="#a9ba86" stroke-width="2"/>
+    <rect x="93" y="93" width="34" height="33" rx="2" fill="#232a26" stroke="#94a18a"/>
+    <path d="M90 92V126M131 92V126M93 88H127M93 131H127" stroke="#dbcaa0" stroke-width="3" stroke-dasharray="2 4"/>
+    <rect x="152" y="98" width="29" height="42" rx="2" fill="#924e39" stroke="#d5a17a"/>
+    <path d="M157 106H175M157 113H175M157 120H175M157 127H175" stroke="#e2bd8e" stroke-width="2"/>
+    <rect x="58" y="124" width="14" height="32" rx="2" fill="#1e2422" stroke="#919d87"/>
+    <rect x="96" y="145" width="27" height="19" rx="2" fill="#c2c5b7" stroke="#e4e2d0"/>
+    <rect x="164" y="39" width="8" height="53" rx="2" fill="#e2d2a4"/>
+    <path d="M168 45V87" stroke="#434b38" stroke-width="4" stroke-dasharray="3 4"/>
+    <circle cx="62" cy="70" r="4" fill="#d5d7be"/><circle cx="180" cy="159" r="4" fill="#d5d7be"/>
+    <circle cx="69" cy="76" r="12" fill="#c3ffad" opacity=".18"/><circle cx="69" cy="76" r="5" fill="#d4ffc1"/>
+  </g>
+</svg>

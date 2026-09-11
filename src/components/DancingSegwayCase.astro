@@ -1,0 +1,248 @@
+---
+import CaseDecision from "./CaseDecision.astro";
+import type { Project } from "../lib/projects";
+type Props = { project: Project };
+const { project } = Astro.props;
+const assets = "/images/projects/dancing-segway";
+const downloads = "/downloads/dancing-segway";
+const sequence = "FBFBLRLR".split("");
+const moves: Record<string, { name: string; arrow: string }> = {
+  F: { name: "Forward", arrow: "↑" }, B: { name: "Backward", arrow: "↓" },
+  L: { name: "Left", arrow: "↶" }, R: { name: "Right", arrow: "↷" }
+};
+const stages = [
+  ["01", "Make the beat visible.", "Audio → light", "Microphone energy becomes an LED response. Two detector variants explore a rolling energy ratio and peaks above a smoothed baseline."],
+  ["02", "Give tilt a direction.", "Orientation → motor command", "Accelerometer and gyroscope readings feed a complementary filter. Pitch and roll are mapped to motor commands, with a small neutral zone."],
+  ["03", "Close the speed loop.", "Hall pulses → PI correction", "Wheel pulses provide feedback for tilt-based speed targets. Several saved iterations record the work on proportional–integral control and motor response."],
+  ["04", "Put movement on the beat.", "Detected beat → next instruction", "A text file holds the choreography. Each accepted beat advances one instruction and briefly flashes the LEDs."],
+  ["05", "Work towards upright balance.", "Pitch error → PID correction", "A separate controller reads pitch, estimates its rate of change and adjusts both motors. Slower OLED updates expose the values used during tuning."]
+];
+---
+
+<div class="segway-case" data-segway-case>
+  <header class="segway-wrap segway-hero">
+    <a class="back-link" href="/#projects">← Back to projects</a>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Dancing Segway / {project.year}</p>
+        <h1>A little rhythm.<br />A lot of <em>control.</em></h1>
+        <p class="hero-deck">Turning sound and tilt into movement, one experiment at a time.</p>
+        <p class="hero-description">A two-wheel robotics project exploring beat-driven choreography and feedback control on a MicroPython platform. From the first LED pulse to a moving physical prototype.</p>
+        <div class="hero-actions"><a class="solid-link" href="#segway-sequence">Try the choreography <span>↗</span></a><a href="#segway-development">Explore the process ↓</a></div>
+        <div class="hero-meta"><div><span>Discipline</span><strong>Embedded systems &amp; robotics</strong></div><div><span>Platform</span><strong>Pyboard / PyBench · MicroPython</strong></div></div>
+      </div>
+      <figure class="film-frame">
+        <div class="film-label"><span><i></i> Prototype in motion</span><span>00:34</span></div>
+        <video controls playsinline preload="metadata" poster={`${assets}/poster.webp`} aria-label="Dancing Segway prototype demonstration" aria-describedby="segway-film-caption">
+          <source src="/videos/dancing-segway/prototype-demo.mp4" type="video/mp4" />
+          <a href="/videos/dancing-segway/prototype-demo.mp4">Watch the prototype demonstration</a>
+        </video>
+        <figcaption id="segway-film-caption">Original test footage: the board is positioned by hand, then released to move and turn on the wooden floor. Play with sound using the video controls.</figcaption>
+      </figure>
+    </div>
+    <div class="technical-strip"><div><strong>8 <small>kHz</small></strong><span>Microphone sampling</span></div><div><strong>20 <small>ms</small></strong><span>Audio energy window</span></div><div><strong>200 <small>Hz</small></strong><span>Balance loop target</span></div><p>Two control experiments.<br />One physical platform.</p></div>
+  </header>
+
+  <nav class="segway-nav segway-wrap" aria-label="Dancing Segway case study chapters"><a href="#segway-sequence">01 / Choreography</a><a href="#segway-signal">02 / Listening</a><a href="#segway-balance">03 / Balance</a><a href="#segway-development">04 / Development</a><a href="#segway-archive">05 / Archive</a></nav>
+  <CaseDecision slug={project.slug} />
+
+  <section class="sequence-chapter" id="segway-sequence" aria-labelledby="sequence-title">
+    <div class="segway-wrap section-space">
+      <div class="section-heading"><p class="eyebrow">01 / Program the rhythm</p><h2 id="sequence-title">Eight instructions.<br /><span>A dance on repeat.</span></h2><p>The choreography lives in a tiny text file: <code>FBFBLRLR</code>. The robot reads the sequence before starting, then executes the next command whenever it detects a beat.</p></div>
+      <div class="sequencer" data-sequencer>
+        <div class="console-top"><span>Dance sequencer</span><span>Source / dance.txt</span></div>
+        <p class="interaction-hint">Tap a beat to advance the sequence, or choose an individual step.</p>
+        <div class="step-grid" role="group" aria-label="Eight choreography steps">{sequence.map((command,i)=><button type="button" disabled data-dance-step={i} aria-label={`Step ${i+1}: ${moves[command].name}`} aria-pressed="false"><small>0{i+1}</small><strong>{command}</strong><span>{moves[command].arrow}</span></button>)}</div>
+        <div class="console-bottom">
+          <div class="command-display"><span class="command-arrow" data-command-arrow aria-hidden="true">·</span><div><span class="console-label">Current instruction</span><p data-command-name>Ready for a beat</p><span data-command-count>8 steps / loops back to the start</span></div></div>
+          <div class="motor-pair" aria-label="Motor commands"><div><span>Motor A</span><strong data-motor-a>0</strong><small>signed PWM %</small></div><div><span>Motor B</span><strong data-motor-b>0</strong><small>signed PWM %</small></div></div>
+          <div class="console-actions"><button class="beat-button" type="button" data-next-beat>Tap a beat <span>↗</span></button><button class="reset-button" type="button" data-reset-dance>Reset sequence</button></div>
+        </div>
+        <p class="sr-only" data-dance-status role="status" aria-live="polite" aria-atomic="true">Ready for a beat.</p>
+        <div class="console-foot"><span><i></i> Interactive command sketch</span><p>This browser demo steps through the saved commands. The physical robot uses microphone input.</p></div>
+        <noscript><p class="noscript-note">The saved sequence is Forward → Backward → Forward → Backward → Left → Right → Left → Right. Enable JavaScript to step through it interactively.</p></noscript>
+      </div>
+      <div class="sequence-notes"><p><b>Movement persists between beats.</b> The dance program keeps the latest motor command until another instruction arrives.</p><p><b>Choreography is editable.</b> Forward, backward and turning commands can be rearranged; <code>S</code> and <code>.</code> are also supported as stop/rest instructions.</p></div>
+    </div>
+  </section>
+
+  <section class="segway-wrap section-space" id="segway-signal" aria-labelledby="signal-title">
+    <div class="signal-layout"><div class="section-heading"><p class="eyebrow">02 / Listening for a change</p><h2 id="signal-title">When sound<br /><span>becomes a cue.</span></h2><p>The detector compares the energy of a short audio window with a rolling background level. A sudden rise becomes a candidate beat; a time gate prevents closely spaced detections.</p><a class="source-link" href={`${downloads}/challenge_4.py.txt`} target="_blank" rel="noopener">Read the dance controller <span>↗</span></a></div>
+      <ol class="signal-flow"><li><span class="flow-number">01</span><div><span class="eyebrow">Sample</span><h3>Capture at 8 kHz.</h3><p>A timer interrupt reads the microphone every 125 µs and subtracts the configured DC offset.</p></div></li><li><span class="flow-number">02</span><div><span class="eyebrow">Measure</span><h3>Collect 160 samples.</h3><p>Sum the squared sample values across a 20 ms window, then compare with 50 recent energy windows.</p></div></li><li><span class="flow-number">03</span><div><span class="eyebrow">Decide</span><h3>Look for a rise above 2.5×.</h3><p>The current-to-average energy ratio must exceed 2.5, with more than 150 ms since the last accepted beat.</p></div></li><li><span class="flow-number">04</span><div><span class="eyebrow">Act</span><h3>Move one step. Flash the LEDs.</h3><p>The next character sets both motor outputs. A brief 60 ms LED pulse makes the detection visible.</p></div></li></ol>
+    </div>
+    <div class="signal-note"><span>Let the background settle.</span><p>The dance script first fills its 50-window history—nominally one second of audio—before enabling beat-triggered motion.</p></div>
+  </section>
+
+  <section class="balance-chapter" id="segway-balance" aria-labelledby="balance-title"><div class="segway-wrap section-space">
+    <div class="section-heading"><p class="eyebrow">03 / A separate balance experiment</p><h2 id="balance-title">Read the lean.<br /><span>Correct the wheels.</span></h2><p>The balance controller turns pitch error into a shared motor command. It combines proportional response, accumulated error and the rate of pitch change, with limits on the integral and output.</p></div>
+    <div class="balance-layout"><div class="control-sheet"><div class="sheet-heading"><span>Pitch feedback / Challenge 5</span><span>Target: 5 ms cycle</span></div><div class="control-node"><small>01 / Sense</small><strong>MPU6050 pitch</strong><span>Accelerometer-based angle − calibration offset</span></div><div class="flow-down" aria-hidden="true">↓</div><div class="control-node control-node--accent"><small>02 / Compare &amp; correct</small><strong>Target angle: 0°</strong><code>u = Kp · error + Ki · ∫error − Kd · pitch_rate</code></div><div class="flow-down" aria-hidden="true">↓</div><div class="control-node"><small>03 / Actuate</small><strong>Shared command → both wheels</strong><span>Limited to ±80 · steering command set to zero</span></div><p class="feedback-line">↺ The next pitch reading closes the loop.</p></div>
+      <div class="balance-decisions"><article><span>Keep sensing responsive</span><h3>Separate control from display.</h3><p>The loop requests a minimum 5 ms interval, while the OLED refreshes every 200 ms. That gives tuning feedback without redrawing the screen on every control update.</p></article><article><span>Bound the correction</span><h3>Limit the accumulated error.</h3><p>The integral is clamped to ±25 and the motor command to ±80. A configured small-command dead zone reduces tiny corrections.</p></article><article><span>Handle excessive tilt</span><h3>Stop beyond 35°.</h3><p>If the absolute pitch exceeds 35°, the script stops the motors and clears the integral. This is a programmed cutoff, rather than a measured stability envelope.</p></article><a class="source-link" href={`${downloads}/challenge_5.py.txt`} target="_blank" rel="noopener">Read the balance controller <span>↗</span></a></div>
+    </div><p class="scope-note">The supplied archive contains separate dance and balance programs. Hall sensors support wheel-speed experiments and display feedback; the final balance script controls pitch directly. The footage documents prototype motion, without establishing simultaneous beat-following and balance performance.</p>
+  </div></section>
+
+  <section class="segway-wrap section-space" id="segway-development" aria-labelledby="development-title"><div class="section-heading"><p class="eyebrow">04 / Build the behaviour in stages</p><h2 id="development-title">Five challenges.<br /><span>One learning curve.</span></h2><p>The saved programs show a progression through sensing, motor response, wheel feedback, choreography and balance control. Each stage makes another part of the system observable.</p></div><div class="development-layout"><figure class="motion-still"><img src={`${assets}/motion.webp`} alt="Frame from the prototype video showing the two-wheel robot moving across a wooden floor with its green indicator illuminated" width="720" height="1280" loading="lazy"/><figcaption>Physical prototype / Still from the supplied demonstration</figcaption></figure><ol class="development-list">{stages.map(([number,title,label,body])=><li><span>{number}</span><div><small>{label}</small><h3>{title}</h3><p>{body}</p></div></li>)}</ol></div></section>
+
+  <section class="archive-chapter" id="segway-archive" aria-labelledby="archive-title"><div class="segway-wrap section-space"><div class="archive-heading"><div><p class="eyebrow">05 / What the project leaves behind</p><h2 id="archive-title">From code<br /><span>to a moving system.</span></h2></div><div class="contribution"><span class="eyebrow">My contribution / Group project</span><p>I contributed to system development, testing and movement behaviour, helping translate sensor input into a physical response.</p><p class="credit-note">Built on the Pyboard / PyBench teaching platform. The supplied audio and motor libraries credit Peter Y K Cheung, Imperial College London.</p></div></div><div class="closing-notes"><article><h3>Make behaviour visible.</h3><p>LED pulses, OLED values and direct motor tests make it easier to connect what the robot does with what the controller sees.</p></article><article><h3>Design around different timescales.</h3><p>Audio sampling, beat decisions, motor control and screen updates need different schedules. Keeping those responsibilities clear is central to the project.</p></article><article><h3>The next integration step.</h3><p>Combining beat commands with a balance controller would need a shared motion strategy and measured tests of timing, stability and recovery.</p></article></div><div class="archive-links"><a href={`${downloads}/dancing-segway-source.zip`} download><span>01 / Development files</span><strong>Explore the source archive ↗</strong><small>Selected MicroPython scripts, drivers &amp; choreography · ZIP</small></a><a href="/videos/dancing-segway/prototype-demo.mp4" download><span>02 / Physical demonstration</span><strong>Download the prototype video ↗</strong><small>Complete 34-second clip · MP4 with original audio</small></a></div><a class="return-link" href="/#projects">← Return to the project circle</a></div></section>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-sequencer]");
+  if (root) {
+    const sequence = "FBFBLRLR";
+    const commands: Record<string, { name: string; arrow: string; a: number; b: number }> = {
+      F: { name: "Forward", arrow: "↑", a: 45, b: 45 }, B: { name: "Backward", arrow: "↓", a: -45, b: -45 },
+      L: { name: "Left", arrow: "↶", a: -40, b: 40 }, R: { name: "Right", arrow: "↷", a: 40, b: -40 }
+    };
+    let index = -1;
+    const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-dance-step]"));
+    const setText = (selector: string, value: string) => { const el = root.querySelector(selector); if (el) el.textContent = value; };
+    const show = (step: number) => {
+      index = step;
+      const command = commands[sequence[index]];
+      buttons.forEach((button, i) => button.setAttribute("aria-pressed", String(i === index)));
+      setText("[data-command-arrow]", command?.arrow ?? "·");
+      setText("[data-command-name]", command?.name ?? "Ready for a beat");
+      setText("[data-command-count]", command ? `Step ${index + 1} / 8 · ${sequence[index]}` : "8 steps / loops back to the start");
+      setText("[data-motor-a]", command ? `${command.a > 0 ? "+" : ""}${command.a}` : "0");
+      setText("[data-motor-b]", command ? `${command.b > 0 ? "+" : ""}${command.b}` : "0");
+      setText("[data-dance-status]", command ? `Step ${index + 1} of 8: ${command.name}. Motor A ${command.a}, Motor B ${command.b} percent.` : "Sequence reset. Ready for a beat.");
+    };
+    buttons.forEach((button, i) => { button.disabled = false; button.addEventListener("click", () => show(i)); });
+    root.querySelector("[data-next-beat]")?.addEventListener("click", () => show((index + 1) % sequence.length));
+    root.querySelector("[data-reset-dance]")?.addEventListener("click", () => show(-1));
+    root.classList.add("is-ready");
+  }
+</script>
+
+<style>
+  .segway-case{--sg-bg:#111310;--sg-ink:#f1eee5;--sg-muted:#a7ada1;--sg-line:#363c31;--sg-accent:#e7bb64;background:var(--sg-bg);color:var(--sg-ink);overflow:hidden}
+  .segway-wrap{width:min(1280px,calc(100% - 100px));margin-inline:auto}
+  .segway-case :is(h1,h2,h3,p,figure){margin:0}
+  .segway-case :is(h1,h2,h3){font-family:"Space Grotesk",sans-serif;font-weight:500;letter-spacing:-.05em}
+  .segway-case p{line-height:1.7}
+  .segway-case a{color:inherit;text-underline-offset:5px}
+  .segway-case button{font:inherit;cursor:pointer}
+  .segway-case :is(a,button):focus-visible{outline:3px solid var(--sg-accent);outline-offset:5px}
+  .segway-case section[id]{scroll-margin-top:110px}
+  .segway-case img{display:block;max-width:100%}
+  .eyebrow{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.67rem;letter-spacing:.11em;text-transform:uppercase;color:var(--sg-accent)}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .back-link{display:inline-flex;align-items:center;min-height:44px;font-size:.8rem;text-decoration:none;color:var(--sg-muted)!important}
+  .segway-hero{padding-top:24px}
+  .hero-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.8fr);gap:85px;align-items:center;padding:25px 0 60px}
+  .hero-copy h1{font-size:clamp(3.5rem,5.8vw,5.65rem);line-height:1.02;margin:29px 0;letter-spacing:-.065em}
+  .hero-copy h1 em{font-style:normal;color:var(--sg-accent)}
+  .hero-deck{font-size:1.36rem;max-width:490px;line-height:1.4!important}
+  .hero-description{font-size:.95rem;color:var(--sg-muted);max-width:530px;margin-top:21px!important}
+  .hero-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:35px}
+  .hero-actions a{font-size:.8rem;min-height:46px;display:inline-flex;align-items:center;text-decoration:none}
+  .solid-link{background:var(--sg-accent);color:#171b12!important;padding:14px 18px;gap:30px}
+  .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-top:48px;padding-top:22px;border-top:1px solid var(--sg-line)}
+  .hero-meta span{display:block;color:var(--sg-muted);font-size:.64rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:9px}
+  .hero-meta strong{font-weight:500;font-size:.75rem;line-height:1.6;display:block}
+  .film-frame{max-width:405px;width:100%;justify-self:end;background:#1e231a;border:1px solid #404837;box-shadow:14px 14px 0 #191e15}
+  .film-label{display:flex;justify-content:space-between;padding:13px 15px;gap:10px;font-family:ui-monospace,monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:#d0d4c6}
+  .film-label i,.console-foot i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--sg-accent);margin-right:7px}
+  .film-frame video{display:block;width:100%;aspect-ratio:9/16;max-height:610px;background:#080a07;object-fit:contain}
+  .film-frame figcaption{padding:15px;font-size:.67rem;line-height:1.6;color:var(--sg-muted)}
+  .technical-strip{display:grid;grid-template-columns:repeat(3,1fr) 1fr;gap:35px;border-block:1px solid var(--sg-line);padding:28px 0}
+  .technical-strip strong{font-family:"Space Grotesk",sans-serif;font-size:2.7rem;font-weight:500;letter-spacing:-.05em}
+  .technical-strip small{font-size:1rem;color:var(--sg-accent);letter-spacing:0}
+  .technical-strip span{display:block;font-size:.7rem;color:var(--sg-muted);margin-top:5px}
+  .technical-strip>p{align-self:center;font-size:.8rem;color:var(--sg-muted);padding-left:25px;border-left:1px solid var(--sg-line)}
+  .segway-nav{display:flex;flex-wrap:wrap;gap:8px 36px;padding-block:20px 30px}
+  .segway-nav a{font-size:.7rem;min-height:32px;display:flex;align-items:center;text-decoration:none;color:var(--sg-muted)}
+  .section-space{padding-block:90px}
+  .section-heading{max-width:730px;margin-bottom:42px}
+  .section-heading h2,.archive-heading h2{font-size:clamp(2.65rem,4.4vw,4.5rem);line-height:1.06;margin:18px 0 25px}
+  .section-heading h2 span,.archive-heading h2 span{color:var(--sg-muted)}
+  .section-heading>p:last-of-type{color:var(--sg-muted);max-width:650px;font-size:1rem}
+  code{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.88em}
+  .sequence-chapter{background:#e9e5d9;--sg-ink:#252b20;--sg-muted:#626b58;--sg-accent:#596b3c;--sg-line:#c5cab8;color:var(--sg-ink)}
+  .sequencer{padding:28px;background:#f5f1e6;border:1px solid #b9c0a8;box-shadow:0 10px 0 #d8dacb}
+  .console-top{display:flex;justify-content:space-between;gap:20px;padding-bottom:20px;border-bottom:1px solid #d0d3c3;font-family:ui-monospace,monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em}
+  .interaction-hint{display:none;font-size:.8rem;color:var(--sg-muted);margin-top:20px!important}
+  .is-ready .interaction-hint{display:block}
+  .step-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;margin-block:22px 30px;pointer-events:none}
+  .is-ready .step-grid{pointer-events:auto}
+  .step-grid button{display:flex;flex-direction:column;align-items:start;gap:12px;padding:14px 16px;color:#424c36;background:#e0e2d2;border:1px solid #bfc6ad;min-width:0;text-align:left}
+  .step-grid button small{font-family:ui-monospace,monospace;font-size:.65rem}
+  .step-grid button strong{font-family:"Space Grotesk",sans-serif;font-size:2.55rem;line-height:1;font-weight:500}
+  .step-grid button>span{align-self:end;font-size:1.3rem}
+  .step-grid button[aria-pressed="true"]{background:#34442b;color:#f4f3de;border-color:#34442b;box-shadow:inset 0 -5px 0 #e3b75e}
+  .step-grid button:hover{border-color:#445234}
+  .console-bottom{display:grid;grid-template-columns:1.15fr 1fr .8fr;gap:30px;align-items:center}
+  .command-display{display:flex;gap:22px;align-items:center;min-width:0}
+  .command-arrow{font-size:3.5rem;width:55px;text-align:center;flex-shrink:0;color:#647644}
+  .console-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.09em;color:var(--sg-muted)}
+  .command-display p{font-family:"Space Grotesk",sans-serif;font-size:1.5rem;line-height:1.2;margin:10px 0}
+  [data-command-count]{font-size:.68rem;color:var(--sg-muted)}
+  .motor-pair{display:grid;grid-template-columns:1fr 1fr;gap:22px;border-inline:1px solid #cbd0bd;padding-inline:28px}
+  .motor-pair span,.motor-pair small{display:block;font-size:.6rem;color:var(--sg-muted)}
+  .motor-pair strong{font-family:ui-monospace,monospace;font-size:2rem;display:block;font-weight:400;margin:8px 0;font-variant-numeric:tabular-nums}
+  .console-actions{display:none;gap:8px}
+  .is-ready .console-actions{display:grid}
+  .beat-button{display:flex;justify-content:space-between;gap:20px;align-items:center;background:#34442b;color:#f7f2dc;border:0;padding:16px 18px;min-height:50px;font-size:.85rem!important}
+  .reset-button{border:0;background:none;min-height:44px;font-size:.72rem!important;color:var(--sg-muted)}
+  .console-foot{display:flex;justify-content:space-between;gap:25px;align-items:center;border-top:1px solid #cbd0bd;margin-top:28px;padding-top:20px;color:var(--sg-muted)}
+  .console-foot>span{white-space:nowrap;font-size:.65rem}.console-foot p{font-size:.68rem;max-width:460px}
+  .noscript-note{font-size:.8rem;margin-top:15px!important}
+  .sequence-notes{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:35px}
+  .sequence-notes p{font-size:.8rem;color:var(--sg-muted)}.sequence-notes b{color:var(--sg-ink);font-weight:600}
+  .signal-layout{display:grid;grid-template-columns:1fr 1.15fr;gap:110px}
+  .signal-flow{list-style:none;margin:0;padding:0}
+  .signal-flow li{display:flex;gap:25px;position:relative;padding-bottom:32px}
+  .signal-flow li:last-child{padding-bottom:0}
+  .signal-flow li:not(:last-child):before{content:"";position:absolute;left:20px;top:42px;bottom:0;border-left:1px solid #505a42}
+  .flow-number{width:42px;height:42px;flex-shrink:0;border:1px solid #505a42;display:grid;place-items:center;font-family:ui-monospace,monospace;font-size:.7rem;color:var(--sg-accent)}
+  .signal-flow h3{font-size:1.55rem;line-height:1.2;margin:12px 0}
+  .signal-flow p{font-size:.9rem;color:var(--sg-muted)}
+  .source-link{display:inline-flex;align-items:center;justify-content:space-between;gap:40px;min-height:44px;font-size:.76rem;text-decoration:none;border-bottom:1px solid var(--sg-line);margin-top:25px}
+  .signal-note{display:grid;grid-template-columns:1fr 2fr;gap:40px;border-block:1px solid var(--sg-line);padding:25px 0;margin-top:45px}
+  .signal-note span{color:var(--sg-accent);font-size:.87rem}.signal-note p{font-size:.87rem;color:var(--sg-muted)}
+  .balance-chapter{background:#1d251a;--sg-line:#46523d}
+  .balance-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:75px;align-items:start}
+  .control-sheet{background:#11180f;padding:25px;border:1px solid #48563c}
+  .sheet-heading{display:flex;justify-content:space-between;gap:20px;font-family:ui-monospace,monospace;font-size:.62rem;color:#bac3ac;padding-bottom:23px}
+  .control-node{padding:21px;border:1px solid #44533a;display:grid;gap:12px}
+  .control-node small{font-family:ui-monospace,monospace;text-transform:uppercase;font-size:.62rem;color:#a9b395}
+  .control-node strong{font-family:"Space Grotesk",sans-serif;font-weight:500;font-size:1.35rem}
+  .control-node span{font-size:.72rem;color:#b1baa3;line-height:1.6}
+  .control-node code{font-size:.69rem;line-height:1.8;overflow-wrap:anywhere}
+  .control-node--accent{background:#34432a;border-color:#7f8d5d}
+  .flow-down{text-align:center;color:#a0b078;font-size:1.5rem;line-height:1.5}
+  .feedback-line{font-size:.72rem;text-align:center;color:#c1cbaa;padding-top:20px}
+  .balance-decisions article+article{margin-top:30px}
+  .balance-decisions article>span{color:var(--sg-accent);font-size:.64rem;text-transform:uppercase;letter-spacing:.07em}
+  .balance-decisions h3{font-size:1.6rem;line-height:1.1;margin:12px 0}
+  .balance-decisions p{font-size:.88rem;color:var(--sg-muted)}
+  .scope-note{font-size:.77rem;color:#b1bca6;border-top:1px solid var(--sg-line);margin-top:45px!important;padding-top:25px}
+  .development-layout{display:grid;grid-template-columns:.75fr 1.25fr;gap:90px;align-items:start}
+  .motion-still img{width:100%;max-height:740px;object-fit:cover}
+  .motion-still figcaption{font-size:.65rem;color:var(--sg-muted);margin-top:15px;line-height:1.6}
+  .development-list{list-style:none;margin:0;padding:0}
+  .development-list li{display:flex;gap:30px;padding-block:25px;border-top:1px solid var(--sg-line)}
+  .development-list li:first-child{padding-top:0;border-top:0}
+  .development-list li>span{font-family:ui-monospace,monospace;font-size:1.25rem;color:var(--sg-accent)}
+  .development-list small{font-size:.64rem;text-transform:uppercase;letter-spacing:.06em;color:var(--sg-muted)}
+  .development-list h3{font-size:1.65rem;line-height:1.1;margin:12px 0}
+  .development-list p{font-size:.88rem;color:var(--sg-muted)}
+  .archive-chapter{border-top:1px solid var(--sg-line)}
+  .archive-heading{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center}
+  .contribution>p{margin-top:20px;max-width:530px}
+  .contribution .credit-note{font-size:.75rem;color:var(--sg-muted)}
+  .closing-notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;margin-top:40px}
+  .closing-notes article{border-top:1px solid var(--sg-line);padding-top:25px}
+  .closing-notes h3{font-size:1.5rem;line-height:1.15;margin-bottom:18px}
+  .closing-notes p{font-size:.85rem;color:var(--sg-muted)}
+  .archive-links{display:grid;grid-template-columns:1fr 1fr;gap:25px;margin-top:50px}
+  .archive-links a{display:grid;gap:16px;padding:26px;border:1px solid #4a533e;background:#1b2217;text-decoration:none}
+  .archive-links span{font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--sg-accent)}
+  .archive-links strong{font-family:"Space Grotesk",sans-serif;font-weight:500;font-size:1.5rem;letter-spacing:-.035em;line-height:1.2}
+  .archive-links small{font-size:.7rem;line-height:1.6;color:var(--sg-muted)}
+  .archive-links a:hover{border-color:var(--sg-accent)}
+  .return-link{display:inline-flex;align-items:center;min-height:44px;margin-top:42px;font-size:.85rem;text-decoration:none}
+  @media(max-width:1100px){.segway-wrap{width:calc(100% - 64px)}.hero-grid{gap:45px}.hero-copy h1{font-size:clamp(3rem,5.8vw,4.6rem)}.signal-layout{gap:60px}.balance-layout,.development-layout,.archive-heading{gap:45px}.console-bottom{grid-template-columns:1fr 1fr}.console-actions{grid-column:1/-1;grid-template-columns:1fr 1fr}.motor-pair{border-right:0}.step-grid button{padding:12px}.technical-strip{gap:20px}}
+  @media(max-width:760px){.segway-wrap{width:calc(100% - 40px)}.hero-grid{grid-template-columns:1fr;gap:38px}.hero-copy h1{font-size:clamp(3rem,9vw,4.5rem)}.film-frame{justify-self:center;max-width:390px}.hero-description{max-width:100%}.hero-meta{margin-top:30px}.technical-strip{grid-template-columns:repeat(3,1fr);gap:20px 12px}.technical-strip>p{grid-column:1/-1;border-left:0;padding-left:0}.technical-strip strong{font-size:2.1rem}.technical-strip span{font-size:.62rem}.segway-nav{gap:3px 22px}.section-space{padding-block:62px}.signal-layout,.balance-layout,.development-layout,.archive-heading{grid-template-columns:1fr;gap:38px}.signal-layout .section-heading{margin-bottom:0}.signal-note{grid-template-columns:1fr;gap:10px}.section-heading h2,.archive-heading h2{font-size:clamp(2.5rem,7vw,3.4rem)}.motion-still{max-width:390px;justify-self:center}.motion-still img{max-height:520px;object-fit:contain}.closing-notes{grid-template-columns:1fr;gap:25px}.archive-heading h2{margin-bottom:0}.archive-links{grid-template-columns:1fr}.sequence-notes{gap:25px}.console-foot{align-items:start;flex-direction:column;gap:10px}.segway-case section[id]{scroll-margin-top:150px}}
+  @media(max-width:480px){.segway-wrap{width:calc(100% - 36px)}.segway-hero{padding-top:17px}.hero-grid{padding-top:20px}.hero-copy h1{font-size:clamp(2.8rem,11.2vw,3.6rem)}.hero-deck{font-size:1.2rem}.hero-meta{grid-template-columns:1fr;gap:20px}.hero-actions{gap:10px 20px}.hero-description{font-size:.9rem}.film-frame{box-shadow:7px 7px 0 #191e15}.sequencer{padding:17px}.console-top{font-size:.58rem;gap:10px}.step-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.step-grid button{gap:9px}.step-grid button strong{font-size:2rem}.console-bottom{grid-template-columns:1fr;gap:22px}.motor-pair{border:0;border-top:1px solid #cbd0bd;padding:20px 0 0}.console-actions{grid-template-columns:1fr}.console-foot>span{white-space:normal}.sequence-notes{grid-template-columns:1fr;gap:18px}.control-sheet{padding:17px}.sheet-heading{flex-direction:column;gap:10px}.control-node{padding:16px}.development-list li{gap:20px}.section-heading>p:last-of-type{font-size:.92rem}.archive-links a{padding:22px}.archive-links strong{font-size:1.35rem}}
+</style>

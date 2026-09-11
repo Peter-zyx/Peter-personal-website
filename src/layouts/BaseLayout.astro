@@ -1,0 +1,184 @@
+---
+type Props = {
+  title?: string;
+  description?: string;
+};
+
+const {
+  title = "Yuxuan Zhou | Design Engineering Portfolio",
+  description = "Design Engineering portfolio exploring AI, robotics, product systems, mobility, sustainability, and physical prototyping."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#050505" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    color-scheme: dark;
+    --bg: #030303;
+    --ink: #080806;
+    --panel: #0b0b0a;
+    --panel-strong: #121716;
+    --text: #f6f8f3;
+    --muted: #a3aaa5;
+    --soft: #626c69;
+    --line: rgba(246, 248, 243, 0.13);
+    --line-strong: rgba(188, 211, 207, 0.42);
+    --metal: #c4d4cf;
+    --metal-bright: #f6fbf7;
+    --metal-soft: rgba(172, 202, 199, 0.14);
+    --accent-cool: #70c9d1;
+    --accent-warm: #b79a7c;
+    --shadow: rgba(0, 0, 0, 0.45);
+    --cursor-xn: 0.5;
+    --cursor-yn: 0.5;
+    --cursor-shift-x: 0px;
+    --cursor-shift-y: 0px;
+    --cursor-cyan-x: 0px;
+    --cursor-cyan-y: 0px;
+    --cursor-warm-x: 0px;
+    --cursor-warm-y: 0px;
+    font-family:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background: var(--bg);
+  }
+
+  body {
+    min-width: 320px;
+    margin: 0;
+    background:
+      radial-gradient(circle at 50% 14%, rgba(216, 231, 229, 0.09), transparent 26rem),
+      radial-gradient(circle at 20% 18%, rgba(112, 201, 209, 0.055), transparent 20rem),
+      radial-gradient(circle at 78% 8%, rgba(183, 154, 124, 0.055), transparent 22rem),
+      linear-gradient(180deg, #030303 0%, #070807 48%, #030303 100%);
+    color: var(--text);
+    letter-spacing: 0;
+  }
+
+  body::before {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    content: "";
+    opacity: 0.12;
+    background-image: radial-gradient(circle, rgba(246, 248, 243, 0.42) 0 1px, transparent 1.6px);
+    background-position: 0 0;
+    background-size: 9px 9px;
+    mask-image:
+      radial-gradient(circle at 50% 16%, black 0, transparent 68%),
+      linear-gradient(180deg, black, transparent 72%);
+  }
+
+  body::after {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    opacity: 0.12;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.38'/%3E%3C/svg%3E");
+  }
+
+  ::selection {
+    background: rgba(112, 201, 209, 0.28);
+    color: var(--text);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  .container {
+    width: min(100% - 48px, 1320px);
+    margin-inline: auto;
+  }
+
+  .eyebrow {
+    margin: 0 0 16px;
+    color: var(--metal);
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    max-width: 860px;
+    margin: 0;
+    font-size: 4.8rem;
+    font-weight: 760;
+    line-height: 0.96;
+  }
+
+  .section-copy {
+    max-width: 720px;
+    margin: 20px 0 0;
+    color: var(--muted);
+    font-size: 1.15rem;
+    line-height: 1.65;
+  }
+
+  .text-link {
+    color: var(--text);
+    text-decoration-color: rgba(188, 211, 207, 0.65);
+    text-underline-offset: 5px;
+  }
+
+  .text-link:hover {
+    color: var(--metal);
+  }
+
+  @media (max-width: 720px) {
+    .container {
+      width: min(100% - 24px, 1240px);
+    }
+
+    .section-title {
+      font-size: 2.55rem;
+    }
+  }
+</style>

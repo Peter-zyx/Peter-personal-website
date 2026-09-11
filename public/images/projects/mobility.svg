@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#050505"/>
+  <linearGradient id="g" x1="0" x2="1">
+    <stop stop-color="#16120b"/>
+    <stop offset="1" stop-color="#2b2418"/>
+  </linearGradient>
+  <path d="M158 548c92-116 185-174 333-186l228-18c90-7 173 29 240 92l72 68c16 15 3 42-19 42H158Z" fill="url(#g)" stroke="#d3b47a" stroke-width="3"/>
+  <circle cx="347" cy="558" r="75" fill="#080808" stroke="#f4f1ea" stroke-width="3"/>
+  <circle cx="854" cy="558" r="75" fill="#080808" stroke="#f4f1ea" stroke-width="3"/>
+  <path d="M420 377c84 35 170 37 258 0M676 380l94 154M480 390l-70 140" stroke="#f4f1ea" stroke-width="3" opacity=".5"/>
+  <text x="72" y="112" fill="#f4f1ea" font-family="Inter,Arial" font-size="64" font-weight="700">MOBILITY</text>
+  <text x="74" y="166" fill="#a8a39a" font-family="Inter,Arial" font-size="26">aerodynamics, energy, future transport</text>
+</svg>

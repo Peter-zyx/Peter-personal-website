@@ -1,0 +1,256 @@
+---
+import CaseDecision from "./CaseDecision.astro";
+import type { Project } from "../lib/projects";
+type Props = { project: Project };
+const { project } = Astro.props;
+const img = "/images/projects/pet-cleaning-tool";
+const features = [
+  { id: "head", label: "Interchangeable head", title: "Twist. Lock. Change the task.", image: "petease-head", alt: "PetEase CAD detail showing the brush head separated from its twist-lock coupling", body: "Locating pins follow curved slots to secure each attachment. The connection aligns the head with the airflow path, allowing the same handle to support grooming and surface-cleaning heads.", detail: "Design intent / Stable coupling with fewer separate tools", page: "16" },
+  { id: "cartridge", label: "Fur collection", title: "Keep the cleaning tool clean.", image: "petease-cartridge", alt: "PetEase CAD with removable cylindrical fur cartridge beside the handle opening", body: "A removable cartridge collects loose fur above the fan and motor. A filter separates the collected hair from the mechanism, while the side opening makes emptying the chamber part of the routine.", detail: "Design intent / Accessible removal and cleaning", page: "15–16" },
+  { id: "carbon", label: "Passive filter", title: "Give the second end a purpose.", image: "petease-carbon", alt: "PetEase CAD cutaway of the perforated lower housing and activated-carbon compartment", body: "The lower end contains a perforated activated-carbon compartment for passive odour reduction. It was conceived as a secondary function without adding another fan to the handheld body.", detail: "Concept proposal / Odour performance was not tested", page: "15–16" },
+  { id: "controls", label: "Simple controls", title: "Make the next action obvious.", image: "petease-controls", alt: "PetEase handle showing a dedicated power button and a fan-speed switch", body: "A dedicated power button and a low/high fan-speed switch keep the main interactions direct. A small OLED display was proposed for battery level and operating mode.", detail: "Concept proposal / Interface and circuit layout", page: "16" }
+];
+const process = [
+  ["01", "Pull", "Choose a length from the refill roll. The transparent cover reveals how much material remains."],
+  ["02", "Seal", "A timed heating cycle seals the inner cellulose film. The paper layer remains a separate pickup sheet."],
+  ["03", "Cut", "A guided sliding blade separates the length. The team refined the slot and pull direction through prototypes."],
+  ["04", "Carry", "A reusable collapsible pouch completes the proposed system for carrying the filled bag home."]
+];
+---
+
+<div class="pet-case">
+  <header class="pet-hero pet-wrap">
+    <a class="back-link" href="/#projects">← Back to projects</a>
+    <div class="hero-heading">
+      <div><p class="eyebrow">{project.title}</p><h1>PetEase<br /><span>&amp; Dooti.</span></h1></div>
+      <div class="hero-deck"><p class="large-copy">Less friction.<br />More room for care.</p><p>From the everyday work of animal carers to a modular cleaning concept and a working bag-making prototype.</p><div class="hero-credit"><span>My individual concept <b>PetEase</b></span><span>Selected team project <b>Dooti</b></span></div><a class="inline-link" href="#pet-research">Follow the design journey <span aria-hidden="true">↘</span></a></div>
+    </div>
+    <div class="hero-pair">
+      <a class="petease-cover" href="#petease"><span class="cover-label">01 / Individual design</span><img src={`${img}/petease-assembled.webp`} alt="My PetEase handheld cleaning tool CAD concept, with a brush head and a lower filter compartment" width="438" height="709" /><div class="cover-bottom"><div><strong>PetEase</strong><span>Clean. Collect. Refresh.</span></div><span class="circle-arrow" aria-hidden="true">↘</span></div></a>
+      <a class="dooti-cover" href="#dooti"><img src={`${img}/dooti-kit.webp`} alt="Final Dooti team presentation: turquoise bag maker, collapsible pouch, refill rolls, packaging and user guide" width="1800" height="1350" /><span class="cover-label">02 / Team development</span><div class="cover-bottom"><div><strong>Dooti</strong><span>Think beyond the bin.</span></div><span class="circle-arrow" aria-hidden="true">↘</span></div></a>
+    </div>
+    <div class="project-facts"><div><span>Context</span><strong>Design engineering / Team 14</strong></div><div><span>My role</span><strong>Individual designer + team CIO</strong></div><div><span>Methods</span><strong>Research · CAD · Electronics · Prototyping</strong></div></div>
+  </header>
+
+  <nav class="chapter-nav pet-wrap" aria-label="Pet cleaning case study chapters"><a href="#pet-research">01 / Research</a><a href="#petease">02 / PetEase</a><a href="#pet-selection">03 / Selection</a><a href="#dooti">04 / Dooti</a><a href="#pet-reflection">05 / Reflection</a></nav>
+  <CaseDecision slug={project.slug} />
+
+  <section class="pet-wrap section research" id="pet-research" aria-labelledby="research-title">
+    <div class="section-heading"><p class="eyebrow">01 / Shared research</p><h2 id="research-title">Care is personal.<br /><span>The work is repetitive.</span></h2><p>Our team investigated cleaning, waste handling and grooming across shelters, foster homes and pet-owning households. Repeated setup, awkward cleanup and tool switching turned small tasks into a substantial daily workload.</p></div>
+    <div class="research-counts"><div><strong>8</strong><span>Interviews across 4 countries</span></div><div><strong>3 / 2 / 3</strong><span>Shelters / Fosterers / Pet owners</span></div><div><strong>30+</strong><span>Survey participants</span></div></div>
+    <div class="research-insights"><article><span>Observation 01</span><h3>Too many transitions.</h3><p>Changing tools, finding attachments and cleaning up between tasks interrupts the care routine.</p></article><article><span>Observation 02</span><h3>Hygiene needs an easy reset.</h3><p>Collected fur and dirty contact surfaces make maintenance part of the product experience.</p></article><article><span>Observation 03</span><h3>Waste care extends beyond pickup.</h3><p>Containment, carrying and disposal create a wider system to design around.</p></article></div>
+    <p class="source-note">Shared research and synthesis / Phase 1, pp. 2–10. These insights informed four individual concept directions.</p>
+  </section>
+
+  <section class="personal-chapter" id="petease" aria-labelledby="petease-title">
+    <div class="pet-wrap section">
+      <div class="chapter-heading"><div><p class="eyebrow">02 / My individual concept</p><h2 id="petease-title">PetEase<span class="title-dot">.</span></h2></div><span class="ownership">Designed by Yuxuan Zhou</span></div>
+      <div class="personal-intro"><p class="large-copy">One handle.<br />A more continuous routine.</p><p>I focused on the friction of switching between tools. PetEase combines interchangeable upper heads, loose-fur collection and a passive lower filter in a dual-ended handheld concept.</p></div>
+      <div class="concept-development"><figure class="sketch-sheet"><a href={`${img}/phase1-page-13.webp`} target="_blank" rel="noopener" aria-label="Enlarge my PetEase concept exploration sheet"><img src={`${img}/phase1-page-13.webp`} alt="Original PetEase concept exploration sheet with hand sketches comparing attachment mechanisms, storage and tool combinations" width="2200" height="1556" loading="lazy" /></a><figcaption>My concept exploration / Phase 1, p. 13 <span>↗</span></figcaption></figure><div class="concept-reasoning"><div class="concept-count"><strong>15</strong><span>ideas explored</span><i aria-hidden="true">→</i><strong>3</strong><span>shortlisted concepts</span></div><h3>Choose a useful combination.</h3><p>I compared a single-head vacuum, a three-in-one tool and a dual-head concept. The dual-head direction offered the strongest balance in my concept scoring: related functions, simpler handling and greater feasibility.</p><div class="decision-note"><span>Design decision</span><p>Combine tasks that belong together, while keeping attachments and collected fur easy to remove.</p></div><p class="source-note">Concept evaluation and user feedback / Phase 1, p. 14. Scores reflect early design judgement.</p></div></div>
+
+      <div class="petease-structure"><figure class="exploded-plate"><span class="eyebrow">Inside the concept</span><img src={`${img}/petease-exploded.webp`} alt="Exploded PetEase CAD: brush head, split handle shell, fur chamber, motor and lower carbon compartment" width="346" height="637" loading="lazy" /><figcaption>My exploded CAD / Phase 1, p. 17</figcaption></figure><div class="structure-copy"><p class="eyebrow">A system designed for access</p><h3>Open it.<br />Empty it.<br />Use it again.</h3><p>The body separates the cleaning attachment, collection chamber and motor. Detachable contact parts and a removable cartridge make maintenance visible in the product architecture.</p><div class="dimension-row"><div><strong>300 <small>mm</small></strong><span>Proposed overall length</span></div><div><strong>48 <small>mm</small></strong><span>Proposed body diameter</span></div></div><p class="source-note">PetEase reached concept CAD and visual development. A physical working prototype and performance validation were outside this phase.</p></div></div>
+
+      <div class="pet-explorer">
+        <fieldset><legend>Explore the PetEase architecture</legend><div class="feature-options">{features.map((feature, index) => <label><input type="radio" name="pet-feature" value={feature.id} checked={index === 0} /><span><small>0{index + 1}</small>{feature.label}</span></label>)}</div></fieldset>
+        <div class="feature-panels">{features.map(feature => <div class="feature-panel" data-feature={feature.id}><figure><a href={`${img}/${feature.image}.webp`} target="_blank" rel="noopener" aria-label={`Enlarge PetEase ${feature.label.toLowerCase()} detail`}><img src={`${img}/${feature.image}.webp`} alt={feature.alt} width="500" height="400" loading="lazy" /></a><figcaption>My CAD detail / Phase 1, p. {feature.page} <span>↗</span></figcaption></figure><div><p class="eyebrow">{feature.label}</p><h3>{feature.title}</h3><p>{feature.body}</p><p class="feature-detail">{feature.detail}</p></div></div>)}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pet-wrap section selection" id="pet-selection" aria-labelledby="selection-title"><div class="section-heading"><p class="eyebrow">03 / The team’s selection</p><h2 id="selection-title">A different concept.<br /><span>A shared next step.</span></h2><p>PetEase was my individual response to the brief. For the group build, we selected Preme’s RePooPress concept, which became Dooti after we reconsidered the heating area and battery demand.</p></div><div class="selection-path"><article><span>My individual branch</span><h3>PetEase</h3><p>Modular cleaning and grooming</p><small>Concluded at concept CAD</small></article><div class="selected-path"><article><span>Selected group branch</span><h3>RePooPress</h3><p>Home paper-bag heat press</p><small>Initial concept by Preme</small></article><span class="path-arrow" aria-hidden="true">→</span><article><span>Developed together</span><h3>Dooti</h3><p>Portable roll-fed bag maker</p><small>Team 14 working prototype</small></article></div></div><div class="pivot-note"><strong>The constraint that changed the product</strong><p>Heating a large sheet was poorly suited to a battery-powered device. The team moved to a narrow sealing line and an on-demand roll system, with a separate carrying pouch.</p></div></section>
+
+  <section class="team-chapter" id="dooti" aria-labelledby="dooti-title">
+    <div class="pet-wrap section">
+      <div class="chapter-heading"><div><p class="eyebrow">04 / Selected team project</p><h2 id="dooti-title">Dooti<span class="title-dot">.</span></h2></div><span class="ownership">Developed by Team 14</span></div>
+      <div class="personal-intro"><p class="large-copy">A small device.<br />A longer view of waste.</p><p>Dooti brings material dispensing, sealing and cutting into a portable bag maker. A reusable pouch extends the design beyond pickup to the often-overlooked experience of carrying waste.</p></div>
+      <figure class="kit-figure"><img src={`${img}/dooti-kit.webp`} alt="Dooti final team presentation with the bag maker, reusable pouch, paper rolls and branded packaging" width="1800" height="1350" loading="lazy" /><figcaption>Final team design presentation / Portfolio p. 13. Branding and packaging are academic concepts; the displayed Battersea identity represents a proposed collaboration.</figcaption></figure>
+      <div class="use-sequence" aria-label="How the Dooti concept works">{process.map(([number,title,body]) => <article><span class="step-number">{number}</span><h3>{title}<span aria-hidden="true">{number === "04" ? "↗" : "→"}</span></h3><p>{body}</p></article>)}</div>
+
+      <div class="team-engineering"><div class="engineering-copy"><p class="eyebrow">My contribution / CAD + electronics</p><h3>Make the idea<br />work inside the shell.</h3><p>As the team’s CIO, I developed appearance and functional CAD, worked on circuit design and power calculations, and helped build and test the electronics.</p><p>I also supported component arrangement, soldering, assembly and integration, alongside the team’s feedback collection and final prototype testing.</p><div class="role-list"><span>Fusion 360 modelling</span><span>Circuit &amp; power analysis</span><span>Hardware testing</span><span>Assembly integration</span></div><p class="source-note">Individual contribution recorded in the final report, PDF p. 44. CAD, electronics and assembly were collaborative activities.</p></div><figure class="dooti-exploded"><a href={`${img}/dooti-exploded.webp`} target="_blank" rel="noopener" aria-label="Enlarge the team's Dooti exploded assembly"><img src={`${img}/dooti-exploded.webp`} alt="Team exploded Dooti assembly showing transparent lid, refill roll, sealing mechanism, controller and lower casing" width="773" height="787" loading="lazy" /></a><figcaption>Team assembly CAD / Portfolio p. 7 <span>↗</span></figcaption></figure></div>
+
+      <div class="electronics-story"><div class="subheading"><p class="eyebrow">From bench to enclosure</p><h3>Resolve the connections.<br />Then make them fit.</h3></div><div class="electronics-photos"><figure><img src={`${img}/dooti-breadboard.webp`} alt="Dooti breadboard circuit with Raspberry Pi Pico and connected heating test components" width="815" height="1449" loading="lazy" /><figcaption><b>01 / Breadboard</b><span>Test control logic and connections.</span></figcaption></figure><figure><img src={`${img}/dooti-stripboard.webp`} alt="Dooti compact stripboard prototype with Raspberry Pi Pico" width="538" height="958" loading="lazy" /><figcaption><b>02 / Stripboard</b><span>Arrange the circuit for assembly.</span></figcaption></figure><figure><img src={`${img}/dooti-integrated.webp`} alt="Dooti prototype enclosure containing the controller, battery arrangement and wiring" width="401" height="713" loading="lazy" /><figcaption><b>03 / Integration</b><span>Bring electronics into the housing.</span></figcaption></figure></div><div class="control-strip"><div><span>Controller</span><strong>Pi Pico</strong><p>Switch inputs, thermistor feedback and status indication.</p></div><div><span>Reported heating cycle</span><strong>2 <small>seconds</small></strong><p>Timed heating of the inner film instead of continuous heating.</p></div><div><span>Programmed cutoff</span><strong>75 <small>°C</small></strong><p>A temperature fault stops heating and requires a reset.</p></div></div><p class="source-note">Team prototype development / Portfolio pp. 5, 7 and report PDF pp. 29–32. Values describe the reported control design. A custom PCB was proposed as a further development step.</p></div>
+
+      <div class="testing-story"><div class="subheading"><p class="eyebrow">Prototype → Observe → Refine</p><h3>A convincing render<br />still needs awkward tests.</h3></div><div class="testing-grid"><figure><img src={`${img}/dooti-test.webp`} alt="Team Dooti exhibition stand where visitors tried the product with artificial waste and gave feedback" width="578" height="434" loading="lazy" /><figcaption>Team user testing at GERF / Portfolio p. 8</figcaption></figure><div class="feedback-list"><article><span>01 / Handling</span><h4>Follow the natural pull.</h4><p>Visitors tended to pull material downwards. The team compared cover options and pull directions while refining the refill path.</p></article><article><span>02 / Pickup</span><h4>Separate the material roles.</h4><p>Artificial-waste trials exposed awkward transfer into the bag. Paper became the pickup sheet, with cellulose film providing containment.</p></article><article><span>03 / Assembly</span><h4>Give the mechanism room.</h4><p>Iterations addressed cover release, blade guidance, PCB positioning, wiring clearance and accessible assembly.</p></article></div></div><a class="inline-link" href={`${img}/final-page-4.webp`} target="_blank" rel="noopener">Explore the team’s original prototyping sheet <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </section>
+
+  <section class="pet-wrap section reflection" id="pet-reflection" aria-labelledby="reflection-title"><div class="section-heading"><p class="eyebrow">05 / Outcome &amp; reflection</p><h2 id="reflection-title">Design the routine.<br /><span>Prove the details.</span></h2><p>PetEase taught me to connect modular architecture to everyday maintenance. Dooti added the harder task of turning a shared concept into an integrated prototype under real power, space and time constraints.</p></div><div class="outcome-grid"><article><span>Completed</span><h3>Two distinct outcomes.</h3><p>My PetEase concept reached sketches, design evaluation and detailed CAD. The team’s Dooti reached an integrated pull–seal–cut prototype, a pouch, packaging and exhibition testing.</p></article><article><span>Next validation</span><h3>Test the whole experience.</h3><p>Bag size, wet-waste handling, seal consistency, pouch cleaning and odour containment need broader trials. Accelerated material exposure did not establish full compostability or a validated disposal system.</p></article><article><span>What I would change</span><h3>Test feasibility earlier.</h3><p>The late shift away from a large heating area reduced prototyping time. I would bring power demand, component fit and a clear selection deadline into the first concept comparison.</p></article></div><div class="credits"><p class="eyebrow">Project credits</p><p><b>PetEase:</b> individual concept by Yuxuan Zhou. <b>Dooti:</b> Team 14 — Yuxuan (CIO), Muk (CTO), Preme (CCO), Cici (COO). Preme originated RePooPress and led brand development; the final product, testing and presentation were a team effort.</p></div><div class="report-links"><a href="/reports/pet-cleaning-phase1.pdf"><span>Phase 1 / 43 pages</span><strong>Research &amp; individual concepts <i aria-hidden="true">↗</i></strong><small>Web reading copy · 20.0 MB · PetEase pp. 11–17</small></a><a href="/reports/pet-cleaning-final.pdf"><span>Final / 46 pages</span><strong>Dooti report &amp; portfolio <i aria-hidden="true">↗</i></strong><small>Web reading copy · 22.8 MB · Team contributions p. 44</small></a></div><a class="back-link" href="/#projects">← Return to the project circle</a></section>
+</div>
+
+<style>
+  .pet-case{--pet-teal:#6ad9ca;--pet-gold:#d5b786;--pet-line:rgba(236,237,224,.18);--pet-muted:#a9b2ac;background:#101713;color:#f1f1e9;overflow:clip}
+  .pet-wrap{width:min(100% - 64px,1240px);margin-inline:auto}
+  .pet-case :is(h1,h2,h3,h4,p,figure){margin:0}
+  .pet-case :is(h1,h2,h3,h4){font-family:"Space Grotesk",sans-serif;font-weight:500;letter-spacing:-.045em}
+  .pet-case p{font-size:1rem;line-height:1.75}
+  .pet-case .eyebrow{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;font-weight:650;line-height:1.6;color:var(--pet-muted)}
+  .pet-case .source-note{font-size:.75rem;line-height:1.7;color:var(--pet-muted)}
+  .pet-case img{height:auto}
+  .pet-case a{text-underline-offset:5px}
+  .pet-case :is(a,input):focus-visible{outline:3px solid var(--pet-gold);outline-offset:5px}
+  .pet-case section[id]{scroll-margin-top:108px}
+  .back-link{display:inline-flex;min-height:44px;align-items:center;font-size:.8rem;text-decoration:none;color:var(--pet-muted)}
+  .pet-hero{padding-top:30px;padding-bottom:20px}
+  .hero-heading{display:grid;grid-template-columns:1.2fr 1fr;gap:70px;margin:40px 0 50px;align-items:end}
+  .hero-heading .eyebrow{max-width:330px;margin-bottom:24px;color:var(--pet-muted)}
+  .hero-heading h1{font-size:clamp(5rem,8.7vw,8.1rem);line-height:.94;letter-spacing:-.065em}
+  .hero-heading h1 span{color:var(--pet-teal)}
+  .pet-case .large-copy{font-family:"Space Grotesk",sans-serif;font-size:clamp(1.9rem,3.2vw,3rem);line-height:1.13;letter-spacing:-.045em}
+  .hero-deck>p:nth-child(2){max-width:440px;color:var(--pet-muted);margin:20px 0}
+  .hero-credit{display:flex;flex-wrap:wrap;gap:22px;font-size:.7rem;color:var(--pet-muted);margin:24px 0}
+  .hero-credit b{display:block;color:#f1f1e9;font-size:.9rem;margin-top:6px;font-weight:500}
+  .inline-link{display:inline-flex;align-items:center;justify-content:space-between;gap:40px;min-height:44px;font-size:.8rem;text-decoration:none;border-bottom:1px solid currentColor}
+  .hero-pair{display:grid;grid-template-columns:.65fr 1.35fr;gap:14px}
+  .hero-pair>a{position:relative;display:block;min-width:0;height:420px;overflow:hidden;text-decoration:none;border-radius:4px}
+  .petease-cover{background:#eeeae1;color:#343a31}
+  .petease-cover>img{height:310px;width:auto;max-width:80%;object-fit:contain;margin:36px auto 0;mix-blend-mode:multiply}
+  .cover-label{position:absolute;top:24px;left:26px;font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;font-weight:600}
+  .cover-bottom{position:absolute;bottom:24px;left:26px;right:26px;display:flex;justify-content:space-between;align-items:end}
+  .cover-bottom strong{display:block;font-family:"Space Grotesk",sans-serif;font-size:2rem;letter-spacing:-.05em;font-weight:500}
+  .cover-bottom div>span{display:block;margin-top:5px;font-size:.75rem}
+  .circle-arrow{display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;width:40px;height:40px;font-size:1.3rem;transition:transform .2s}
+  .hero-pair>a:hover .circle-arrow{transform:translate(2px,2px)}
+  .dooti-cover>img{width:100%;height:100%;object-fit:cover;object-position:50% 51%}
+  .dooti-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.78),transparent 45%,rgba(0,0,0,.34))}
+  .dooti-cover :is(.cover-label,.cover-bottom){z-index:1}
+  .project-facts{display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:24px;margin-top:28px;padding:23px 0}
+  .project-facts span{display:block;font-size:.65rem;color:var(--pet-muted);margin-bottom:9px;text-transform:uppercase;letter-spacing:.08em}
+  .project-facts strong{font-size:.8rem;font-weight:500;line-height:1.6}
+  .chapter-nav{display:flex;flex-wrap:wrap;gap:12px 34px;border-top:1px solid var(--pet-line);border-bottom:1px solid var(--pet-line);padding:13px 0}
+  .chapter-nav a{font-size:.75rem;text-decoration:none;min-height:32px;display:flex;align-items:center;color:var(--pet-muted)}
+  .chapter-nav a:hover{color:var(--pet-teal)}
+  .section{padding-block:100px}
+  .section-heading{max-width:740px;margin-bottom:48px}
+  .section-heading h2{font-size:clamp(2.25rem,4.2vw,3.6rem);line-height:1.07;margin:20px 0 24px}
+  .section-heading h2 span{color:var(--pet-muted)}
+  .section-heading>p:last-child{max-width:650px;color:var(--pet-muted)}
+  .research-counts{display:grid;grid-template-columns:1fr 1.2fr 1fr;border-block:1px solid var(--pet-line);padding:30px 0;gap:35px}
+  .research-counts strong{display:block;font-family:"Space Grotesk",sans-serif;font-size:3.4rem;letter-spacing:-.055em;font-weight:500;color:var(--pet-teal)}
+  .research-counts span{display:block;font-size:.8rem;margin-top:9px}
+  .research-insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:42px;margin:42px 0 30px}
+  .research-insights article>span{font-size:.65rem;color:var(--pet-muted);text-transform:uppercase;letter-spacing:.1em}
+  .research-insights h3{font-size:1.5rem;margin:15px 0 12px;line-height:1.15}
+  .research-insights p{font-size:.9rem;color:var(--pet-muted)}
+  .personal-chapter{--pet-muted:#66695f;--pet-line:#d6d3c7;background:#f1eee5;color:#2c352c;color-scheme:light}
+  .chapter-heading{display:flex;justify-content:space-between;gap:28px;align-items:center;border-bottom:1px solid var(--pet-line);padding-bottom:30px}
+  .chapter-heading h2{font-size:clamp(4rem,9vw,8rem);line-height:1;margin-top:14px;letter-spacing:-.075em}
+  .personal-chapter .title-dot{color:#a88e52}
+  .ownership{border:1px solid var(--pet-line);padding:12px 18px;border-radius:100px;font-size:.75rem}
+  .personal-intro{display:grid;grid-template-columns:1fr 1fr;gap:70px;padding:38px 0 55px;align-items:start}
+  .personal-intro>p:last-child{max-width:530px;color:var(--pet-muted)}
+  .concept-development{display:grid;grid-template-columns:1.2fr 1fr;gap:46px;align-items:center}
+  .sketch-sheet{background:white;border:1px solid var(--pet-line);padding:12px}
+  .sketch-sheet img{width:100%}
+  .pet-case figcaption{font-size:.7rem;line-height:1.6;color:var(--pet-muted)}
+  .sketch-sheet figcaption{display:flex;justify-content:space-between;padding:12px 8px 3px}
+  .concept-count{display:grid;grid-template-columns:auto 1fr auto auto 1fr;align-items:center;gap:13px;margin-bottom:22px}
+  .concept-count strong{font-family:"Space Grotesk",sans-serif;font-size:3rem;letter-spacing:-.05em;font-weight:500}
+  .concept-count span{font-size:.7rem;max-width:70px;line-height:1.5}
+  .concept-count i{font-style:normal;margin-right:10px}
+  .concept-reasoning h3{font-size:1.8rem;margin-bottom:18px}
+  .concept-reasoning>p{font-size:.9rem;color:var(--pet-muted)}
+  .decision-note{border-left:2px solid #ad945a;padding-left:18px;margin:22px 0}
+  .decision-note>span{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em}
+  .decision-note p{font-size:.9rem;margin-top:8px}
+  .petease-structure{display:grid;grid-template-columns:1fr 1fr;gap:85px;align-items:center;margin:80px 0 70px}
+  .exploded-plate{background:#fff;padding:30px 30px 20px;border-radius:180px 180px 4px 4px;text-align:center}
+  .exploded-plate img{height:480px;width:auto;max-width:100%;object-fit:contain;margin:20px auto}
+  .structure-copy h3{font-size:clamp(2.5rem,5vw,4.8rem);line-height:1.04;margin:22px 0}
+  .structure-copy>p:not(.eyebrow){color:var(--pet-muted);max-width:440px}
+  .dimension-row{display:flex;gap:38px;margin:32px 0;border-block:1px solid var(--pet-line);padding:25px 0}
+  .dimension-row strong{display:block;font-family:"Space Grotesk",sans-serif;font-size:2rem;font-weight:500}
+  .dimension-row small{font-size:.8rem}
+  .dimension-row span{display:block;font-size:.7rem;margin-top:6px;color:var(--pet-muted)}
+  .pet-explorer{border-top:1px solid var(--pet-line);padding-top:25px}
+  fieldset{border:0;padding:0;margin:0;min-width:0}
+  legend{font-size:.75rem;margin-bottom:20px}
+  .feature-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .feature-options label{position:relative;cursor:pointer;min-width:0}
+  .feature-options input{position:absolute;opacity:0;width:1px;height:1px}
+  .feature-options label>span{display:flex;align-items:center;gap:16px;padding:18px 16px;border:1px solid var(--pet-line);font-size:.8rem;min-height:66px}
+  .feature-options small{color:#737667;font-size:.65rem}
+  .feature-options input:checked+span{background:#303d32;color:#fff;border-color:#303d32}
+  .feature-options input:checked+span small{color:#d9dcca}
+  .feature-options input:focus-visible+span{outline:3px solid #9c8143;outline-offset:3px}
+  .feature-panel{display:none;grid-template-columns:1fr 1fr;align-items:center;gap:60px;padding:36px;background:#e5e5d9;margin-top:8px;min-height:405px}
+  .pet-explorer:has([value="head"]:checked) [data-feature="head"],.pet-explorer:has([value="cartridge"]:checked) [data-feature="cartridge"],.pet-explorer:has([value="carbon"]:checked) [data-feature="carbon"],.pet-explorer:has([value="controls"]:checked) [data-feature="controls"]{display:grid}
+  .feature-panel figure{min-width:0;background:#fff;padding:18px}
+  .feature-panel img{width:100%;height:270px;object-fit:contain}
+  .feature-panel figcaption{display:flex;justify-content:space-between;margin-top:15px}
+  .feature-panel h3{font-size:2.2rem;line-height:1.1;margin:17px 0}
+  .feature-panel>div>p:not(.eyebrow){font-size:.9rem;color:var(--pet-muted)}
+  .feature-panel .feature-detail{border-top:1px solid #c6cbbd;padding-top:15px;margin-top:25px;font-size:.72rem}
+  .selection-path{display:grid;grid-template-columns:.8fr 1.8fr;gap:28px}
+  .selection-path article{min-width:0;padding:28px}
+  .selection-path>article{border:1px dashed #697365}
+  .selection-path article>span{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--pet-muted)}
+  .selection-path h3{font-size:1.8rem;margin:20px 0 9px}
+  .selection-path p{font-size:.85rem}
+  .selection-path small{display:block;font-size:.7rem;margin-top:22px;color:var(--pet-muted)}
+  .selected-path{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;background:#1d3029;border:1px solid #365549}
+  .selected-path h3{color:var(--pet-teal)}
+  .path-arrow{font-size:1.7rem;color:var(--pet-teal)}
+  .pivot-note{display:grid;grid-template-columns:.8fr 1.8fr;gap:28px;margin-top:28px;padding:28px 0;border-bottom:1px solid var(--pet-line)}
+  .pivot-note strong{font-size:.9rem;font-weight:500;line-height:1.5;max-width:220px}
+  .pivot-note p{color:var(--pet-muted);font-size:.9rem;max-width:680px}
+  .team-chapter{--pet-muted:#47625c;--pet-line:#b1c7bd;background:#d8e5dc;color:#183b33;color-scheme:light}
+  .team-chapter .title-dot{color:#168b7e}
+  .kit-figure{background:#cad8ce;border-radius:4px;overflow:hidden}
+  .kit-figure>img{width:100%;max-height:700px;object-fit:cover;object-position:center}
+  .kit-figure figcaption{padding:14px 20px}
+  .use-sequence{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:45px 0 90px;border-block:1px solid var(--pet-line)}
+  .use-sequence article{padding:25px 22px 30px;border-right:1px solid var(--pet-line)}
+  .use-sequence article:first-child{padding-left:0}
+  .use-sequence article:last-child{border-right:0}
+  .step-number{font-size:.7rem;color:var(--pet-muted)}
+  .use-sequence h3{display:flex;justify-content:space-between;font-size:2rem;margin:26px 0 15px}
+  .use-sequence h3>span{color:#668b7a;font-size:1.3rem}
+  .use-sequence p{font-size:.85rem;color:var(--pet-muted)}
+  .team-engineering{display:grid;grid-template-columns:1fr 1fr;gap:75px;align-items:center}
+  .engineering-copy h3,.subheading h3{font-size:clamp(2rem,3.7vw,3.2rem);line-height:1.1;margin:22px 0}
+  .engineering-copy>p:not(.eyebrow){margin-top:16px;color:var(--pet-muted);font-size:.95rem}
+  .role-list{display:flex;flex-wrap:wrap;gap:8px;margin:25px 0}
+  .role-list span{border:1px solid #a3bcb0;border-radius:50px;padding:9px 12px;font-size:.7rem}
+  .dooti-exploded{background:#fff;padding:25px}
+  .dooti-exploded img{width:100%;height:470px;object-fit:contain}
+  .dooti-exploded figcaption{display:flex;justify-content:space-between;margin-top:12px}
+  .electronics-story,.testing-story{margin-top:100px}
+  .subheading{margin-bottom:35px}
+  .electronics-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+  .electronics-photos figure{background:#c5d6cb;min-width:0}
+  .electronics-photos img{width:100%;height:330px;object-fit:contain;padding:16px}
+  .electronics-photos figcaption{border-top:1px solid var(--pet-line);padding:18px}
+  .electronics-photos figcaption b{display:block;font-size:.8rem;color:#244d40;font-weight:550;margin-bottom:5px}
+  .control-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;padding:30px 0;border-bottom:1px solid var(--pet-line);margin-bottom:20px}
+  .control-strip div>span{display:block;font-size:.65rem;color:var(--pet-muted)}
+  .control-strip strong{display:block;font-size:2.2rem;font-family:"Space Grotesk",sans-serif;font-weight:500;margin:12px 0;letter-spacing:-.04em}
+  .control-strip small{font-size:1rem}
+  .control-strip p{font-size:.85rem;color:var(--pet-muted)}
+  .testing-grid{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:start}
+  .testing-grid img{width:100%;height:auto}
+  .testing-grid figcaption{margin-top:14px}
+  .feedback-list article{border-top:1px solid #a3bcb0;padding:20px 0}
+  .feedback-list article>span{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em}
+  .feedback-list h4{font-size:1.5rem;margin:11px 0 9px}
+  .feedback-list p{font-size:.9rem;color:var(--pet-muted)}
+  .testing-story>.inline-link{margin-top:25px}
+  .outcome-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;border-top:1px solid var(--pet-line);padding:32px 0}
+  .outcome-grid article>span{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--pet-teal)}
+  .outcome-grid h3{font-size:1.6rem;margin:18px 0}
+  .outcome-grid p{font-size:.9rem;color:var(--pet-muted)}
+  .credits{border-top:1px solid var(--pet-line);padding-top:30px;margin:25px 0 45px}
+  .credits>p:last-child{font-size:.8rem;color:var(--pet-muted);max-width:920px;margin-top:14px}
+  .credits b{font-weight:600;color:#dce4d9}
+  .report-links{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:35px}
+  .report-links>a{display:block;text-decoration:none;background:#1b2720;border:1px solid var(--pet-line);padding:26px}
+  .report-links>a:hover{border-color:var(--pet-teal)}
+  .report-links span{font-size:.65rem;color:var(--pet-muted);text-transform:uppercase;letter-spacing:.1em}
+  .report-links strong{display:flex;justify-content:space-between;gap:20px;font-family:"Space Grotesk",sans-serif;font-size:1.4rem;font-weight:500;margin:17px 0}
+  .report-links i{font-style:normal;color:var(--pet-teal)}
+  .report-links small{font-size:.7rem;color:var(--pet-muted);line-height:1.6;display:block}
+  @media(min-width:1600px){.pet-wrap{width:min(100% - 96px,1320px)}}
+  @media(max-width:1000px){.hero-heading{gap:40px}.hero-pair>a{height:365px}.petease-cover>img{height:265px;margin-top:30px}.concept-development{grid-template-columns:1fr;gap:30px}.concept-reasoning{max-width:680px}.petease-structure{gap:40px}.feature-panel{gap:30px;padding:24px}.feature-options label>span{gap:9px;padding:13px;font-size:.75rem}.selection-path{grid-template-columns:1fr;gap:14px}.selection-path>article{display:grid;grid-template-columns:1fr 1fr;align-items:center;column-gap:20px}.selection-path>article h3{margin:0}.selection-path>article small{margin-top:12px}.team-engineering{gap:35px}.dooti-exploded img{height:380px}.testing-grid{gap:35px}.use-sequence article{padding-inline:16px}.electronics-photos img{height:285px}.outcome-grid{gap:25px}}
+  @media(max-width:700px){.pet-wrap{width:calc(100% - 36px)}.pet-hero{padding-top:20px}.hero-heading{grid-template-columns:1fr;gap:30px;margin:25px 0 32px}.hero-heading h1{font-size:clamp(4.6rem,17vw,7rem)}.hero-heading .eyebrow{max-width:280px;margin-bottom:20px}.hero-deck .large-copy{font-size:1.9rem}.hero-credit{gap:25px}.hero-deck>p:nth-child(2){font-size:.95rem}.hero-pair{grid-template-columns:1fr 1fr;gap:8px}.hero-pair>a{height:290px}.petease-cover>img{height:195px;margin-top:33px}.cover-label{top:15px;left:14px;font-size:.52rem;letter-spacing:.06em}.cover-bottom{bottom:16px;left:14px;right:14px}.cover-bottom strong{font-size:1.6rem}.cover-bottom div>span{font-size:.62rem;max-width:100px;line-height:1.5}.circle-arrow{width:28px;height:28px;flex-shrink:0;font-size:1rem}.dooti-cover>img{object-position:32% 50%}.project-facts{grid-template-columns:1fr 1fr;gap:25px 15px;margin-top:10px}.project-facts>div:last-child{grid-column:1/-1}.project-facts strong{font-size:.75rem}.chapter-nav{gap:2px 20px;padding-block:10px}.chapter-nav a{font-size:.65rem;min-height:38px}.section{padding-block:65px}.section-heading{margin-bottom:30px}.section-heading h2{font-size:2.25rem}.section-heading>p:last-child{font-size:.93rem}.research-counts{gap:15px;grid-template-columns:1fr 1.25fr 1fr;padding:22px 0}.research-counts strong{font-size:2.2rem;white-space:nowrap}.research-counts span{font-size:.65rem;line-height:1.6}.research-insights{grid-template-columns:1fr;gap:25px;margin-top:30px}.research-insights h3{margin:8px 0}.chapter-heading{align-items:start;flex-direction:column;gap:18px}.chapter-heading h2{font-size:5rem}.ownership{padding:9px 13px;font-size:.65rem}.personal-intro{grid-template-columns:1fr;gap:24px;padding:30px 0}.personal-intro>p:last-child{font-size:.93rem}.concept-development{gap:24px}.sketch-sheet{padding:8px}.sketch-sheet figcaption{font-size:.63rem}.concept-count{gap:9px}.concept-count strong{font-size:2.5rem}.concept-count i{margin:0}.concept-count span{font-size:.66rem}.petease-structure{grid-template-columns:1fr;gap:30px;margin:45px 0}.exploded-plate{padding-top:25px;border-radius:130px 130px 4px 4px}.exploded-plate img{height:370px}.structure-copy h3{font-size:3.4rem}.dimension-row{gap:35px}.dimension-row strong{font-size:1.8rem}.feature-options{grid-template-columns:1fr 1fr}.feature-options label>span{min-height:58px;padding:12px 10px;font-size:.7rem}.feature-panel{grid-template-columns:1fr;gap:25px;padding:18px}.feature-panel img{height:220px}.feature-panel h3{font-size:1.9rem}.feature-panel figure{padding:12px}.feature-panel .feature-detail{font-size:.7rem}.selection-path>article{display:block}.selection-path>article h3{margin:16px 0 8px}.selection-path article{padding:23px}.selected-path{grid-template-columns:1fr}.path-arrow{padding-left:25px;transform:rotate(90deg);width:56px;height:38px;display:grid;place-items:center;padding:0;margin-left:15px}.selected-path h3{margin:15px 0 9px}.pivot-note{grid-template-columns:1fr;gap:15px}.pivot-note strong{max-width:none}.kit-figure>img{max-height:none}.kit-figure figcaption{font-size:.65rem;padding:12px 14px}.use-sequence{grid-template-columns:1fr 1fr;margin:28px 0 50px}.use-sequence article,.use-sequence article:first-child{padding:23px 16px}.use-sequence article:nth-child(2){border-right:0}.use-sequence article:nth-child(-n+2){border-bottom:1px solid var(--pet-line)}.use-sequence h3{font-size:1.8rem;margin:16px 0 12px}.use-sequence p{font-size:.8rem}.team-engineering{grid-template-columns:1fr;gap:30px}.engineering-copy h3,.subheading h3{font-size:2.3rem}.dooti-exploded{padding:18px}.dooti-exploded img{height:auto;max-height:440px}.electronics-story,.testing-story{margin-top:55px}.electronics-photos{gap:8px}.electronics-photos img{height:210px;padding:5px}.electronics-photos figcaption{padding:10px 7px}.electronics-photos figcaption b{font-size:.65rem}.electronics-photos figcaption span{font-size:.62rem;display:block;line-height:1.5}.control-strip{gap:16px;grid-template-columns:1fr}.control-strip>div{padding:8px 0 18px;border-bottom:1px solid var(--pet-line)}.control-strip>div:last-child{border:0;padding-bottom:0}.control-strip strong{font-size:2rem}.control-strip p{max-width:360px}.testing-grid{grid-template-columns:1fr;gap:28px}.testing-story>.inline-link{font-size:.72rem;gap:15px}.outcome-grid{grid-template-columns:1fr;gap:30px}.outcome-grid h3{margin:12px 0}.report-links{grid-template-columns:1fr;gap:12px}.report-links>a{padding:23px}.report-links strong{font-size:1.3rem}.pet-case section[id]{scroll-margin-top:95px}}
+  @media(max-width:700px){.pet-case section[id]{scroll-margin-top:150px}}
+  @media(prefers-reduced-motion:reduce){.circle-arrow{transition:none}}
+</style>

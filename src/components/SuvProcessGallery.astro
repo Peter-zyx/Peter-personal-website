@@ -1,0 +1,583 @@
+---
+type Props = {
+  variant?: "suv" | "plane-seat";
+};
+
+const { variant = "suv" } = Astro.props;
+
+const suvSlides = [
+  {
+    stage: "Modelling",
+    title: "Fusion 360 vehicle model",
+    description: "The initial exterior geometry prepared for aerodynamic development.",
+    image: "/images/projects/suv-battery-cooling/process/01-fusion-model.png",
+    alt: "SUV exterior model shown in Fusion 360"
+  },
+  {
+    stage: "Modelling",
+    title: "Simulation geometry preparation",
+    description: "The body and wheel geometry simplified and sectioned for analysis.",
+    image: "/images/projects/suv-battery-cooling/process/02-simulation-geometry.png",
+    alt: "Simplified SUV body and wheel geometry for simulation"
+  },
+  {
+    stage: "Charts",
+    title: "Drag coefficient convergence",
+    description: "Drag stabilising across the CFD iteration history.",
+    image: "/images/projects/suv-battery-cooling/process/03-drag-convergence.png",
+    alt: "ANSYS drag coefficient convergence chart"
+  },
+  {
+    stage: "Charts",
+    title: "Lift coefficient convergence",
+    description: "Lift behaviour monitored until the solution reached a stable state.",
+    image: "/images/projects/suv-battery-cooling/process/04-lift-convergence.png",
+    alt: "ANSYS lift coefficient convergence chart"
+  },
+  {
+    stage: "ANSYS",
+    title: "Volume mesh generation",
+    description: "The external flow domain and local mesh refinement around the vehicle.",
+    image: "/images/projects/suv-battery-cooling/process/05-volume-mesh.png",
+    alt: "Vehicle volume mesh generation in ANSYS Fluent"
+  },
+  {
+    stage: "ANSYS",
+    title: "Surface pressure distribution",
+    description: "Pressure contours used to locate stagnation and low-pressure regions.",
+    image: "/images/projects/suv-battery-cooling/process/06-pressure-contour.png",
+    alt: "Pressure contour across the SUV exterior"
+  },
+  {
+    stage: "ANSYS",
+    title: "Velocity contour",
+    description: "A longitudinal section showing acceleration over the roof and wake development.",
+    image: "/images/projects/suv-battery-cooling/process/07-velocity-contour.png",
+    alt: "Velocity contour around the SUV in ANSYS"
+  },
+  {
+    stage: "ANSYS",
+    title: "Velocity streamlines",
+    description: "Streamlines reveal how the body shape redirects airflow through the domain.",
+    image: "/images/projects/suv-battery-cooling/process/08-velocity-streamlines.png",
+    alt: "Velocity streamlines around the SUV"
+  },
+  {
+    stage: "ANSYS",
+    title: "Front flow detail",
+    description: "A closer view of the flow direction around the nose and front wheel region.",
+    image: "/images/projects/suv-battery-cooling/process/09-front-flow-detail.png",
+    alt: "Front airflow direction detail"
+  },
+  {
+    stage: "ANSYS",
+    title: "Three-dimensional streamline study",
+    description: "A perspective view used to inspect separation around the full body.",
+    image: "/images/projects/suv-battery-cooling/process/10-streamline-perspective.png",
+    alt: "Three-dimensional streamlines around the SUV model"
+  },
+  {
+    stage: "ANSYS",
+    title: "Front velocity detail",
+    description: "Local velocity behaviour around the front channel and wheel opening.",
+    image: "/images/projects/suv-battery-cooling/process/11-front-velocity-detail.png",
+    alt: "Close-up velocity contour at the front of the SUV"
+  },
+  {
+    stage: "ANSYS",
+    title: "Full-body velocity field",
+    description: "The final side section highlights the roof flow and rear wake region.",
+    image: "/images/projects/suv-battery-cooling/process/12-full-velocity-detail.png",
+    alt: "Full side velocity field around the SUV"
+  },
+  {
+    stage: "ANSYS",
+    title: "Battery thermal-fluid analysis",
+    description: "Temperature distribution across the final parallel-channel cooling architecture.",
+    image: "/images/projects/suv-battery-cooling/process/13-battery-thermal-analysis.png",
+    alt: "Battery cooling system temperature analysis in ANSYS Discovery"
+  }
+];
+
+const planeSeatSlides = [
+  {
+    stage: "Research",
+    title: "Product definition and user needs",
+    description: "Comfort, affordability, weight, repair, and recyclability establish the design opportunity.",
+    image: "/images/projects/sustainable-plane-seat/process/01-product-definition.png",
+    alt: "Aircraft seat product definition and user research"
+  },
+  {
+    stage: "Brief",
+    title: "Design requirements",
+    description: "Geometry, comfort, durability, circularity, disassembly, and information targets define the system.",
+    image: "/images/projects/sustainable-plane-seat/process/02-design-requirements.png",
+    alt: "Aircraft seat design requirements and considerations"
+  },
+  {
+    stage: "Concept",
+    title: "Ideation and material strategy",
+    description: "Early concepts combine adjustable support, a lighter frame, modular parts, and lower-impact materials.",
+    image: "/images/projects/sustainable-plane-seat/process/03-ideation-materials.png",
+    alt: "Aircraft seat ideation, material selection, and eco audit"
+  },
+  {
+    stage: "Structure",
+    title: "Lightweight primary system",
+    description: "A 6061-T6 aluminium load path and removable perforated seat pan reduce mass and part complexity.",
+    image: "/images/projects/sustainable-plane-seat/process/04-primary-system.png",
+    alt: "Aircraft seat primary structure and dimensional specification"
+  },
+  {
+    stage: "Structure",
+    title: "Base disassembly and analysis",
+    description: "Snap fits and accessible fasteners expose clean modules for maintenance, replacement, and recycling.",
+    image: "/images/projects/sustainable-plane-seat/process/05-base-disassembly-analysis.png",
+    alt: "Aircraft seat base disassembly tree and product analysis"
+  },
+  {
+    stage: "Comfort",
+    title: "Ergonomic secondary system",
+    description: "Dual-density foam, breathable zones, and adjustable neck support improve short-haul comfort.",
+    image: "/images/projects/sustainable-plane-seat/process/06-ergonomic-system.png",
+    alt: "Ergonomic aircraft seat cushions and support features"
+  },
+  {
+    stage: "Interaction",
+    title: "Modular passenger accessories",
+    description: "A stowed tray, cup holder, bag hook, USB-C power, and tactile controls share common hard points.",
+    image: "/images/projects/sustainable-plane-seat/process/07-accessories.png",
+    alt: "Modular aircraft seat accessory design"
+  },
+  {
+    stage: "Circularity",
+    title: "Top-down disassembly sequence",
+    description: "High-wear soft goods leave first, followed by accessories, shells, frame members, and floor fittings.",
+    image: "/images/projects/sustainable-plane-seat/process/08-disassembly-tree.png",
+    alt: "Complete aircraft seat disassembly sequence"
+  },
+  {
+    stage: "Analysis",
+    title: "Circularity and environmental impact",
+    description: "The final concept records mass, energy, carbon, MCI performance, and opportunities for refinement.",
+    image: "/images/projects/sustainable-plane-seat/process/09-product-analysis.png",
+    alt: "Aircraft seat MCI and environmental product analysis"
+  },
+  {
+    stage: "System",
+    title: "Stakeholder and recovery mapping",
+    description: "The product is situated across passenger, airline, MRO, manufacturing, and end-of-life stakeholders.",
+    image: "/images/projects/sustainable-plane-seat/process/10-system-mapping.png",
+    alt: "Aircraft seat product system and stakeholder map"
+  },
+  {
+    stage: "Outcome",
+    title: "Final three-seat row",
+    description: "The final model integrates the lightweight base, ergonomic soft goods, and modular accessories.",
+    image: "/images/projects/sustainable-plane-seat/process/11-final-product.png",
+    alt: "Final sustainable aircraft seat design"
+  }
+];
+
+const isPlaneSeat = variant === "plane-seat";
+const processSlides = isPlaneSeat ? planeSeatSlides : suvSlides;
+const galleryTitle = isPlaneSeat
+  ? "From passenger needs to a circular cabin system"
+  : "From surface model to validated system";
+const galleryIntro = isPlaneSeat
+  ? "Browse the research, material strategy, primary structure, comfort system, disassembly, and environmental analysis."
+  : "Browse the modelling, convergence data, aerodynamic study, and thermal-fluid analysis.";
+---
+
+<section class="process-gallery" data-process-gallery tabindex="0" aria-label={`${isPlaneSeat ? "Aircraft seat" : "SUV"} development process gallery`}>
+  <header class="process-heading">
+    <div>
+      <h2>{galleryTitle}</h2>
+    </div>
+    <p class="process-intro">{galleryIntro}</p>
+  </header>
+
+  <div class="process-viewer">
+    <div class="process-stage" aria-live="polite">
+      {
+        processSlides.map((slide, index) => (
+          <figure
+            class:list={["process-slide", index === 0 && "is-active"]}
+            data-process-slide
+            aria-hidden={index === 0 ? "false" : "true"}
+          >
+            <div class="process-media">
+              <img src={slide.image} alt={slide.alt} loading={index === 0 ? "eager" : "lazy"} />
+            </div>
+            <figcaption>
+              <span>{slide.stage}</span>
+              <div>
+                <strong>{slide.title}</strong>
+                <p>{slide.description}</p>
+              </div>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <button class="process-arrow process-arrow--previous" type="button" data-process-previous aria-label="Previous process image">
+      <span aria-hidden="true">&#8592;</span>
+    </button>
+    <button class="process-arrow process-arrow--next" type="button" data-process-next aria-label="Next process image">
+      <span aria-hidden="true">&#8594;</span>
+    </button>
+  </div>
+
+  <footer class="process-controls">
+    <div class="process-dots" aria-label="Choose a process image">
+      {
+        processSlides.map((slide, index) => (
+          <button
+            class:list={["process-dot", index === 0 && "is-active"]}
+            type="button"
+            data-process-dot={index}
+            aria-label={`Show image ${index + 1}: ${slide.title}`}
+            aria-current={index === 0 ? "true" : "false"}
+          />
+        ))
+      }
+    </div>
+    <p class="process-count"><span data-process-current>01</span> / {String(processSlides.length).padStart(2, "0")}</p>
+  </footer>
+</section>
+
+<script>
+  const galleries = document.querySelectorAll<HTMLElement>("[data-process-gallery]");
+
+  galleries.forEach((gallery) => {
+    const slides = Array.from(gallery.querySelectorAll<HTMLElement>("[data-process-slide]"));
+    const dots = Array.from(gallery.querySelectorAll<HTMLButtonElement>("[data-process-dot]"));
+    const current = gallery.querySelector<HTMLElement>("[data-process-current]");
+    const previous = gallery.querySelector<HTMLButtonElement>("[data-process-previous]");
+    const next = gallery.querySelector<HTMLButtonElement>("[data-process-next]");
+    let activeIndex = 0;
+    let pointerStartX = 0;
+
+    const showSlide = (nextIndex: number) => {
+      activeIndex = (nextIndex + slides.length) % slides.length;
+
+      slides.forEach((slide, index) => {
+        const isActive = index === activeIndex;
+        slide.classList.toggle("is-active", isActive);
+        slide.setAttribute("aria-hidden", String(!isActive));
+      });
+
+      dots.forEach((dot, index) => {
+        const isActive = index === activeIndex;
+        dot.classList.toggle("is-active", isActive);
+        dot.setAttribute("aria-current", String(isActive));
+      });
+
+      if (current) current.textContent = String(activeIndex + 1).padStart(2, "0");
+    };
+
+    previous?.addEventListener("click", () => showSlide(activeIndex - 1));
+    next?.addEventListener("click", () => showSlide(activeIndex + 1));
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => showSlide(Number(dot.dataset.processDot ?? 0)));
+    });
+
+    gallery.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showSlide(activeIndex - 1);
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showSlide(activeIndex + 1);
+      }
+    });
+
+    gallery.addEventListener("pointerdown", (event) => {
+      pointerStartX = event.clientX;
+    });
+
+    gallery.addEventListener("pointerup", (event) => {
+      const movement = event.clientX - pointerStartX;
+      if (Math.abs(movement) < 60) return;
+      showSlide(activeIndex + (movement < 0 ? 1 : -1));
+    });
+  });
+</script>
+
+<style>
+  .process-gallery {
+    display: grid;
+    gap: 18px;
+    margin: 18px 0 104px;
+    outline: none;
+  }
+
+  .process-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 0.42fr);
+    gap: 36px;
+    align-items: end;
+  }
+
+  .process-heading h2 {
+    max-width: 920px;
+    margin: 0;
+    color: var(--text);
+    font-size: clamp(2rem, 4.2vw, 4.8rem);
+    line-height: 0.94;
+  }
+
+  .process-intro {
+    margin: 0 0 4px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .process-viewer {
+    position: relative;
+  }
+
+  .process-stage {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid rgba(246, 248, 243, 0.1);
+    border-radius: 8px;
+    background: #080909;
+    box-shadow: 0 28px 90px rgba(0, 0, 0, 0.34);
+  }
+
+  .process-slide {
+    position: absolute;
+    inset: 0;
+    display: block;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.985);
+    transition:
+      opacity 320ms ease,
+      transform 440ms cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 320ms;
+  }
+
+  .process-slide.is-active {
+    z-index: 1;
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+
+  .process-media {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 10px 74px;
+    background:
+      radial-gradient(circle at 50% 44%, rgba(131, 159, 154, 0.07), transparent 48%),
+      #080909;
+  }
+
+  .process-media img {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: contain;
+  }
+
+  .process-slide figcaption {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 86px minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    min-height: 82px;
+    padding: 15px 18px;
+    border: 1px solid rgba(246, 248, 243, 0.12);
+    border-radius: 6px;
+    background: rgba(10, 12, 12, 0.78);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(20px) saturate(1.15);
+  }
+
+  .process-slide figcaption > span {
+    color: var(--metal);
+    font-size: 0.7rem;
+    font-weight: 760;
+    text-transform: uppercase;
+  }
+
+  .process-slide figcaption div {
+    display: grid;
+    gap: 4px;
+  }
+
+  .process-slide figcaption strong {
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
+  .process-slide figcaption p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+
+  .process-arrow {
+    position: absolute;
+    z-index: 3;
+    top: calc(50% - 25px);
+    display: grid;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba(246, 248, 243, 0.16);
+    border-radius: 50%;
+    background: rgba(8, 9, 9, 0.68);
+    color: var(--text);
+    font: inherit;
+    font-size: 1.2rem;
+    cursor: pointer;
+    backdrop-filter: blur(16px);
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      transform 180ms ease;
+  }
+
+  .process-arrow:hover,
+  .process-arrow:focus-visible {
+    border-color: rgba(188, 217, 210, 0.54);
+    background: rgba(32, 43, 41, 0.9);
+    transform: scale(1.06);
+    outline: none;
+  }
+
+  .process-arrow--previous {
+    left: 16px;
+  }
+
+  .process-arrow--next {
+    right: 16px;
+  }
+
+  .process-controls {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .process-dots {
+    display: flex;
+    flex: 1;
+    gap: 5px;
+  }
+
+  .process-dot {
+    position: relative;
+    flex: 1;
+    height: 12px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .process-dot::after {
+    position: absolute;
+    inset: 5px 0;
+    content: "";
+    background: rgba(246, 248, 243, 0.16);
+    transition: background 180ms ease;
+  }
+
+  .process-dot:hover::after,
+  .process-dot:focus-visible::after {
+    background: rgba(246, 248, 243, 0.44);
+  }
+
+  .process-dot.is-active::after {
+    background: var(--metal);
+  }
+
+  .process-count {
+    min-width: 60px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.76rem;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .process-count span {
+    color: var(--text);
+  }
+
+  @media (max-width: 760px) {
+    .process-gallery {
+      margin-bottom: 64px;
+    }
+
+    .process-heading {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .process-stage {
+      aspect-ratio: 4 / 5;
+    }
+
+    .process-media {
+      padding: 10px 46px 92px;
+    }
+
+    .process-slide figcaption {
+      right: 8px;
+      bottom: 8px;
+      left: 8px;
+      grid-template-columns: 1fr;
+      gap: 5px;
+      min-height: 126px;
+      padding: 14px 16px;
+    }
+
+    .process-arrow {
+      top: calc(42% - 21px);
+      width: 42px;
+      height: 42px;
+    }
+
+    .process-arrow--previous {
+      left: 8px;
+    }
+
+    .process-arrow--next {
+      right: 8px;
+    }
+
+    .process-dots {
+      gap: 3px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process-slide,
+    .process-arrow,
+    .process-dot::after {
+      transition: none;
+    }
+  }
+</style>
