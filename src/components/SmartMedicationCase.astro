@@ -5,9 +5,9 @@ type Props = { project: Project };
 const { project } = Astro.props;
 const assets = "/images/projects/smart-medication-monitor";
 const screens = [
-  ["app-home", "01 / Plan & connect", "A reminder starts a conversation.", "Daily prescriptions, BLE device status and 15-minute follow-ups bring the next action into one place."],
-  ["app-result", "02 / Read the evidence", "Two signals. One understandable event.", "Weight and camera results stay visible separately. Matching the expected count plus a TAKE action supports the event."],
-  ["app-doctor", "03 / Review locally", "A record with its context intact.", "Local history and a patient ID support an on-device Doctor View. Remote clinician access is future work."]
+  ["app-home-en", "01 / Plan & connect", "A reminder starts a conversation.", "Daily prescriptions, BLE device status and 15-minute follow-ups bring the next action into one place."],
+  ["app-result-en", "02 / Read the evidence", "Two signals. One understandable event.", "Weight and camera results stay visible separately. Matching the expected count plus a TAKE action supports the event."],
+  ["app-doctor-en", "03 / Review locally", "A record with its context intact.", "Local history and a patient ID support an on-device Doctor View. Remote clinician access is future work."]
 ];
 const evidence = [
   ["82%", "Cross-session weight accuracy", "Train on 50 Round 1 events; test on 50 Round 2 events. The flat Random Forest baseline reached 74%."],
@@ -37,7 +37,7 @@ const evidence = [
       <div class="signal-orbit orbit-two" aria-hidden="true"></div>
       <img class="hero-pill" src={`${assets}/orbit-icon.svg`} alt="" width="240" height="240" />
       <div class="signal-note weight-note"><span>01 / Physical signal</span><strong>Weight change</strong><svg viewBox="0 0 180 44" aria-hidden="true"><path d="M0 12H40L49 10L54 14L62 12H73L79 35L86 31L91 34H180" /></svg><small>HX711 → ESP32-S3</small></div>
-      <figure class="hero-phone"><img src={`${assets}/app-result.webp`} alt="MedBox iOS result screen showing weight evidence and a separate visual signal in a development mock event" width="736" height="1600" /><figcaption>Actual app / Mock event</figcaption></figure>
+      <figure class="hero-phone"><img src={`${assets}/app-result-en.webp`} alt="MedBox iOS result screen showing weight evidence and a separate visual signal in a development mock event" width="1206" height="2622" /><figcaption>Actual app / Mock event</figcaption></figure>
       <div class="signal-note vision-note"><span>02 / Visual signal</span><strong>Action context</strong><div class="landmarks" aria-hidden="true"><svg viewBox="0 0 140 65"><circle cx="70" cy="13" r="9"/><path d="M70 22v22m-24-12 24-5 25 5M46 32l12 19 22-26M95 32l13 22M70 44 55 63m15-19 14 19"/><g><circle cx="46" cy="32" r="3"/><circle cx="58" cy="51" r="3"/><circle cx="80" cy="25" r="3"/><circle cx="95" cy="32" r="3"/><circle cx="70" cy="44" r="3"/></g></svg></div><small>MediaPipe → Core ML</small></div>
       <div class="instrument-footer"><span>Sense. Interpret. Record.</span><span>ESP32-S3 + iPhone</span></div>
     </div>
@@ -82,8 +82,8 @@ const evidence = [
 
     <section class="med-section" id="med-app" aria-labelledby="app-title">
       <div class="section-heading"><p class="med-label">04 / Bringing the system into everyday use</p><h2 id="app-title">Evidence, translated<br /><span>into an experience.</span></h2><p>The bilingual SwiftUI app connects planning, device interaction and event review. Each result keeps the weight and camera evidence readable, including when the signals disagree.</p></div>
-      <div class="app-gallery">{screens.map(([src, index, title, body]) => <figure class="app-card"><div class="app-screen"><a href={`${assets}/${src}.webp`} target="_blank" rel="noopener" aria-label={`Enlarge MedBox ${index.slice(5)} screen`}><img src={`${assets}/${src}.webp`} alt={`Actual MedBox iOS app: ${index.slice(5)}. Report simulator screenshot with development data.`} width="736" height="1600" loading="lazy" /></a></div><figcaption><span class="med-label">{index}</span><h3>{title}</h3><p>{body}</p></figcaption></figure>)}</div>
-      <p class="med-note">Actual App screenshots from the report, pp. 15–17. Home and result screens use development Mock events. These images illustrate the interface, not measured hardware performance.</p>
+      <div class="app-gallery">{screens.map(([src, index, title, body]) => <figure class="app-card"><div class="app-screen"><a href={`${assets}/${src}.webp`} target="_blank" rel="noopener" aria-label={`Enlarge MedBox ${index.slice(5)} screen`}><img src={`${assets}/${src}.webp`} alt={`Actual MedBox iOS app: ${index.slice(5)}. English simulator screenshot with development data.`} width="1206" height="2622" loading="lazy" /></a></div><figcaption><span class="med-label">{index}</span><h3>{title}</h3><p>{body}</p></figcaption></figure>)}</div>
+      <p class="med-note">English screenshots captured from the working MedBox app in the iOS Simulator. Home and result screens use development Mock events. These images illustrate the interface, not measured hardware performance.</p>
       <div class="app-principles"><div><span>01</span><strong>Keep inference close</strong><p>Weight classification on the microcontroller; vision on the iPhone.</p></div><div><span>02</span><strong>Keep the meaning precise</strong><p>Expected count + TAKE supports an event. Conflicting signals remain visible.</p></div><div><span>03</span><strong>Keep records local</strong><p>On-device history and Doctor View; no cloud or remote patient lookup.</p></div></div>
     </section>
 
