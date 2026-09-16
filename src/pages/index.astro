@@ -1,5 +1,6 @@
 ---
 import Header from "../components/Header.astro";
+import About from "../components/About.astro";
 import ProjectGrid from "../components/ProjectGrid.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { categories, projects as allProjects } from "../lib/projects";
@@ -43,43 +44,7 @@ const projects = allProjects.filter(
       </div>
     </section>
 
-    <section class="about" id="about">
-      <div class="container about-grid">
-        <div>
-          <p class="eyebrow">About</p>
-          <h2 class="section-title">A design engineer moving between digital intelligence and physical systems.</h2>
-        </div>
-        <div class="about-copy">
-          <p>
-            I study Design Engineering at Imperial College London, with project work spanning robot vision,
-            mobility concepts, sustainable product redesign, CAD modelling, simulation analysis, and human-centred
-            research.
-          </p>
-          <p>
-            I am looking for placement and internship opportunities in AI-enabled products, design engineering,
-            mobility, game-adjacent interaction, automotive technology, and future-facing product teams.
-          </p>
-        </div>
-      </div>
-      <div class="container toolkit">
-        <div>
-          <span>Languages</span>
-          <strong>English, Mandarin, Spanish B1</strong>
-        </div>
-        <div>
-          <span>Design & CAD</span>
-          <strong>Fusion 360, Blender, Figma, InDesign</strong>
-        </div>
-        <div>
-          <span>Code & AI</span>
-          <strong>Python, MATLAB, MicroPython, Edge Impulse</strong>
-        </div>
-        <div>
-          <span>Engineering</span>
-          <strong>ANSYS, Granta EduPack, 3D printing, prototyping</strong>
-        </div>
-      </div>
-    </section>
+    <About />
 
     <ProjectGrid projects={projects} categories={categories} />
 
@@ -296,56 +261,6 @@ const projects = allProjects.filter(
     background: transparent;
   }
 
-  .about {
-    padding: 110px 0;
-    border-block: 0;
-    background: transparent;
-  }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.7fr);
-    gap: 54px;
-  }
-
-  .about-copy p {
-    margin: 0 0 20px;
-    color: var(--muted);
-    font-size: 1.04rem;
-    line-height: 1.75;
-  }
-
-  .toolkit {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-top: 52px;
-  }
-
-  .toolkit div {
-    min-height: 132px;
-    padding: 18px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.25);
-  }
-
-  .toolkit span {
-    display: block;
-    margin-bottom: 18px;
-    color: var(--metal);
-    font-size: 0.76rem;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-
-  .toolkit strong {
-    display: block;
-    font-size: 1rem;
-    font-weight: 560;
-    line-height: 1.5;
-  }
-
   .contact {
     padding: 110px 0 130px;
   }
@@ -377,13 +292,8 @@ const projects = allProjects.filter(
   }
 
   @media (max-width: 980px) {
-    .hero-grid,
-    .about-grid {
+    .hero-grid {
       grid-template-columns: 1fr;
-    }
-
-    .toolkit {
-      grid-template-columns: repeat(2, 1fr);
     }
 
     .hero-copy h1 {
@@ -401,10 +311,6 @@ const projects = allProjects.filter(
     }
 
     .hero-meta {
-      grid-template-columns: 1fr;
-    }
-
-    .toolkit {
       grid-template-columns: 1fr;
     }
 
