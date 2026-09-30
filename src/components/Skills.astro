@@ -1,0 +1,162 @@
+---
+import { getProject } from "../lib/projects";
+import { withBase } from "../lib/paths";
+
+const previewImages: Record<string, { src: string; alt: string; fit?: string }> = {
+  Make: { src: "/images/projects/pet-cleaning-tool/dooti-exploded.webp", alt: "Exploded CAD view of the Dooti assembly" },
+  Compute: { src: "/images/projects/dancing-segway/motion.webp", alt: "Dancing Segway robot during a motion test", fit: "cover" },
+  Design: { src: "/images/projects/smart-medication-monitor/app-home-en.webp", alt: "MedBox iOS interface with mock development data" },
+  Validate: { src: "/images/projects/suv-battery-cooling/editorial/vehicle.webp", alt: "SUV design rendered in metallic grey" },
+};
+
+const disciplines = [
+  { name: "Make", slug: "pet-cleaning-tool", work: "Dooti", note: "Product & hardware", icon: "M12 3 3 8v8l9 5 9-5V8l-9-5ZM3 8l9 5 9-5M12 13v8M7.5 5.5l9 5v5" },
+  { name: "Compute", slug: "dancing-segway", work: "Dancing Segway", note: "Code & control", icon: "m8 6-6 6 6 6m8-12 6 6-6 6M14 3l-4 18" },
+  { name: "Design", slug: "smart-medication-monitor", work: "Smart Medication", note: "Sensing & interaction", icon: "M5 3h14v18H5zM5 9h14M11 9v12M8 6h1m3 0h1" },
+  { name: "Validate", slug: "suv-battery-cooling", work: "SUV & Battery Cooling", note: "Analysis & experiment", icon: "M3 3v18h18M6 15l4-5 4 3 6-8M16 5h4v4" },
+].map((discipline) => {
+  const project = getProject(discipline.slug);
+  if (!project) throw new Error(`Missing skills project: ${discipline.slug}`);
+  return { ...discipline, href: withBase(`/projects/${project.slug}/`) };
+});
+const skills = [
+  { name: "CAD", group: "Make", size: "xl" },
+  { name: "Python", group: "Compute", size: "xl" },
+  { name: "Interaction", group: "Design", size: "md" },
+  { name: "Electronics", group: "Make", size: "md" },
+  { name: "Product design", group: "Design", size: "xl" },
+  { name: "CFD", group: "Validate", size: "lg" },
+  { name: "Machine learning", group: "Compute", size: "md" },
+  { name: "Prototyping", group: "Make", size: "lg" },
+  { name: "Figma", group: "Design", size: "lg" },
+  { name: "MATLAB", group: "Compute", size: "md" },
+  { name: "Simulation", group: "Validate", size: "lg" },
+  { name: "Systems thinking", group: "Design", size: "sm" },
+  { name: "Embedded systems", group: "Compute", size: "sm" },
+  { name: "Testing", group: "Validate", size: "md" },
+  { name: "Physical experimentation", group: "Validate", size: "sm" },
+];
+---
+
+<section class="skills" id="skills" aria-labelledby="skills-title">
+  <div class="skills-heading">
+    <div><p class="meta section-label">02 / Skills & tools</p><h3 id="skills-title">Ideas into <em>practice.</em></h3></div>
+    <p class="skills-intro">A toolkit that connects disciplines.<br />From the first sketch to a working prototype.</p>
+  </div>
+  <div class="skill-filters" role="group" aria-label="Filter skills by discipline" hidden>
+    <button type="button" data-filter="All" aria-pressed="true" aria-controls="skill-cloud skill-previews">All skills <span class="filter-count">{skills.length}</span></button>
+    {disciplines.map((discipline) => <button type="button" data-filter={discipline.name} aria-pressed="false" aria-controls="skill-cloud skill-previews"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={discipline.icon} /></svg>{discipline.name}</button>)}
+  </div>
+  <div class="cloud-stage">
+    <span class="cloud-cross cross-start" aria-hidden="true">+</span>
+    <ul id="skill-cloud" class="skill-cloud" aria-label="Design and engineering skills">
+      {skills.map((skill) => <li class={`skill-word size-${skill.size}`} data-group={skill.group}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d={disciplines.find((discipline) => discipline.name === skill.group)?.icon} /></svg><span>{skill.name}</span>
+      </li>)}
+    </ul>
+    <span class="cloud-cross cross-end" aria-hidden="true">+</span>
+    <p class="cloud-caption meta" aria-live="polite" aria-atomic="true">{skills.length} skills / Across four disciplines</p>
+    <div id="skill-previews" hidden>
+      {disciplines.map((discipline) => <a class="skill-preview" href={discipline.href} data-group={discipline.name} hidden>
+        <span class="preview-image"><img src={withBase(previewImages[discipline.name].src)} alt={previewImages[discipline.name].alt} width="104" height="80" loading="lazy" decoding="async" style={`object-fit: ${previewImages[discipline.name].fit ?? "contain"}`} /></span>
+        <span class="preview-copy"><span class="meta">{discipline.name} in practice</span><span class="preview-title">{discipline.work}</span><span class="preview-note">{discipline.note}</span></span>
+        <span class="preview-action"><span>View project</span><span aria-hidden="true">↗</span></span>
+      </a>)}
+    </div>
+  </div>
+</section>
+
+<script>
+  const section = document.querySelector<HTMLElement>(".skills");
+  if (section) {
+    const filters = section.querySelector<HTMLElement>(".skill-filters");
+    if (filters) filters.hidden = false;
+    const buttons = section.querySelectorAll<HTMLButtonElement>("[data-filter]");
+    const words = section.querySelectorAll<HTMLElement>(".skill-word");
+    const previews = section.querySelector<HTMLElement>("#skill-previews");
+    const projects = section.querySelectorAll<HTMLAnchorElement>(".skill-preview");
+    const caption = section.querySelector<HTMLElement>(".cloud-caption");
+    buttons.forEach((button) => button.addEventListener("click", () => {
+      const group = button.dataset.filter;
+      section.classList.toggle("is-filtered", group !== "All");
+      buttons.forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+      let count = 0;
+      words.forEach((word) => {
+        word.hidden = group !== "All" && word.dataset.group !== group;
+        if (!word.hidden) count++;
+      });
+      if (previews) previews.hidden = group === "All";
+      projects.forEach((project) => { project.hidden = group === "All" || project.dataset.group !== group; });
+      if (caption) caption.textContent = `${count} skills / ${group === "All" ? "Across four disciplines" : group}`;
+    }));
+  }
+</script>
+
+<style>
+  .skills { margin-top: 100px; padding-top: 36px; border-top: 1px solid var(--line); scroll-margin-top: 100px; }
+  .meta { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.64rem; font-weight: 400; letter-spacing: 0.08em; line-height: 1.5; text-transform: uppercase; }
+  .skills-heading { display: flex; align-items: end; justify-content: space-between; gap: 28px; }
+  .section-label { margin: 0 0 16px; }
+  h3 { margin: 0; font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 550; line-height: 1.1; letter-spacing: -0.045em; }
+  h3 em { font-style: normal; color: var(--accent-cool); }
+  .skills-intro { margin: 0; color: var(--muted); font-size: 0.87rem; line-height: 1.7; }
+  svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .skill-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+  .skill-filters[hidden], .skill-word[hidden] { display: none; }
+  .skill-filters button { display: inline-flex; gap: 8px; align-items: center; justify-content: center; min-height: 44px; padding: 9px 16px; color: var(--muted); border: 1px solid var(--line); border-radius: 30px; background: transparent; cursor: pointer; font-size: 0.78rem; }
+  .skill-filters svg { width: 15px; height: 15px; }
+  .skill-filters button[aria-pressed="true"] { background: var(--text); border-color: var(--text); color: var(--ink); }
+  .skill-filters button:hover:not([aria-pressed="true"]) { color: var(--text); border-color: var(--line-strong); }
+  .filter-count { opacity: 0.6; font-family: monospace; font-size: 0.66rem; }
+  .cloud-stage { position: relative; margin-top: 24px; border-block: 1px solid var(--line); background: radial-gradient(ellipse at center, rgba(112, 201, 209, 0.045), transparent 65%); }
+  .skill-cloud { display: flex; flex-wrap: wrap; align-content: center; align-items: center; justify-content: center; gap: 20px 34px; min-height: 350px; max-width: 1080px; padding: 42px 34px 30px; margin: 0 auto; list-style: none; }
+  .skills.is-filtered .skill-cloud { min-height: 230px; }
+  .skill-word { display: inline-flex; align-items: center; gap: 10px; line-height: 1.15; font-weight: 500; letter-spacing: -0.035em; }
+  .skill-word svg { color: var(--accent-cool); width: 0.55em; height: 0.55em; min-width: 16px; min-height: 16px; opacity: 0.8; }
+  .size-xl { font-size: clamp(2.4rem, 4vw, 3.7rem); color: var(--text); }
+  .size-lg { font-size: clamp(1.9rem, 3vw, 2.8rem); color: var(--accent-cool); }
+  .size-md { font-size: clamp(1.35rem, 2.2vw, 2rem); color: #c6cdca; }
+  .size-sm { font-size: clamp(1rem, 1.5vw, 1.35rem); color: var(--muted); font-weight: 400; letter-spacing: -0.015em; }
+  .cloud-cross { position: absolute; color: var(--soft); font-family: monospace; font-size: 18px; }
+  .cross-start { left: 0; top: 14px; } .cross-end { right: 0; bottom: 16px; }
+  .cloud-caption { text-align: center; margin: 0; padding: 0 24px 24px; font-size: 0.58rem; }
+  #skill-previews { padding: 0 28px; }
+  .skill-preview { display: flex; align-items: center; gap: 24px; max-width: 760px; margin-inline: auto; padding: 20px 0 24px; border-top: 1px solid var(--line); text-decoration: none; }
+  #skill-previews[hidden], .skill-preview[hidden] { display: none; }
+  .preview-image { display: grid; place-items: center; width: 104px; height: 80px; flex-shrink: 0; overflow: hidden; border-radius: 3px; }
+  .preview-image img { width: 100%; height: 100%; }
+  .preview-copy { display: grid; gap: 5px; min-width: 0; }
+  .preview-copy .meta { color: var(--accent-cool); font-size: 0.57rem; }
+  .preview-title { font-size: 1.15rem; line-height: 1.3; letter-spacing: -0.025em; }
+  .preview-note { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+  .preview-action { display: flex; align-items: center; gap: 18px; margin-left: auto; padding-left: 12px; font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+  .preview-action > span:last-child { font-size: 1.25rem; color: var(--text); }
+  .skill-preview:hover .preview-title, .skill-preview:hover .preview-action { color: var(--accent-cool); }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--accent-cool); outline-offset: 4px; }
+  @media (max-width: 1000px) { .skill-cloud { gap: 22px 28px; } }
+  @media (max-width: 720px) {
+    .skills { margin-top: 64px; padding-top: 28px; }
+    .skills-heading { display: block; }
+    .skills-intro { margin-top: 18px; font-size: 0.82rem; }
+    .skill-filters { gap: 7px; margin-top: 24px; }
+    .skill-filters button { padding: 9px 12px; font-size: 0.72rem; }
+    .skill-cloud { min-height: 400px; padding: 34px 12px 28px; gap: 20px 22px; }
+    .size-xl { font-size: 2.3rem; }
+    .size-lg { font-size: 1.85rem; }
+    .size-md { font-size: 1.35rem; }
+    .size-sm { font-size: 1rem; }
+    .skill-word { gap: 7px; }
+    #skill-previews { padding-inline: 4px; }
+    .skill-preview { gap: 14px; }
+    .preview-image { width: 68px; height: 70px; }
+    .preview-title { font-size: 0.97rem; }
+    .preview-note { font-size: 0.67rem; }
+    .preview-action { padding-left: 0; }
+    .preview-action > span:first-child { display: none; }
+  }
+  @media (max-width: 360px) { .skill-cloud { padding-inline: 8px; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .skill-filters button { transition: background 180ms ease, border-color 180ms ease, color 180ms ease; }
+    .preview-title, .preview-action { transition: color 180ms ease; }
+  }
+</style>

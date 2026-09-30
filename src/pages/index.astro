@@ -1,6 +1,7 @@
 ---
 import Header from "../components/Header.astro";
 import About from "../components/About.astro";
+import Experience from "../components/Experience.astro";
 import ProjectGrid from "../components/ProjectGrid.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { categories, projects as allProjects } from "../lib/projects";
@@ -47,6 +48,8 @@ const projects = allProjects.filter(
     <About />
 
     <ProjectGrid projects={projects} categories={categories} />
+
+    <Experience />
 
     <section class="contact" id="contact">
       <div class="container contact-card">

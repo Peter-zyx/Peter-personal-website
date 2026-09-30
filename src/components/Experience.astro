@@ -1,0 +1,123 @@
+---
+import { withBase } from "../lib/paths";
+
+const contributions = [
+  {
+    title: "Connected the physical and digital.",
+    body: "Integrated ESP32-S3, load-cell sensing and a camera into a medication-monitoring prototype, with BLE communication and Wi-Fi camera streaming.",
+  },
+  {
+    title: "Brought machine learning onto the device.",
+    body: "Built a hierarchical weight classifier for the ESP32-S3 and a MediaPipe + Core ML vision pipeline on iPhone, bringing both signals into a multimodal event decision.",
+  },
+  {
+    title: "Made the evidence understandable.",
+    body: "Developed a bilingual SwiftUI app for reminders, device interaction and local event history, keeping weight and visual evidence readable when results were uncertain.",
+  },
+];
+---
+
+<section class="experience" id="experience" aria-labelledby="experience-title">
+  <div class="container">
+    <div class="experience-heading">
+      <div><p class="meta">Experience / Beyond the studio</p><h2 id="experience-title">Research into <em>reality.</em></h2></div>
+      <p class="section-intro">Building, testing and learning<br />in a research environment.</p>
+    </div>
+
+    <article class="experience-entry" aria-labelledby="fudan-title">
+      <aside class="entry-meta" aria-label="Internship details">
+        <p class="entry-date"><span class="timeline-dot" aria-hidden="true"></span><time datetime="2026-08">Aug 2026</time></p>
+        <p class="entry-location">Shanghai, China</p>
+        <span class="entry-type meta">Research internship</span>
+        <div class="discipline-tags" aria-label="Areas of work"><span>Embedded systems</span><span>On-device AI</span><span>Product interaction</span></div>
+      </aside>
+
+      <div class="entry-body">
+        <header class="entry-header">
+          <p class="role">AI & IoT Research Intern</p>
+          <h3 id="fudan-title">Fudan University<span lang="zh" class="institution-cn">复旦大学</span></h3>
+          <p class="department">College of Intelligent Robotics and Advanced Manufacturing</p>
+        </header>
+
+        <div class="entry-content">
+          <div class="entry-story">
+            <p class="project-context">Smart Medication Monitor</p>
+            <p class="entry-summary">From a physical signal to a useful interaction: an end-to-end prototype combining sensing, embedded intelligence and a native iOS app.</p>
+            <ol class="contributions">
+              {contributions.map((item, index) => <li><span class="contribution-number meta" aria-hidden="true">0{index + 1}</span><div><h4>{item.title}</h4><p>{item.body}</p></div></li>)}
+            </ol>
+            <div class="experience-links">
+              <a class="case-link" href={withBase("/projects/smart-medication-monitor/")}>Explore the case study <span aria-hidden="true">↗</span></a>
+              <a href="https://github.com/Peter-zyx/smart-medication-monitor">View repository <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+
+          <div class="entry-evidence">
+            <figure class="app-preview">
+              <div class="preview-heading meta"><span>From the prototype</span><span aria-hidden="true">↙</span></div>
+              <img src={withBase("/images/projects/smart-medication-monitor/app-result-en.webp")} alt="MedBox iOS prototype showing separate weight and camera evidence for a medication event, using mock development data" width="1206" height="2622" loading="lazy" decoding="async" />
+              <figcaption>MedBox / SwiftUI<br /><span>Simulator capture · Mock event data</span></figcaption>
+            </figure>
+            <div class="result">
+              <p class="meta">Cross-session weight accuracy</p>
+              <p class="result-value"><span>74<small>%</small></span><span class="result-arrow" aria-hidden="true">→</span><strong>82<small>%</small></strong></p>
+              <p class="result-detail">Flat Random Forest → hierarchical model<br />50-event holdout · +8 percentage points</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .experience { padding: 100px 0 20px; background: var(--bg); scroll-margin-top: 96px; }
+  .meta { font: 400 0.65rem/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+  .experience-heading { display: flex; justify-content: space-between; align-items: end; gap: 32px; padding-bottom: 38px; border-bottom: 1px solid var(--line); }
+  .experience-heading .meta { margin: 0 0 18px; }
+  .experience-heading h2 { margin: 0; font-size: clamp(2.4rem, 4.4vw, 4rem); font-weight: 550; line-height: 1.08; letter-spacing: -0.05em; }
+  .experience-heading em { color: var(--accent-cool); font-style: normal; }
+  .section-intro { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
+  .experience-entry { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 48px; padding-top: 44px; }
+  .entry-meta { position: relative; padding-left: 22px; border-left: 1px solid var(--line); }
+  .entry-date { margin: 0; font-size: 0.95rem; line-height: 1.5; }
+  .timeline-dot { position: absolute; left: -5px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent-cool); box-shadow: 0 0 0 6px var(--bg); }
+  .entry-location { color: var(--muted); font-size: 0.82rem; margin: 8px 0 20px; }
+  .entry-type { display: inline-block; color: var(--accent-cool); font-size: 0.59rem; }
+  .discipline-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+  .discipline-tags span { padding: 7px 10px; border: 1px solid var(--line); border-radius: 3px; color: var(--muted); font-size: 0.67rem; line-height: 1.4; }
+  .role { margin: 0 0 12px; color: var(--accent-cool); font-size: 0.85rem; }
+  .entry-header h3 { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 20px; margin: 0; font-size: clamp(1.9rem, 3vw, 2.65rem); font-weight: 550; line-height: 1.15; letter-spacing: -0.045em; }
+  .institution-cn { font-size: 0.95rem; font-weight: 400; letter-spacing: 0.13em; color: var(--muted); }
+  .department { margin: 14px 0 0; color: var(--muted); font-size: 0.82rem; line-height: 1.6; }
+  .entry-content { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 44px; margin-top: 36px; }
+  .project-context { margin: 0 0 12px; font-size: 1.22rem; letter-spacing: -0.025em; font-weight: 500; }
+  .entry-summary { margin: 0; font-size: 0.98rem; color: #cbd2ce; line-height: 1.7; max-width: 53ch; }
+  .contributions { list-style: none; padding: 0; margin: 30px 0 0; display: grid; gap: 24px; }
+  .contributions li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 12px; }
+  .contribution-number { padding-top: 3px; color: var(--accent-cool); }
+  .contributions h4 { margin: 0 0 7px; font-size: 0.9rem; font-weight: 550; line-height: 1.5; }
+  .contributions p { margin: 0; color: var(--muted); font-size: 0.84rem; line-height: 1.75; }
+  .experience-links { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; margin-top: 32px; }
+  .experience-links a { display: inline-flex; align-items: center; gap: 16px; min-height: 44px; color: var(--muted); font-size: 0.79rem; text-decoration: none; }
+  .experience-links .case-link { color: var(--text); border-bottom: 1px solid var(--line-strong); }
+  .experience-links a:hover { color: var(--accent-cool); }
+  .experience-links a:focus-visible { outline: 2px solid var(--accent-cool); outline-offset: 5px; }
+  .entry-evidence { align-self: start; }
+  .app-preview { margin: 0; padding: 18px 20px 20px; border: 1px solid var(--line); border-radius: 4px; background: radial-gradient(ellipse at 50% 35%, #70c9d110, transparent 80%), #0b0f0e; }
+  .preview-heading { display: flex; justify-content: space-between; gap: 12px; font-size: 0.56rem; margin-bottom: 22px; }
+  .app-preview img { width: 150px; height: auto; margin: 0 auto; border: 4px solid #263432; border-radius: 24px; box-shadow: 0 16px 32px #0006; }
+  .app-preview figcaption { margin-top: 18px; text-align: center; font-size: 0.72rem; line-height: 1.7; }
+  .app-preview figcaption span { color: var(--muted); font-size: 0.63rem; }
+  .result { padding-top: 24px; }
+  .result > .meta { margin: 0; font-size: 0.57rem; }
+  .result-value { display: flex; align-items: center; gap: 18px; margin: 10px 0; font-size: 2.7rem; font-weight: 450; letter-spacing: -0.05em; }
+  .result-value > span:first-child { color: var(--muted); }
+  .result-value small { font-size: 0.55em; }
+  .result-value .result-arrow { font-size: 1.5rem; color: var(--soft); }
+  .result-value strong { color: var(--accent-cool); font-weight: 500; }
+  .result-detail { font-size: 0.66rem; line-height: 1.75; color: var(--muted); margin: 0; }
+  @media (max-width: 1100px) { .experience-entry { grid-template-columns: 155px minmax(0, 1fr); gap: 30px; } .entry-content { grid-template-columns: minmax(0, 1fr) 240px; gap: 28px; } .app-preview { padding-inline: 14px; } }
+  @media (max-width: 850px) { .experience-entry { grid-template-columns: 1fr; gap: 30px; } .entry-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px 20px; } .entry-location { margin: 0; } .discipline-tags { width: 100%; margin-top: 8px; } .experience-heading { align-items: start; } .section-intro { max-width: 27ch; } .section-intro br { display: none; } }
+  @media (max-width: 600px) { .experience { padding-top: 64px; } .experience > .container { width: calc(100% - 40px); } .experience-heading { display: block; padding-bottom: 28px; } .section-intro { margin-top: 18px; max-width: none; font-size: 0.83rem; } .experience-entry { padding-top: 28px; } .entry-content { grid-template-columns: 1fr; gap: 30px; margin-top: 26px; } .contributions { gap: 22px; } .entry-evidence { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; } .app-preview img { width: 170px; } .result { padding-top: 0; } .result-value { font-size: 3rem; } .result-detail { font-size: 0.72rem; } }
+</style>
