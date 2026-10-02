@@ -1,5 +1,6 @@
 ---
 import CPAppCase from "../../components/CPAppCase.astro";
+import FaustCase from "../../components/FaustCase.astro";
 import SuvEngineeringCase from "../../components/SuvEngineeringCase.astro";
 import PlaneSeatCase from "../../components/PlaneSeatCase.astro";
 import ProjectContinuation from "../../components/ProjectContinuation.astro";
@@ -28,6 +29,7 @@ export function getStaticPaths() {
 const { project } = Astro.props;
 const Content = project.Content;
 const isCPApp = project.slug === "cp-app";
+const isFaust = project.slug === "faust-light-system";
 const isSuv = project.slug === "suv-battery-cooling";
 const isPlaneSeat = project.slug === "sustainable-plane-seat";
 const isReverseEngineering = project.slug === "reverse-engineering-shaver";
@@ -49,7 +51,9 @@ const isImmersiveProject = isSuv;
   <main>
     <article data-project-slug={project.slug} class={`project ${isImmersiveProject ? "project--suv" : ""}`}>
       {
-        isCPApp ? (
+        isFaust ? (
+          <FaustCase />
+        ) : isCPApp ? (
           <CPAppCase project={project} />
         ) : isPlaneSeat ? (
           <PlaneSeatCase />
@@ -94,7 +98,7 @@ const isImmersiveProject = isSuv;
       }
 
 
-      {!isCPApp && !isSuv && !isPlaneSeat && !isReverseEngineering && !isDataAnalysis && !isSmartMedication && !isProsthetic && !isPetCleaning && !isShyBloom && !isArchitecture && !isDancingSegway && !isFootballRobot && !isWulinGame ? (
+      {!isFaust && !isCPApp && !isSuv && !isPlaneSeat && !isReverseEngineering && !isDataAnalysis && !isSmartMedication && !isProsthetic && !isPetCleaning && !isShyBloom && !isArchitecture && !isDancingSegway && !isFootballRobot && !isWulinGame ? (
       <section class={`container content-grid ${isImmersiveProject ? "content-grid--suv" : ""}`}>
         <aside>
           <div>

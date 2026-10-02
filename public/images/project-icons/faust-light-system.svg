@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
+  <defs>
+    <linearGradient id="base" x1="45" y1="95" x2="146" y2="153" gradientUnits="userSpaceOnUse"><stop stop-color="#62756e"/><stop offset=".46" stop-color="#263a34"/><stop offset="1" stop-color="#0d1916"/></linearGradient>
+    <linearGradient id="glass" x1="51" y1="33" x2="125" y2="121" gradientUnits="userSpaceOnUse"><stop stop-color="#b3d6cf" stop-opacity=".55"/><stop offset=".5" stop-color="#527f78" stop-opacity=".19"/><stop offset="1" stop-color="#0b1917" stop-opacity=".95"/></linearGradient>
+    <linearGradient id="rim" x1="34" y1="76" x2="138" y2="111"><stop stop-color="#bfd8cf"/><stop offset=".5" stop-color="#f3fff7"/><stop offset="1" stop-color="#607f72"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>
+  <ellipse cx="90" cy="153" rx="60" ry="10" fill="#10251c" opacity=".5"/>
+  <path d="M28 106C28 83 152 83 152 106L147 130C140 158 45 158 33 131Z" fill="url(#base)" stroke="#5e7870"/>
+  <ellipse cx="90" cy="106" rx="61" ry="25" fill="#172923" stroke="#607970"/>
+  <ellipse cx="90" cy="103" rx="49" ry="18" stroke="#c4f3db" stroke-width="7" filter="url(#glow)" opacity=".45"/>
+  <ellipse cx="90" cy="103" rx="49" ry="18" stroke="url(#rim)" stroke-width="5"/>
+  <path d="M29 103C30 70 48 35 77 30H104C134 36 150 71 151 103C138 138 43 137 29 103Z" fill="url(#glass)" stroke="#82a99e" stroke-width="1.6"/>
+  <path d="M40 87C45 63 57 45 69 42" stroke="#dfefec" stroke-width="7" stroke-linecap="round" opacity=".65"/>
+  <path d="M123 53C134 65 140 80 142 92" stroke="#bbd8d0" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+  <ellipse cx="90" cy="31" rx="15" ry="6" fill="#10251e" stroke="#83a79c" stroke-width="3"/><ellipse cx="90" cy="31" rx="9" ry="3" fill="#06100c"/>
+  <path d="M43 128C67 143 112 144 136 130" stroke="#678c79" stroke-opacity=".4"/>
+</svg>

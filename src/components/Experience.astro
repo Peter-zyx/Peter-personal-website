@@ -20,9 +20,38 @@ const contributions = [
 <section class="experience" id="experience" aria-labelledby="experience-title">
   <div class="container">
     <div class="experience-heading">
-      <div><p class="meta">Experience / Beyond the studio</p><h2 id="experience-title">Research into <em>reality.</em></h2></div>
-      <p class="section-intro">Building, testing and learning<br />in a research environment.</p>
+      <div><p class="meta">Experience / Beyond the studio</p><h2 id="experience-title">Making ideas <em>tangible.</em></h2></div>
+      <p class="section-intro">Designing, prototyping and testing<br /> across industry and research.</p>
     </div>
+
+    <article class="experience-entry faust-entry" aria-labelledby="faust-title">
+      <aside class="entry-meta" aria-label="Faust internship details">
+        <p class="entry-date"><span class="timeline-dot" aria-hidden="true"></span><time datetime="2026-09">Sep</time> – <time datetime="2026-11-30">30 Nov 2026</time></p>
+        <p class="entry-location">Remote · Ongoing</p>
+        <span class="entry-type meta">Product design internship</span>
+        <div class="discipline-tags" aria-label="Areas of work"><span>Interaction design</span><span>3D prototyping</span><span>Optical simulation</span></div>
+      </aside>
+      <div class="entry-body">
+        <header class="entry-header"><p class="role">Product Designer</p><h3 id="faust-title">Faust</h3><p class="department">San Francisco HQ · Shenzhen office</p></header>
+        <div class="entry-content">
+          <div class="entry-story">
+            <p class="project-context">Light Interaction & Optical Engineering</p>
+            <p class="entry-summary">Developing a smart device’s light system, connecting behaviour, interactive prototypes and optical evidence.</p>
+            <ol class="contributions">
+              <li><span class="contribution-number meta" aria-hidden="true">01</span><div><h4>Defined the light behaviour.</h4><p>Reviewed requirements and supplier proposals, then defined state semantics, motion timing, transitions and privacy priorities.</p></div></li>
+              <li><span class="contribution-number meta" aria-hidden="true">02</span><div><h4>Built tools to compare decisions.</h4><p>Created Blender studies and a Three.js review tool, combining repeatable views, sequence playback and controlled behaviour comparisons.</p></div></li>
+              <li><span class="contribution-number meta" aria-hidden="true">03</span><div><h4>Connected interaction with optical analysis.</h4><p>Developed conditional Speos studies and Model Lab, linking dynamic light output, illuminance maps and requirements for engineering review.</p></div></li>
+            </ol>
+            <div class="experience-links"><a class="case-link" href={withBase('/projects/faust-light-system/')}>Explore the case study <span aria-hidden="true">↗</span></a><a href={withBase('/apps/faust-light-lab/index.html')} target="_blank" rel="noopener">Try Light Lab <span aria-hidden="true">↗</span></a></div>
+          </div>
+          <div class="entry-evidence">
+            <figure class="faust-preview"><div class="preview-heading meta"><span>From the light study</span><span aria-hidden="true">↙</span></div><a href={withBase('/projects/faust-light-system/')} aria-label="Explore the Faust light system"><img src={withBase('/images/projects/faust-light-system/hero.webp')} alt="Faust light interaction visualisation with a clear dome and white LED ring" width="640" height="640" loading="lazy"/></a><figcaption>Faust / Light System<br/><span>Blender visualisation · Interaction study</span></figcaption></figure>
+            <div class="faust-results"><div><strong>160</strong><span>privacy-study renders</span></div><div><strong>8</strong><span>F2 optical configurations</span></div></div>
+            <p class="faust-evidence-note">Simulation and design evidence.<br/>Work through 29 September 2026.</p>
+          </div>
+        </div>
+      </div>
+    </article>
 
     <article class="experience-entry" aria-labelledby="fudan-title">
       <aside class="entry-meta" aria-label="Internship details">
@@ -79,6 +108,16 @@ const contributions = [
   .experience-heading em { color: var(--accent-cool); font-style: normal; }
   .section-intro { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.7; }
   .experience-entry { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 48px; padding-top: 44px; }
+  .experience-entry + .experience-entry { margin-top: 48px; border-top: 1px solid var(--line); }
+  .faust-preview { margin: 0; padding: 18px 0; border: 1px solid var(--line); border-radius: 4px; background: #0b1310; }
+  .faust-preview .preview-heading { padding-inline: 18px; margin-bottom: 0; }
+  .faust-preview img { display: block; width: 100%; height: auto; }
+  .faust-preview figcaption { padding: 0 18px; font-size: .73rem; line-height: 1.8; }
+  .faust-preview figcaption span { color: var(--muted); font-size: .61rem; }
+  .faust-results { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 24px; }
+  .faust-results strong { display: block; font-size: 2.6rem; font-weight: 450; color: #a9d2c4; letter-spacing: -.04em; }
+  .faust-results span { display: block; color: var(--muted); font-size: .66rem; line-height: 1.7; margin-top: 5px; }
+  .faust-evidence-note { color: var(--muted); font-size: .62rem; line-height: 1.8; margin-top: 18px; }
   .entry-meta { position: relative; padding-left: 22px; border-left: 1px solid var(--line); }
   .entry-date { margin: 0; font-size: 0.95rem; line-height: 1.5; }
   .timeline-dot { position: absolute; left: -5px; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent-cool); box-shadow: 0 0 0 6px var(--bg); }

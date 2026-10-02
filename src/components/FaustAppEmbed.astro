@@ -1,0 +1,51 @@
+---
+import { withBase } from '../lib/paths';
+type Props = { name: string; number: string; description: string; src: string; full: string; poster: string; alt: string; kind: 'light' | 'model' };
+const { name, number, description, src, full, poster, alt, kind } = Astro.props;
+---
+<div class:list={['faust-app', `faust-app--${kind}`]} data-faust-app>
+  <div class="app-bar"><span>{number} / WORKING WEB APP</span><a href={withBase(full)} target="_blank" rel="noopener">Open full app <span aria-hidden="true">↗</span></a></div>
+  <div class="app-stage" data-app-stage>
+    <div class="app-cover" data-app-cover>
+      <img src={withBase(poster)} alt={alt} loading="lazy" width="960" height="640" />
+      <div class="cover-copy"><span class="app-label">EXPLORE THE PROTOTYPE</span><h3>{name}</h3><p>{description}</p><button type="button" data-load-app data-app-src={withBase(src)} data-app-name={name}>Launch interactive preview <span aria-hidden="true">↗</span></button><noscript><p>Open the full app to use this JavaScript prototype.</p></noscript></div>
+    </div>
+  </div>
+  <div class="app-footer"><span data-app-status role="status">Loads only when you choose to explore.</span><button type="button" data-unload-app hidden>Close preview ×</button></div>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-faust-app]').forEach(root => {
+    const launch = root.querySelector<HTMLButtonElement>('[data-load-app]')!;
+    const close = root.querySelector<HTMLButtonElement>('[data-unload-app]')!;
+    const stage = root.querySelector<HTMLElement>('[data-app-stage]')!;
+    const cover = root.querySelector<HTMLElement>('[data-app-cover]')!;
+    const status = root.querySelector<HTMLElement>('[data-app-status]')!;
+    let frame: HTMLIFrameElement | null = null;
+    launch.addEventListener('click', () => {
+      if (frame) return;
+      frame = document.createElement('iframe');
+      frame.title = `${launch.dataset.appName} interactive preview`;
+      frame.src = launch.dataset.appSrc!;
+      frame.allow = 'fullscreen';
+      frame.addEventListener('load', () => { status.textContent = 'Preview open. Use Open full app for all controls.'; });
+      status.textContent = 'Opening interactive preview…';
+      cover.hidden = true;
+      close.hidden = false;
+      stage.append(frame);
+      frame.focus();
+    });
+    close.addEventListener('click', () => {
+      frame?.remove(); frame = null; cover.hidden = false; close.hidden = true;
+      status.textContent = 'Preview closed. Loads only when you choose to explore.';
+      launch.focus();
+    });
+  });
+</script>
+<style>
+  .faust-app{border:1px solid #354541;background:#0c1412;border-radius:5px;overflow:hidden;margin-top:30px}
+  .app-bar,.app-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 24px;font:11px/1.5 ui-monospace,monospace;color:#adbbb5}
+  .app-bar{border-bottom:1px solid #354541}.app-bar a{color:#e2eee7;text-decoration:none;min-height:32px;display:flex;align-items:center;gap:16px}.app-stage{position:relative}.app-cover{min-height:430px;display:grid;grid-template-columns:1fr 1fr;align-items:center;background:radial-gradient(ellipse at 30% 50%,#24393666,transparent 65%)}
+  .app-cover>img{width:100%;height:400px;object-fit:contain;padding:25px}.cover-copy{padding:40px;max-width:480px}.app-label{color:#9cccbf;font:10px/1.6 ui-monospace,monospace;letter-spacing:.1em}.cover-copy h3{font-size:clamp(30px,4vw,48px);font-weight:450;letter-spacing:-.05em;margin:14px 0}.cover-copy p{color:#acb9b2;font-size:14px;line-height:1.8;margin-bottom:26px}button{font:inherit;cursor:pointer}.cover-copy button{padding:14px 18px;border:1px solid #d4e6dc;color:#102019;background:#d4e6dc;display:flex;gap:20px;align-items:center;border-radius:3px;font-size:12px;min-height:44px}.app-footer{border-top:1px solid #354541;font-size:10px}.app-footer button{color:#d9e6df;border:0;background:none;padding:8px;min-height:36px}.faust-app :global(iframe){display:block;width:100%;height:590px;border:0;background:#0e1714}.faust-app [hidden]{display:none!important}.faust-app :where(a,button):focus-visible{outline:2px solid #89d7c6;outline-offset:4px}
+  .faust-app--model :global(iframe){height:640px}
+  @media(max-width:700px){.app-cover{grid-template-columns:1fr}.app-cover>img{height:260px;padding:22px 20px 0}.cover-copy{padding:20px 24px 30px;max-width:none}.cover-copy h3{font-size:32px}.app-bar,.app-footer{padding:14px 16px;font-size:9px;flex-wrap:wrap}.faust-app :global(iframe){height:950px}.faust-app--model :global(iframe){height:920px}}
+</style>

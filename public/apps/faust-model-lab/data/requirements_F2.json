@@ -1,0 +1,399 @@
+{
+  "revision": "F2",
+  "date": "2026-09-29",
+  "source": "led-reqs-detailed.md",
+  "source_sha256": "fa5f9e7ea3b0dee2568ce8bf7f328034129fbee5908006780e629b9a9528875d",
+  "baseline": {
+    "led_class": "SK9822 / APA102-class RGB; exact vendor/part unknown",
+    "min_count": 12,
+    "window_od_options_mm": [
+      45,
+      52
+    ],
+    "hole_mm": 14,
+    "gap_mm": [
+      8,
+      10
+    ],
+    "transmission_assumption": 0.6,
+    "close_range_lx": 100,
+    "close_range_mm": 150,
+    "uniformity_fraction": 0.2,
+    "continuous_mA": 200,
+    "burst_mA": 500,
+    "absolute_max_mA": 500,
+    "rail_V": 5,
+    "sphere_budget_W": 7,
+    "camera": "IMX415 rolling shutter; f/2; fixed focus ~0.6m; FOV82x52; fixed IR-cut",
+    "ambient_typical_lx": [
+      100,
+      500
+    ],
+    "subject_distance_m": [
+      0.3,
+      1.5
+    ],
+    "als_present": false,
+    "room_baseline_240mA": {
+      "150": [
+        116,
+        232
+      ],
+      "300": [
+        29,
+        58
+      ],
+      "500": [
+        10,
+        21
+      ],
+      "1000": [
+        3,
+        5
+      ]
+    }
+  },
+  "requirements": [
+    {
+      "id": "R1",
+      "title_zh": "近距与暗室照明",
+      "title_en": "Close-range and dark-room illumination",
+      "requirement": "≥100 lx added at 0.15 m on axis; CV distance from M1",
+      "measurement": "M1",
+      "evidence": "0.15m axis-patch and cone sensitivity solves; real flux and CV not known",
+      "previous": "旧R1 / former R1",
+      "requirement_zh": "0.15m轴上新增≥100lx；暗室CV工作距离由M1确定。",
+      "evidence_zh": "已补0.15m轴心小区与光锥条件化求解；真实光量与CV尚未确定。"
+    },
+    {
+      "id": "R2",
+      "title_zh": "A模式照明底线",
+      "title_en": "Regime A illumination floor",
+      "requirement": "No full-off animation in A; floor level from M1",
+      "measurement": "M1",
+      "evidence": "A waveform baseline implemented; hardware PWM and slew conflict unresolved",
+      "previous": "旧R2 / former R2",
+      "requirement_zh": "A模式动画不能全灭；最低可用亮度由M1确定。",
+      "evidence_zh": "A底光波形已实现；真实PWM及转动灭灯冲突待解决。"
+    },
+    {
+      "id": "R3",
+      "title_zh": "无ALS明暗判断",
+      "title_en": "Darkness detection without ALS",
+      "requirement": "Camera exposure/gain minus calibrated ring contribution; no sampling blink; awake only",
+      "measurement": "M1",
+      "evidence": "Algorithm contract and simulator-only ambient input; no calibrated detector",
+      "previous": "新增 / new",
+      "requirement_zh": "相机曝光/增益经标定后扣除环灯贡献；不能灭灯采样；只在唤醒时运行。",
+      "evidence_zh": "已定义标定流程与手动场景；未接入真实相机自动判断。"
+    },
+    {
+      "id": "R4",
+      "title_zh": "完整状态语言",
+      "title_en": "Complete state language",
+      "requirement": "14 state families; white only; red reserved for camera live",
+      "measurement": "M3;M4",
+      "evidence": "Proposed state simulator covers all listed states, not approved UX",
+      "previous": "旧R3 / former R3",
+      "requirement_zh": "覆盖全部14类状态；正常白色，红色保留给camera live。",
+      "evidence_zh": "模拟器覆盖全部状态；动画设计为提案，非已批准UX。"
+    },
+    {
+      "id": "R5",
+      "title_zh": "拍摄红光影响",
+      "title_en": "Camera-live scene impact",
+      "requirement": "Captured colour/level change within M5 tolerance",
+      "measurement": "M5",
+      "evidence": "Red capture policy shown; no RGB spectral/image simulation or passing claim",
+      "previous": "新增 / new",
+      "requirement_zh": "红色拍摄指示引起的画面颜色/亮度变化应满足M5容差。",
+      "evidence_zh": "标出红色拍摄策略；没有RGB光谱、真实图像或通过结论。"
+    },
+    {
+      "id": "R6",
+      "title_zh": "平顺与闪烁",
+      "title_en": "Non-jarring behaviour",
+      "requirement": "≤3 flashes/s policy; smooth fades; depth/time from M3/M4",
+      "measurement": "M3;M4",
+      "evidence": "Proposed slow cadences and transitions; no perceptual/WCAG certification",
+      "previous": "旧R4 / former R4",
+      "requirement_zh": "每秒最多3次闪烁；平顺渐变；调制深度与过渡时长由M3/M4确定。",
+      "evidence_zh": "采用慢节奏与平滑渐变提案；无舒适性或WCAG认证结论。"
+    },
+    {
+      "id": "R7",
+      "title_zh": "PWM与滚动快门",
+      "title_en": "PWM and rolling shutter",
+      "requirement": "No visible bands over actual exposure range; vendor PWM/global-brightness disclosure",
+      "measurement": "M6",
+      "evidence": "Ideal PWM calculator retained; actual second-PWM and sensor timing unknown",
+      "previous": "旧R6拆分 / former R6 split",
+      "requirement_zh": "实际曝光范围内无可见条纹；供应商说明通道PWM与全局亮度实现。",
+      "evidence_zh": "保留理想PWM计算；真实双PWM和传感器逐行时序仍未知。"
+    },
+    {
+      "id": "R8",
+      "title_zh": "自动曝光稳定",
+      "title_en": "Auto-exposure stability",
+      "requirement": "Frame brightness within M3 limit or provide ring level to image processor",
+      "measurement": "M3",
+      "evidence": "Exported per-frame commands as integration interface; AE not modeled",
+      "previous": "旧R6拆分 / former R6 split",
+      "requirement_zh": "帧间亮度变化在M3容差内，或向图像处理器前馈环灯亮度。",
+      "evidence_zh": "导出逐时平均指令作为前馈接口参考；未建立AE闭环。"
+    },
+    {
+      "id": "R9",
+      "title_zh": "镜头光学隔离",
+      "title_en": "Optical isolation",
+      "requirement": "Contrast loss through Ø14 aperture within M7 tolerance",
+      "measurement": "M7",
+      "evidence": "Hole modeled; no lens/baffle/contrast solve; opening flux is not flare",
+      "previous": "新增 / new",
+      "requirement_zh": "通过Ø14孔的杂散光不得导致超过M7容差的对比度损失。",
+      "evidence_zh": "已建开孔；无真实镜头/遮光结构和对比度求解。"
+    },
+    {
+      "id": "R10",
+      "title_zh": "窗口均匀性",
+      "title_en": "Diffused output",
+      "requirement": "≤±20%; no hotspots/dark sectors; measured material from M2",
+      "measurement": "M2",
+      "evidence": "Conditional sampled mean-relative deviation reported; full window/views unverified",
+      "previous": "旧R5 / former R5",
+      "requirement_zh": "窗口均匀性≤±20%；无热点或暗区；材料由M2实测确定。",
+      "evidence_zh": "报告暂定均值参考下的采样偏差；全窗口、视角和收敛仍待验证。"
+    },
+    {
+      "id": "R11",
+      "title_zh": "电流与热",
+      "title_en": "Power and thermal",
+      "requirement": "200mA sustained; 500mA burst/absolute max; 7W sphere envelope",
+      "measurement": "M8",
+      "evidence": "Electrical budget calculations and calibrated-input estimator; real current/thermal pending",
+      "previous": "旧R7 / former R7",
+      "requirement_zh": "持续200mA，短时500mA，绝不超过500mA；整球预算约7W。",
+      "evidence_zh": "已加入电流预算和需标定输入的估算；真实电流与热尚待测。"
+    }
+  ],
+  "states": [
+    [
+      "booting",
+      "开机",
+      "Booting"
+    ],
+    [
+      "idle",
+      "待机",
+      "Idle"
+    ],
+    [
+      "listening",
+      "聆听",
+      "Listening"
+    ],
+    [
+      "speaking",
+      "说话",
+      "Speaking"
+    ],
+    [
+      "capturing",
+      "拍摄中",
+      "Capturing"
+    ],
+    [
+      "capture_complete",
+      "拍摄完成",
+      "Capture complete"
+    ],
+    [
+      "slewing",
+      "转动",
+      "Slewing"
+    ],
+    [
+      "passive",
+      "被动模式",
+      "Passive"
+    ],
+    [
+      "volume",
+      "音量弧",
+      "Volume arc"
+    ],
+    [
+      "battery",
+      "电量弧",
+      "Battery arc"
+    ],
+    [
+      "ota",
+      "OTA进度",
+      "OTA arc"
+    ],
+    [
+      "error",
+      "错误",
+      "Error"
+    ],
+    [
+      "asleep",
+      "睡眠",
+      "Asleep"
+    ],
+    [
+      "waking",
+      "唤醒",
+      "Waking"
+    ]
+  ],
+  "measurements": [
+    [
+      "M1",
+      "CV照度底线、工作距离及A/B边界",
+      "CV floor, distance and A/B boundary",
+      "Camera/CV metrics, exposure/gain calibration, real emitter output; no prototype available"
+    ],
+    [
+      "M2",
+      "材料透射与窗口均匀性",
+      "Material transmission and window uniformity",
+      "Measured spectral transmission/scattering, full-window/view protocol; ±20% reference to be agreed"
+    ],
+    [
+      "M3",
+      "调制与自动曝光",
+      "Modulation and auto-exposure",
+      "Actual frame/exposure/row timing, AE logs and tolerance"
+    ],
+    [
+      "M4",
+      "状态舒适性与渐变",
+      "State comfort and fades",
+      "Human viewing evaluation and agreed depth/fade criteria"
+    ],
+    [
+      "M5",
+      "红色指示对画面的影响",
+      "Red-indicator effect on captured frames",
+      "RGB spectra, camera spectral response, colour/level tolerances"
+    ],
+    [
+      "M6",
+      "PWM条纹与拍频",
+      "PWM bands and beats",
+      "Part-specific channel/global PWM, clocks, exposure range and image tests"
+    ],
+    [
+      "M7",
+      "杂散光与对比度",
+      "Stray light and image contrast",
+      "Lens and front-stack CAD, baffle/BSDF, contrast target and threshold"
+    ],
+    [
+      "M8",
+      "电流与热",
+      "Current and thermal",
+      "Measured current/code curves, standby, burst duration, thermal paths/limits"
+    ]
+  ],
+  "geometry_cases": [
+    {
+      "case": "W45_N12_G8",
+      "window_od_mm": 45,
+      "hole_diameter_mm": 14,
+      "count": 12,
+      "gap_mm": 8,
+      "thickness_mm": 2,
+      "radius_mm": 14.75,
+      "source_z_mm": -10,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W45_N12_G10",
+      "window_od_mm": 45,
+      "hole_diameter_mm": 14,
+      "count": 12,
+      "gap_mm": 10,
+      "thickness_mm": 2,
+      "radius_mm": 14.75,
+      "source_z_mm": -12,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W45_N24_G8",
+      "window_od_mm": 45,
+      "hole_diameter_mm": 14,
+      "count": 24,
+      "gap_mm": 8,
+      "thickness_mm": 2,
+      "radius_mm": 14.75,
+      "source_z_mm": -10,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W45_N24_G10",
+      "window_od_mm": 45,
+      "hole_diameter_mm": 14,
+      "count": 24,
+      "gap_mm": 10,
+      "thickness_mm": 2,
+      "radius_mm": 14.75,
+      "source_z_mm": -12,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W52_N12_G8",
+      "window_od_mm": 52,
+      "hole_diameter_mm": 14,
+      "count": 12,
+      "gap_mm": 8,
+      "thickness_mm": 2,
+      "radius_mm": 16.5,
+      "source_z_mm": -10,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W52_N12_G10",
+      "window_od_mm": 52,
+      "hole_diameter_mm": 14,
+      "count": 12,
+      "gap_mm": 10,
+      "thickness_mm": 2,
+      "radius_mm": 16.5,
+      "source_z_mm": -12,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W52_N24_G8",
+      "window_od_mm": 52,
+      "hole_diameter_mm": 14,
+      "count": 24,
+      "gap_mm": 8,
+      "thickness_mm": 2,
+      "radius_mm": 16.5,
+      "source_z_mm": -10,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W52_N24_G10",
+      "window_od_mm": 52,
+      "hole_diameter_mm": 14,
+      "count": 24,
+      "gap_mm": 10,
+      "thickness_mm": 2,
+      "radius_mm": 16.5,
+      "source_z_mm": -12,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    }
+  ],
+  "unresolved_conflicts": [
+    "Slew blanking vs regime A floor",
+    "240mA calculated baseline exceeds 200mA continuous budget",
+    "Solid red capture vs image colour/level tolerance",
+    "100lx on-axis vs ambiguous across-90deg wording",
+    "Window diameter and production CAD not final"
+  ],
+  "scope": "No physical tests. M1-M8 descriptions are requirement-derived proposed plans; Investigation brief tab was not supplied."
+}

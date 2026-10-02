@@ -1,0 +1,94 @@
+{
+  "cases": [
+    {
+      "case": "W45_N12_G8",
+      "window_od_mm": 45,
+      "hole_diameter_mm": 14,
+      "count": 12,
+      "gap_mm": 8,
+      "thickness_mm": 2,
+      "radius_mm": 14.75,
+      "source_z_mm": -10,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W45_N12_G10",
+      "window_od_mm": 45,
+      "hole_diameter_mm": 14,
+      "count": 12,
+      "gap_mm": 10,
+      "thickness_mm": 2,
+      "radius_mm": 14.75,
+      "source_z_mm": -12,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W45_N24_G8",
+      "window_od_mm": 45,
+      "hole_diameter_mm": 14,
+      "count": 24,
+      "gap_mm": 8,
+      "thickness_mm": 2,
+      "radius_mm": 14.75,
+      "source_z_mm": -10,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W45_N24_G10",
+      "window_od_mm": 45,
+      "hole_diameter_mm": 14,
+      "count": 24,
+      "gap_mm": 10,
+      "thickness_mm": 2,
+      "radius_mm": 14.75,
+      "source_z_mm": -12,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W52_N12_G8",
+      "window_od_mm": 52,
+      "hole_diameter_mm": 14,
+      "count": 12,
+      "gap_mm": 8,
+      "thickness_mm": 2,
+      "radius_mm": 16.5,
+      "source_z_mm": -10,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W52_N12_G10",
+      "window_od_mm": 52,
+      "hole_diameter_mm": 14,
+      "count": 12,
+      "gap_mm": 10,
+      "thickness_mm": 2,
+      "radius_mm": 16.5,
+      "source_z_mm": -12,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W52_N24_G8",
+      "window_od_mm": 52,
+      "hole_diameter_mm": 14,
+      "count": 24,
+      "gap_mm": 8,
+      "thickness_mm": 2,
+      "radius_mm": 16.5,
+      "source_z_mm": -10,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    },
+    {
+      "case": "W52_N24_G10",
+      "window_od_mm": 52,
+      "hole_diameter_mm": 14,
+      "count": 24,
+      "gap_mm": 10,
+      "thickness_mm": 2,
+      "radius_mm": 16.5,
+      "source_z_mm": -12,
+      "status": "Conditional planar annular envelope; curvature, LED package and material unconfirmed"
+    }
+  ],
+  "scope": "Planar envelope sensitivity; dimensions not approved production CAD",
+  "material": "same hypothetical HG material as F1, NOT prescribed 60% transmission"
+}

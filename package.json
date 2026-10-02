@@ -4,9 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
-    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
-    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
+    "predev": "npm run build:faust",
+    "dev": "node scripts/astro.mjs dev",
+    "build:faust": "node scripts/build-faust-apps.mjs",
+    "build": "npm run build:faust && node scripts/astro.mjs build",
+    "preview": "node scripts/astro.mjs preview",
+    "test:faust": "node --test integrations/faust-light-lab/tests/*.test.js tests/faust-f2.test.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -15,6 +18,7 @@
     "typescript": "^5.5.4"
   },
   "devDependencies": {
-    "@types/three": "^0.185.1"
+    "@types/three": "^0.185.1",
+    "vite": "^6.4.3"
   }
 }
